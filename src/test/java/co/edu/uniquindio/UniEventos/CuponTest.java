@@ -1,36 +1,34 @@
 package co.edu.uniquindio.UniEventos;
 
-import co.edu.uniquindio.UniEventos.modelo.Usuario;
-import co.edu.uniquindio.UniEventos.repositorios.UsuarioRepo;
+import co.edu.uniquindio.UniEventos.modelo.Cupon;
+import co.edu.uniquindio.UniEventos.modelo.TipoCupon;
+import co.edu.uniquindio.UniEventos.repositorios.CuponRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 
 @SpringBootTest
 public class CuponTest {
 
     @Autowired
-    private UsuarioRepo usuarioRepo;
+    private CuponRepo cuponRepo;
 
     @Test
     public void registrarTest(){
-        //Creamos el usuario con sus propiedades
-        Usuario usuario = Usuario.builder()
-                .cedula("1213444")
-                .nombre("Pepito perez")
-                .email("pepito@email.com")
-                .password("121212")
-                .direccion("Calle 12 # 12-12")
-                .telefono("3012223333")
-                .compras(new ArrayList<>())
-                .build();
+        //Creamos el cupon con sus propiedades
 
+        Cupon cupon = Cupon.builder()
+                .nombre("UNIQ")
+                .fechaInicio(LocalDate.of(2024,8,24))
+                .fechaFin(LocalDate.of(2024,12,24))
+                .tipoCupon(TipoCupon.INDIVIDUAL)
+                .descuento((float) 0.15).build();
 
-        //Guardamos el usuario en la base de datos
-        Usuario registro = usuarioRepo.save( usuario );
+        //Guardamos el cupon en la base de datos
+        Cupon registro = cuponRepo.save(cupon);
 
 
         //Verificamos que se haya guardado validando que no sea null

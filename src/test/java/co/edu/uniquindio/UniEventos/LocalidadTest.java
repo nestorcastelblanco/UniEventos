@@ -1,7 +1,7 @@
 package co.edu.uniquindio.UniEventos;
 
-import co.edu.uniquindio.UniEventos.modelo.Usuario;
-import co.edu.uniquindio.UniEventos.repositorios.UsuarioRepo;
+import co.edu.uniquindio.UniEventos.modelo.Localidad;
+import co.edu.uniquindio.UniEventos.repositorios.LocalidadRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,24 +13,20 @@ import java.util.ArrayList;
 public class LocalidadTest {
 
     @Autowired
-    private UsuarioRepo usuarioRepo;
+    private LocalidadRepo localidadRepo;
 
     @Test
     public void registrarTest(){
-        //Creamos el usuario con sus propiedades
-        Usuario usuario = Usuario.builder()
-                .cedula("1213444")
-                .nombre("Pepito perez")
-                .email("pepito@email.com")
-                .password("121212")
-                .direccion("Calle 12 # 12-12")
-                .telefono("3012223333")
-                .compras(new ArrayList<>())
-                .build();
 
+        //Creamos la Localidad con sus propiedades
+        Localidad localidad = Localidad.builder()
+                .nombre("Gramilla VIP")
+                .precio(150000)
+                .capacidad(250)
+                .boletasVendidas(0).build();
 
-        //Guardamos el usuario en la base de datos
-        Usuario registro = usuarioRepo.save( usuario );
+        //Guardamos la localidad en la base de datos
+        Localidad registro = localidadRepo.save( localidad );
 
 
         //Verificamos que se haya guardado validando que no sea null
