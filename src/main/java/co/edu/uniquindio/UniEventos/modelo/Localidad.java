@@ -1,0 +1,25 @@
+package co.edu.uniquindio.UniEventos.modelo;
+
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document("localidades")
+@Getter
+@Setter
+@ToString
+@Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+
+public class Localidad {
+
+    @Id
+    @EqualsAndHashCode.Include
+    private String codigo;
+
+    private String nombre;
+    private float precio;
+    private int capacidad, boletasVendidas;
+
+
+}
