@@ -18,12 +18,15 @@ public class Cupon {
 
     @Id
     @EqualsAndHashCode.Include
-    private String codigo;
+    private String id;
 
     private String nombre;
-    private LocalDate fechaInicio, fechaFin;
+    private LocalDate fechaVencimiento;
     private float descuento;
     private TipoCupon tipoCupon;
+    private String codigo;
+    private EstadoCupon estado;
+
 
 
 }

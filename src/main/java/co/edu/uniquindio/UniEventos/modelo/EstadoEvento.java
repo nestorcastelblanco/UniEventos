@@ -1,5 +1,5 @@
 package co.edu.uniquindio.UniEventos.modelo;
 
-public enum Estado {
-    PAGA, PENDIENTE
+public enum EstadoEvento {
+    ACTIVO, INACTIVO
 }

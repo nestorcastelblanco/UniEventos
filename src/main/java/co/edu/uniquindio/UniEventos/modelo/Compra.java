@@ -18,7 +18,7 @@ public class Compra {
     private Usuario usuario;
     private int cantBoletas;
     private Boleta boleta;
-    private Estado estado;
+    private EstadoEvento estado;
 
 
 }

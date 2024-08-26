@@ -2,10 +2,8 @@ package co.edu.uniquindio.UniEventos;
 
 import co.edu.uniquindio.UniEventos.modelo.Evento;
 import co.edu.uniquindio.UniEventos.modelo.Localidad;
-import co.edu.uniquindio.UniEventos.modelo.Tipo;
-import co.edu.uniquindio.UniEventos.modelo.Usuario;
+import co.edu.uniquindio.UniEventos.modelo.TipoEvento;
 import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
-import co.edu.uniquindio.UniEventos.repositorios.UsuarioRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +54,7 @@ public class EventoTest {
                 .dirección("Coliseo del Cafe")
                 .ciudad("Armenia, Quindio")
                 .descripción("Concierto en vivo de Luis Alfonso")
-                .tipo(Tipo.CONCIERTO)
+                .tipo(TipoEvento.CONCIERTO)
                 .imágenes(new ArrayList<>())
                 .fecha(LocalDate.now())
                 .localidades(localidades).build();

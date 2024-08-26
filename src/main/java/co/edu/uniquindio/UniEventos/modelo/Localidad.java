@@ -13,10 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 public class Localidad {
 
-    @Id
-    @EqualsAndHashCode.Include
-    private String codigo;
-
     private String nombre;
     private float precio;
     private int capacidad, boletasVendidas;

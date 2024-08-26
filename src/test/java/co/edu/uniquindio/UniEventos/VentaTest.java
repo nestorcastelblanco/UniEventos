@@ -1,7 +1,6 @@
 package co.edu.uniquindio.UniEventos;
 
 import co.edu.uniquindio.UniEventos.modelo.*;
-import co.edu.uniquindio.UniEventos.repositorios.UsuarioRepo;
 import co.edu.uniquindio.UniEventos.repositorios.VentaRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -52,7 +51,7 @@ public class VentaTest {
                 .dirección("Coliseo del Cafe")
                 .ciudad("Armenia, Quindio")
                 .descripción("Concierto en vivo de Luis Alfonso")
-                .tipo(Tipo.CONCIERTO)
+                .tipo(TipoEvento.CONCIERTO)
                 .imágenes(new ArrayList<>())
                 .fecha(LocalDate.now())
                 .localidades(localidades).build();

@@ -1,22 +1,22 @@
 package co.edu.uniquindio.UniEventos.modelo;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Pago {
 
-public class Carrito {
-
-    private List<DetalleCarrito> items;
+    private String moneda;
+    private String tipoPago;
+    private String detalleEstado;
+    private String codigoAutorizacion;
     private LocalDateTime fecha;
     private String id;
-
-
+    private float valorTransaccion;
+    private String estado;
 }
