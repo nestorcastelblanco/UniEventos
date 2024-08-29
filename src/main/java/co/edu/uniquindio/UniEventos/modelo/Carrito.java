@@ -1,6 +1,7 @@
 package co.edu.uniquindio.UniEventos.modelo;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,6 @@ public class Carrito {
     private List<DetalleCarrito> items;
     private LocalDateTime fecha;
     private String id;
-
+    private ObjectId idUsuario;
 
 }

@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document("cupones")
@@ -13,7 +14,6 @@ import java.util.List;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 public class Cupon {
 
     @Id
@@ -21,9 +21,9 @@ public class Cupon {
     private String id;
 
     private String nombre;
-    private LocalDate fechaVencimiento;
+    private LocalDateTime fechaVencimiento;
     private float descuento;
-    private TipoCupon tipoCupon;
+    private TipoCupon tipo;
     private String codigo;
     private EstadoCupon estado;
 

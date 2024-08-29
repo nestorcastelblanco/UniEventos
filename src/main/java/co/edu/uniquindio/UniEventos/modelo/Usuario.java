@@ -17,15 +17,11 @@ public class Usuario {
 
     @Id
     @EqualsAndHashCode.Include
-    private String codigo;
+    private String id;
 
     private String telefono;
     private String cedula;
     private String nombre;
-    private String email;
-    private String password;
     private String direccion;
-    private Carrito carrito;
-    private List<Compra> compras;
 
 }
