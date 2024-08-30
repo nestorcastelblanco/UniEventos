@@ -1,7 +1,8 @@
 package co.edu.uniquindio.UniEventos;
 
-import co.edu.uniquindio.UniEventos.modelo.Cupon;
-import co.edu.uniquindio.UniEventos.modelo.TipoCupon;
+import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
+import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCupon;
+import co.edu.uniquindio.UniEventos.modelo.enums.TipoCupon;
 import co.edu.uniquindio.UniEventos.repositorios.CuponRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,22 +18,23 @@ public class CuponTest {
     private CuponRepo cuponRepo;
 
     @Test
-    public void registrarTest(){
-        //Creamos el cupon con sus propiedades
+    public void crearCuponMultipleTest() {
 
+        //Creamos el cupon con sus propiedades
         Cupon cupon = Cupon.builder()
-                .nombre("UNIQ")
-                .fechaInicio(LocalDate.of(2024,8,24))
-                .fechaFin(LocalDate.of(2024,12,24))
-                .tipoCupon(TipoCupon.INDIVIDUAL)
-                .descuento((float) 0.15).build();
+                .codigo("0000")
+                .descuento(10)
+                .nombre("Cupon de descuento")
+                .tipo(TipoCupon.MULTIPLE)
+                .estado(EstadoCupon.DISPONIBLE)
+                .fechaVencimiento(LocalDate.of(2025, 1, 1).atStartOfDay())
+                .build();
 
         //Guardamos el cupon en la base de datos
-        Cupon registro = cuponRepo.save(cupon);
-
+        Cupon cuponCreado = cuponRepo.save(cupon);
 
         //Verificamos que se haya guardado validando que no sea null
-        Assertions.assertNotNull(registro);
+        Assertions.assertNotNull(cuponCreado);
     }
 
 }

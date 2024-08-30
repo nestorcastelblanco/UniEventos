@@ -1,8 +1,9 @@
-package co.edu.uniquindio.UniEventos.modelo;
+package co.edu.uniquindio.UniEventos.modelo.documentos;
 
+import co.edu.uniquindio.UniEventos.modelo.vo.DetalleCarrito;
 import lombok.*;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.List;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 public class Carrito {
 
     private List<DetalleCarrito> items;

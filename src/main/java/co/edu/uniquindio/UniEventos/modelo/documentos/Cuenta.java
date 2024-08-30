@@ -1,10 +1,15 @@
-package co.edu.uniquindio.UniEventos.modelo;
+package co.edu.uniquindio.UniEventos.modelo.documentos;
 
+import co.edu.uniquindio.UniEventos.modelo.vo.CodigoValidacion;
+import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCuenta;
+import co.edu.uniquindio.UniEventos.modelo.enums.Rol;
+import co.edu.uniquindio.UniEventos.modelo.vo.Usuario;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
+@Document("cuentas")
 @Getter
 @Setter
 @ToString

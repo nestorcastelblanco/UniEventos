@@ -1,5 +1,8 @@
-package co.edu.uniquindio.UniEventos.modelo;
+package co.edu.uniquindio.UniEventos.modelo.documentos;
 
+import co.edu.uniquindio.UniEventos.modelo.enums.EstadoEvento;
+import co.edu.uniquindio.UniEventos.modelo.vo.Localidad;
+import co.edu.uniquindio.UniEventos.modelo.enums.TipoEvento;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,7 +16,6 @@ import java.util.List;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 public class Evento {
 
     @Id

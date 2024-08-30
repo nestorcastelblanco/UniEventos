@@ -1,7 +1,7 @@
 package co.edu.uniquindio.UniEventos.repositorios;
 
 
-import co.edu.uniquindio.UniEventos.modelo.Cupon;
+import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
