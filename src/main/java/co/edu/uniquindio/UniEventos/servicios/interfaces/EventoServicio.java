@@ -1,6 +1,6 @@
-package co.edu.uniquindio.UniEventos.modelo.servicios;
+package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
-import co.edu.uniquindio.UniEventos.modelo.dto.*;
+import co.edu.uniquindio.UniEventos.dto.*;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ public interface EventoServicio {
 
     String crearEvento(CrearEventoDTO cuenta) throws Exception;
 
-    String editarCuenta(EditarEventoDTO cuenta) throws Exception;
+    String editarEvento(EditarEventoDTO editarEventoDTO) throws Exception;
 
-    String eliminarCuenta(String id) throws Exception;
+    String eliminarEvento(String id) throws Exception;
 
     InformacionEventoDTO obtenerInformacionCuenta(String id) throws Exception;
 

@@ -1,4 +1,4 @@
-package co.edu.uniquindio.UniEventos.modelo.dto;
+package co.edu.uniquindio.UniEventos.dto;
 
 public record EditarCuentaDTO(
         String nombre,

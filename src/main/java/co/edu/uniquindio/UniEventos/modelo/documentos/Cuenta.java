@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cuenta{
 
     private Rol rol;

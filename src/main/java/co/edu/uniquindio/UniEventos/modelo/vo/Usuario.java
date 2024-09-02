@@ -10,7 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuario {
 
     @Id
@@ -22,4 +23,6 @@ public class Usuario {
     private String nombre;
     private String direccion;
 
+    public Usuario(String cedula, String nombre, String telefono, String direccion) {
+    }
 }

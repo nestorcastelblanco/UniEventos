@@ -1,6 +1,6 @@
-package co.edu.uniquindio.UniEventos.modelo.servicios;
+package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
-import co.edu.uniquindio.UniEventos.modelo.dto.*;
+import co.edu.uniquindio.UniEventos.dto.*;
 
 public interface CuentaServicio {
 
@@ -17,4 +17,6 @@ public interface CuentaServicio {
     String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception;
 
     String iniciarSesion(LoginDTO loginDTO) throws Exception;
+
+    String validarCuenta(ValidarCuentaDTO validarCuentaDTO) throws Exception;
 }
