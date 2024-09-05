@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -79,36 +80,115 @@ public class CuentaServicioImpl implements CuentaServicio {
     }
     @Override
     public String editarCuenta(EditarCuentaDTO cuenta) throws Exception {
-        return "";
+
+        Cuenta cuentaUsuario = obtenerCuenta(cuenta.id());
+        cuentaUsuario.getUsuario().setNombre(cuenta.nombre());
+        cuentaUsuario.getUsuario().setDireccion(cuenta.direccion());
+        cuentaUsuario.getUsuario().setTelefono(cuenta.telefono());
+        cuentaUsuario.setPassword(cuenta.password());
+
+        cuentaRepo.save(cuentaUsuario);
+
+        return cuentaUsuario.getId();
     }
 
     @Override
     public String eliminarCuenta(String id) throws Exception {
-        return "";
+
+        Cuenta cuentaUsuario = obtenerCuenta(id);
+        cuentaUsuario.setEstadoCuenta(EstadoCuenta.ELIMINADO);
+
+        return "Eliminado";
     }
 
     @Override
     public InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception {
-        return null;
+        Cuenta cuentaUsuario = obtenerCuenta(id);
+        return new InformacionCuentaDTO(
+                cuentaUsuario.getId(),
+                cuentaUsuario.getUsuario().getNombre(),
+                cuentaUsuario.getUsuario().getTelefono(),
+                cuentaUsuario.getUsuario().getDireccion(),
+                cuentaUsuario.getEmail()
+        );
     }
 
     @Override
     public String enviarCodigoRecuperacionPassword(String correo) throws Exception {
-        return "";
+        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCorreo(correo);
+
+        if(cuentaOptional.isEmpty()){
+            throw new Exception("El correo no esta registrado");
+        }
+
+        Cuenta cuentaUsuario = cuentaOptional.get();
+        String codigoValidacion = generarCodigoValidacion();
+
+        cuentaUsuario.setCodigoValidacionPassword(
+                new CodigoValidacion(
+                        codigoValidacion,
+                        LocalDateTime.now()
+                )
+        );
+
+        cuentaRepo.save(cuentaUsuario);
+
+        return "Se ha enviado un código a su correo, con una duracion de 15 minutos";
     }
 
     @Override
     public String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
-        return "";
+        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCorreo(cambiarPasswordDTO.email());
+
+        if(cuentaOptional.isEmpty()){
+            throw new Exception("El correo no esta registrado");
+        }
+
+        Cuenta cuentaUsuario = cuentaOptional.get();
+        CodigoValidacion codigoValidacion = cuentaUsuario.getCodigoValidacionPassword();
+
+        if (codigoValidacion.getCodigo().equals(cambiarPasswordDTO.codigoVerificacion())){
+            if(codigoValidacion.getFechaCreacion().plusMinutes(15).isBefore(LocalDateTime.now())){
+                cuentaUsuario.setPassword(cambiarPasswordDTO.passwordNueva());
+                cuentaRepo.save(cuentaUsuario);
+            }
+            else{
+                throw new Exception("Su código de verificación ya expiró");
+            }
+        }
+        else{
+            throw new Exception("El código no es correcto");
+        }
+
+        cuentaRepo.save(cuentaUsuario);
+
+        return "La clave se ha cambiado correctamente";
     }
 
     @Override
     public String iniciarSesion(LoginDTO loginDTO) throws Exception {
-        return "";
+
+        Optional<Cuenta> cuentaOptional = cuentaRepo.validarDatosAutenticacion(loginDTO.correo(),loginDTO.password());
+
+        if(cuentaOptional.isEmpty()){
+            throw new Exception("Los datos de autenticación son incorrectos");
+        }
+
+        return "TOKEN_JWT";
     }
 
     @Override
     public String validarCuenta(ValidarCuentaDTO validarCuentaDTO) throws Exception {
         return "";
+    }
+
+    private Cuenta obtenerCuenta (String id) throws Exception {
+        Optional<Cuenta> cuentaOptional = cuentaRepo.findById(id);
+
+        if(cuentaOptional.isEmpty()){
+            throw new Exception("La cuenta con el id: " + id + " no existe");
+        }
+
+        return cuentaOptional.get();
     }
 }
