@@ -1,0 +1,151 @@
+@startuml
++class Orden {
+    -idCliente : ObjectId
+    -fecha: LocalDateTime
+    -codigoPasarela: String
+    -items: List<DetalleOrden>
+    -pago: Pago
+    -id: String
+    -total: float
+    -idCupon: ObjectId
+}
+
++class Pago {
+    -moneda: String
+    -tipoPago: String
+    -detalleEstado: String
+    -codigoAutorizacion: String
+    -fecha: LocalDateTime
+    -id: String
+    -valorTransaccion: float
+    -estado: String
+
+}
+
++class DetalleOrden {
+    -id : String
+    -idEvento : ObjectId
+    -precio : float
+    -nombreLocalidad : String
+    -cantidad : int
+}
+
++class Cupon {
+    -descuento: float
+    -fechaVencimiento: LocalDateTime
+    -codigo: String
+    -estado: EstadoCupon
+    -tipo: TipoCupon
+    -id: String
+    -nombre: String
+}
+
++enum TipoCupon {
+    +MULTIPLE
+    +UNICO
+}
+
++enum EstadoCupon {
+    +DIPONIBLE
+    +NO_DISPONIBLE
+}
+
++class Cuenta {
+    -rol : Rol
+    -email : String
+    -codigoValidacionRegistro : CodigoValidacion
+    -usuario : Usuario
+    -id : String
+    -fechaRegistro : LocalDateTime
+    -password : String
+    -estado : EstadoCuenta
+    -codigoValidacionPassword : CodigoValidacion
+}
+
++class Usuario {
+    -id: String
+    -nombre: String
+    -cedula: String
+    -direccion: String
+    -telefono: String
+}
+
++enum EstadoCuenta {
+    +ACTIVO
+    +INACTIVO
+    +ELIMINADO
+}
+
++enum Rol {
+    +CLIENTE
+    +ADMINISTRADOR
+}
+
++class CodigoValidacion {
+    -fechaCreacion: LocalDateTime
+    -codigo: String
+}
+
++class Evento {
+    +imagenPortada: String
+    +estado: EstadoEvento
+    +nombre: String
+    +descripcion: String
+    +direccion: String
+    +imagenLocalidades: String
+    +tipo: TipoEvento
+    +fecha: LocalDateTime
+    +ciudad: String
+    +id: String
+    +localidades: List<Localidad>
+}
+
++enum TipoEvento {
+    +DEPORTE
+    +CONCIERTO
+    +CULTURAL
+    +MODA
+    +BELLEZA
+}
+
++enum EstadoEvento {
+    +ACTIVO
+    +INACTIVO
+}
+
++class Localidad {
+    +precio: float
+    +nombre: String
+    +entradasVendidas: int
+    +capacidadMaxima: int
+}
+
++class Carrito {
+    -fecha: LocalDateTime
+    -items: List<DetalleCarrito>
+    -id: String
+    -idUsuario: ObjectId
+}
+
++class DetalleCarrito {
+    -cantidad: int
+    -nombreLocalidad: String
+    -idEvento: ObjectId
+}
+
+Orden *--> Pago
+Orden *--> DetalleOrden
+Orden *--> Cupon
+Orden *--> Cuenta
+Cupon *--> TipoCupon
+Cupon *--> EstadoCupon
+Cuenta *--> Usuario
+Cuenta *--> EstadoCuenta
+Cuenta *--> Rol
+Cuenta *--> CodigoValidacion
+Evento *--> TipoEvento
+Evento *--> EstadoEvento
+Evento *--> Localidad
+Carrito *--> Cuenta
+Carrito *--> DetalleCarrito
+@enduml

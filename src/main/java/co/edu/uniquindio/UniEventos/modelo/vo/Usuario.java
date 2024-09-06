@@ -1,5 +1,6 @@
 package co.edu.uniquindio.UniEventos.modelo.vo;
 
+import co.edu.uniquindio.UniEventos.modelo.documentos.Carrito;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
