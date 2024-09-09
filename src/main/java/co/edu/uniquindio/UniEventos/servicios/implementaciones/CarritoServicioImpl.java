@@ -1,11 +1,19 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
 
 import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.CrearCarritoDTO;
+import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.EventoCarritoDTO;
+import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.EventoEliminarCarritoDTO;
+import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.VistaCarritoDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Carrito;
+import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.repositorios.CarritoRepo;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CarritoServicio;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,9 +29,7 @@ public class CarritoServicioImpl implements CarritoServicio {
     public String crearCarrito(CrearCarritoDTO carrito) throws Exception {
 
         Carrito carro = Carrito.builder()
-                .fecha(carrito.fecha())
-                .id(carrito.id())
-                .items(carrito.items())
+                .fecha(LocalDateTime.now())
                 .idUsuario(carrito.idUsuario())
                 .build();
 
@@ -32,12 +38,18 @@ public class CarritoServicioImpl implements CarritoServicio {
     }
 
     @Override
-    public String agregarItemCarrito() throws Exception {
+    public String agregarItemCarrito(EventoCarritoDTO eventoCarritoDTO) throws Exception {
 
+        //id del carrito
+        //id evento, numBoletas, nombreLocalidad
+
+        Carrito carritoCLiente = buscarCLiente
+
+        return "";
     }
 
     @Override
-    public String eliminarItemCarrito() throws Exception {
+    public String eliminarItemCarrito(EventoEliminarCarritoDTO eventoEliminarCarritoDTO) throws Exception {
         return "";
     }
 
@@ -47,9 +59,19 @@ public class CarritoServicioImpl implements CarritoServicio {
     }
 
     @Override
-    public void obtenerInformacionCarrito() throws Exception {
+    public void obtenerInformacionCarrito(VistaCarritoDTO vistaCarritoDTO) throws Exception {
 
     }
 
+    private Cuenta obtenerCarritoCliente (String id) throws Exception {
+
+        Optional<Carrito> cuentaOptional = carritoRepo.buscarCarritoPorIdCliente(new ObjectId(id));
+
+        if(cuentaOptional.isEmpty()){
+            throw new Exception("La cuenta con el id: " + id + " no existe");
+        }
+
+        return cuentaOptional.get();
+    }
 
 }
