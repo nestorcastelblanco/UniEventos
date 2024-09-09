@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Pago {
 
     private String moneda;

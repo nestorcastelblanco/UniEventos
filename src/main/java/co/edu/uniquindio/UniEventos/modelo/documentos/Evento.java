@@ -16,6 +16,8 @@ import java.util.List;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Evento {
 
     @Id

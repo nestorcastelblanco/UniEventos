@@ -13,6 +13,8 @@ import java.util.List;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Carrito {
 
     private List<DetalleCarrito> items;

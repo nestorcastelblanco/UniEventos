@@ -1,5 +1,6 @@
 package co.edu.uniquindio.UniEventos.modelo.documentos;
 
+import co.edu.uniquindio.UniEventos.modelo.vo.DetalleCarrito;
 import co.edu.uniquindio.UniEventos.modelo.vo.DetalleOrden;
 import co.edu.uniquindio.UniEventos.modelo.vo.Pago;
 import lombok.*;
@@ -15,7 +16,9 @@ import java.util.List;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Orden {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Orden extends Carrito {
 
     private ObjectId idCliente;
     private LocalDateTime fecha;
@@ -25,4 +28,5 @@ public class Orden {
     private String id;
     private float total;
     private ObjectId idCupon;
+
 }

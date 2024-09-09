@@ -1,6 +1,7 @@
 package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
 import co.edu.uniquindio.UniEventos.dto.CrearCuponDTO;
+import co.edu.uniquindio.UniEventos.dto.EditarCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.InformacionCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.ItemCuponDTO;
 
@@ -10,7 +11,7 @@ public interface CuponServicio {
 
     String crearCupon(CrearCuponDTO crearCuponDTO) throws Exception;
 
-    String editarCupon() throws Exception;
+    String editarCupon(EditarCuponDTO editarCuponDTO) throws Exception;
 
     String eliminarCupon(String id) throws Exception;
 

@@ -1,14 +1,16 @@
 package co.edu.uniquindio.UniEventos.modelo.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
 @Getter
+@Setter
+@ToString
+@Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class CodigoValidacion {
 
     private String codigo;

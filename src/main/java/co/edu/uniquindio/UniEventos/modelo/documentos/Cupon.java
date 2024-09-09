@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cupon {
 
     @Id
@@ -27,13 +29,4 @@ public class Cupon {
     private EstadoCupon estado;
     private LocalDateTime fechaVencimiento;
 
-    public Cupon(String id, String codigo, float descuento, String nombre, TipoCupon tipo, EstadoCupon estado, LocalDateTime fechaVencimiento) {
-        this.id = id;
-        this.codigo = codigo;
-        this.descuento = descuento;
-        this.nombre = nombre;
-        this.tipo = tipo;
-        this.estado = estado;
-        this.fechaVencimiento = fechaVencimiento;
-    }
 }

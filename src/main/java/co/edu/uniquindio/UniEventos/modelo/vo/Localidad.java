@@ -9,7 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class Localidad {
 
     private String nombre;

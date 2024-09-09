@@ -1,5 +1,7 @@
 package co.edu.uniquindio.UniEventos.modelo.enums;
 
-public enum TipoEvento {
+import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
+
+public enum TipoEvento extends Cupon {
     CONCIERTO, CULTURAL , DEPORTE, MODA, BELLEZA
 }
