@@ -1,6 +1,6 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
 
-import co.edu.uniquindio.UniEventos.dto.*;
+import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.UniEventos.modelo.enums.Rol;

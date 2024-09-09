@@ -1,8 +1,8 @@
 package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
-import co.edu.uniquindio.UniEventos.dto.CrearOrdenDTO;
-import co.edu.uniquindio.UniEventos.dto.InformacionOrdenCompraDTO;
-import co.edu.uniquindio.UniEventos.dto.ItemOrdenDTO;
+import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.CrearOrdenDTO;
+import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
+import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package co.edu.uniquindio.UniEventos.dto;
+package co.edu.uniquindio.UniEventos.dto.CuponDTOs;
 
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCupon;
 import co.edu.uniquindio.UniEventos.modelo.enums.TipoCupon;
@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
-public record EditarCuponDTO(
+public record CrearCuponDTO(
         @NotBlank(message = "El código del cupón es obligatorio")
         @Length(max = 10, message = "El código del cupón no debe exceder los 10 caracteres") String codigo,
 
@@ -28,8 +28,7 @@ public record EditarCuponDTO(
 
         @Future(message = "La fecha de vencimiento debe estar en el futuro")
         @NotNull(message = "La fecha de vencimiento es obligatoria")
-        LocalDateTime fechaVencimiento,
-
-        @NotBlank(message = "El ID del cupón es obligatorio")
-        @Length(max = 24, message = "El ID del cupón no debe exceder los 24 caracteres") String id
+        LocalDateTime fechaVencimiento
 ) {}
+
+

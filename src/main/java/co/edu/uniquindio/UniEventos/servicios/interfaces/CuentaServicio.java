@@ -1,6 +1,6 @@
 package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
-import co.edu.uniquindio.UniEventos.dto.*;
+import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
 
 public interface CuentaServicio {
 

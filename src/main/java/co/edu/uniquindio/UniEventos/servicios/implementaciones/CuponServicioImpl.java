@@ -1,9 +1,9 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
 
-import co.edu.uniquindio.UniEventos.dto.CrearCuponDTO;
-import co.edu.uniquindio.UniEventos.dto.EditarCuponDTO;
-import co.edu.uniquindio.UniEventos.dto.InformacionCuponDTO;
-import co.edu.uniquindio.UniEventos.dto.ItemCuponDTO;
+import co.edu.uniquindio.UniEventos.dto.CuponDTOs.CrearCuponDTO;
+import co.edu.uniquindio.UniEventos.dto.CuponDTOs.EditarCuponDTO;
+import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
+import co.edu.uniquindio.UniEventos.dto.CuponDTOs.ItemCuponDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCupon;
 import co.edu.uniquindio.UniEventos.repositorios.CuponRepo;

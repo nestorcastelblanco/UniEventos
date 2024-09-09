@@ -1,8 +1,10 @@
 package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
+import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.CrearCarritoDTO;
+
 public interface CarritoServicio {
 
-    String crearCarrito() throws Exception;
+    String crearCarrito(CrearCarritoDTO carritoDTO) throws Exception;
 
     String agregarItemCarrito() throws Exception;
 

@@ -1,4 +1,4 @@
-package co.edu.uniquindio.UniEventos.dto;
+package co.edu.uniquindio.UniEventos.dto.CuentaDTOs;
 
 public record ValidarCuentaDTO (
         String correo,

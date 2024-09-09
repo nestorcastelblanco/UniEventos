@@ -1,4 +1,4 @@
-package co.edu.uniquindio.UniEventos.dto;
+package co.edu.uniquindio.UniEventos.dto.CuponDTOs;
 
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCupon;
 import co.edu.uniquindio.UniEventos.modelo.enums.TipoCupon;
