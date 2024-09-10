@@ -1,5 +1,7 @@
 package co.edu.uniquindio.UniEventos.modelo.documentos;
 
+import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCupon;
+import co.edu.uniquindio.UniEventos.modelo.enums.EstadoOrden;
 import co.edu.uniquindio.UniEventos.modelo.vo.DetalleCarrito;
 import co.edu.uniquindio.UniEventos.modelo.vo.DetalleOrden;
 import co.edu.uniquindio.UniEventos.modelo.vo.Pago;
@@ -28,5 +30,6 @@ public class Orden extends Carrito {
     private String id;
     private float total;
     private ObjectId idCupon;
+    private EstadoOrden estado;
 
 }
