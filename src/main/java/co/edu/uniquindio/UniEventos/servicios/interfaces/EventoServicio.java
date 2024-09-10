@@ -12,11 +12,9 @@ public interface EventoServicio {
 
     String eliminarEvento(String id) throws Exception;
 
-    InformacionEventoDTO obtenerInformacionCuenta(String id) throws Exception;
-
-    List<ItemEventoDTO> listarEventos();
+    List<ItemEventoDTO> listarEventos() throws Exception;
 
     List<ItemEventoDTO> filtrarEventos (FiltroEventoDTO filtroEventoDTO) throws Exception;
 
-
+    InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception;
 }
