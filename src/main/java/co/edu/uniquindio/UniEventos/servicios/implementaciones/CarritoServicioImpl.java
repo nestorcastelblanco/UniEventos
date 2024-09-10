@@ -34,6 +34,7 @@ public class CarritoServicioImpl implements CarritoServicio {
     @Override
     public String agregarItemCarrito() throws Exception {
 
+        return "";
     }
 
     @Override
