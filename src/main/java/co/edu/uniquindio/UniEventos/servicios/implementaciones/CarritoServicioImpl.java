@@ -38,6 +38,7 @@ public class CarritoServicioImpl implements CarritoServicio {
     }
 
     @Override
+<<<<<<< HEAD
     public String agregarItemCarrito(EventoCarritoDTO eventoCarritoDTO) throws Exception {
 
         //id del carrito
@@ -45,6 +46,10 @@ public class CarritoServicioImpl implements CarritoServicio {
 
         Carrito carritoCLiente = buscarCLiente
 
+=======
+    public String agregarItemCarrito() throws Exception {
+        
+>>>>>>> f1cd1d4cd5611bd89437153db02d76d02eeb54c6
         return "";
     }
 

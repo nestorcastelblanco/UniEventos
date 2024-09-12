@@ -24,10 +24,10 @@ public class Evento {
     @EqualsAndHashCode.Include
     private String id;
 
-    private String nombre, dirección, ciudad, descripción;
+    private String nombre, direccion, ciudad, descripcion;
     private TipoEvento tipo;
     private EstadoEvento estado;
-    private String imágenPortada;
+    private String imagenPortada;
     private LocalDateTime fecha;
     private List<Localidad> localidades;
     private String imagenLocalidades;

@@ -1,12 +1,9 @@
 package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
-<<<<<<< Updated upstream
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.CrearCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.EditarCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.ItemCuponDTO;
-=======
->>>>>>> Stashed changes
 
 import java.util.List;
 

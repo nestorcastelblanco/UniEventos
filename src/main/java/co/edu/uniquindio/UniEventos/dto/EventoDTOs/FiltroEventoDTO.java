@@ -1,4 +1,10 @@
 package co.edu.uniquindio.UniEventos.dto.EventoDTOs;
 
-public class FiltroEventoDTO {
+import co.edu.uniquindio.UniEventos.modelo.enums.TipoEvento;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record FiltroEventoDTO(
+) {
 }
+
