@@ -25,7 +25,7 @@ public class CuentaServicioImpl implements CuentaServicio {
     }
 
     @Override
-    public String crearCuenta(CrearCuentaDTO cuenta) throws Exception {
+    public void crearCuenta(CrearCuentaDTO cuenta) throws Exception {
 
         if (existeCedula(cuenta.cedula())){
             throw new Exception("Ya existe una cuenta con esta cedula");
@@ -55,7 +55,6 @@ public class CuentaServicioImpl implements CuentaServicio {
         );
 
         Cuenta cuentaCreada = cuentaRepo.save(nuevaCuenta);
-        return cuentaCreada.getId();
     }
 
     private boolean existeCedula(String cedula) {

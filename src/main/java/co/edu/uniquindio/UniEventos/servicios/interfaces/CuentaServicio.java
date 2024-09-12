@@ -4,7 +4,7 @@ import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
 
 public interface CuentaServicio {
 
-    String crearCuenta(CrearCuentaDTO cuenta) throws Exception;
+    void crearCuenta(CrearCuentaDTO cuenta) throws Exception;
 
     String editarCuenta(EditarCuentaDTO cuenta) throws Exception;
 
