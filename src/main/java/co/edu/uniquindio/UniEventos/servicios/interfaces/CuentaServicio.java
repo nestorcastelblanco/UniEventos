@@ -1,6 +1,8 @@
 package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
+import co.edu.uniquindio.UniEventos.config.JWTUtils;
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
+import co.edu.uniquindio.UniEventos.dto.TokenDTOs.TokenDTO;
 
 public interface CuentaServicio {
 
@@ -16,7 +18,9 @@ public interface CuentaServicio {
 
     String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception;
 
-    String iniciarSesion(LoginDTO loginDTO) throws Exception;
+    TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 
     String validarCuenta(ValidarCuentaDTO validarCuentaDTO) throws Exception;
+
+    String encriptarPassword(String password) throws Exception;
 }
