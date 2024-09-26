@@ -10,7 +10,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record EventoCarritoDTO(
-        String idCarrito, String idEvento, int numBoletas, String nombreLocalidad
+        ObjectId idCarrito,
+        ObjectId idEvento,
+        int numBoletas,
+        String nombreLocalidad,
+        ObjectId idCliente
 
     ) {
 }

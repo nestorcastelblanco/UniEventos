@@ -6,6 +6,7 @@ import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.EventoEliminarCarritoDTO;
 import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.VistaCarritoDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Carrito;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
+import co.edu.uniquindio.UniEventos.modelo.vo.DetalleCarrito;
 import co.edu.uniquindio.UniEventos.repositorios.CarritoRepo;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CarritoServicio;
 import org.bson.types.ObjectId;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,23 +40,35 @@ public class CarritoServicioImpl implements CarritoServicio {
     }
 
     @Override
-<<<<<<< HEAD
     public String agregarItemCarrito(EventoCarritoDTO eventoCarritoDTO) throws Exception {
 
         //id del carrito
         //id evento, numBoletas, nombreLocalidad
 
-        Carrito carritoCLiente = buscarCLiente
+        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorIdCliente(eventoCarritoDTO.idCliente());
+        Carrito carrito = carritoCliente.get();
 
-=======
-    public String agregarItemCarrito() throws Exception {
-        
->>>>>>> f1cd1d4cd5611bd89437153db02d76d02eeb54c6
+        DetalleCarrito detalleCarrito = DetalleCarrito.builder()
+                .cantidad(eventoCarritoDTO.numBoletas())
+                .nombreLocalidad(eventoCarritoDTO.nombreLocalidad())
+                .idEvento(eventoCarritoDTO.idEvento()).build();
+
+        carrito.getItems().add(detalleCarrito);
+        carritoRepo.save(carrito);
         return "";
     }
 
     @Override
     public String eliminarItemCarrito(EventoEliminarCarritoDTO eventoEliminarCarritoDTO) throws Exception {
+
+        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorId(eventoEliminarCarritoDTO.idCarrito());
+
+        Carrito carrito =  carritoCliente.get();
+        List<DetalleCarrito> lista = carrito.getItems();
+
+        lista.removeIf( i -> i.getId().equals(eventoEliminarCarritoDTO.idDetalle()) );
+        carritoRepo.save(carrito);
+
         return "";
     }
 
@@ -76,7 +90,7 @@ public class CarritoServicioImpl implements CarritoServicio {
             throw new Exception("La cuenta con el id: " + id + " no existe");
         }
 
-        return cuentaOptional.get();
+        return null;
     }
 
 }

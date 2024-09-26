@@ -1,6 +1,9 @@
 package co.edu.uniquindio.UniEventos.dto.CarritoDTOs;
 
-public record EventoEliminarCarritoDTO(
+import org.bson.types.ObjectId;
 
+public record EventoEliminarCarritoDTO(
+        ObjectId idDetalle,
+        ObjectId idCarrito
         ) {
 }
