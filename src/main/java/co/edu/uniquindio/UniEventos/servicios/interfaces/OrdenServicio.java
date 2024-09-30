@@ -3,8 +3,9 @@ package co.edu.uniquindio.UniEventos.servicios.interfaces;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.CrearOrdenDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
-import java.util.Map;
-import com.mercadopago.resources.preference.Preference;
+
+import co.edu.uniquindio.UniEventos.modelo.documentos.Orden;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -18,8 +19,9 @@ public interface OrdenServicio {
 
     InformacionOrdenCompraDTO obtenerInformacionOrden(String idOrden) throws Exception;
 
-    Preference realizarPago(String idOrden) throws Exception;
-    void recibirNotificacionMercadoPago(Map<String, Object> request);
+//    Preference realizarPago(String idOrden) throws Exception;
+//    void recibirNotificacionMercadoPago(Map<String, Object> request);
 
+    List<Orden> ordenesUsuario(ObjectId idUsuario) throws Exception;
 
 }

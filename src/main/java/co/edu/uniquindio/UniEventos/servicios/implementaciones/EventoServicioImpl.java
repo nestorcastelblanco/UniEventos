@@ -123,7 +123,8 @@ public class EventoServicioImpl implements EventoServicio {
                 eventoExistente.getLocalidades());
     }
 
-    private Evento obtenerEvento(String id) throws Exception {
+    @Override
+    public Evento obtenerEvento(String id) throws Exception {
         Optional<Evento> eventoOptional = eventoRepo.findById(id);
 
         if (eventoOptional.isEmpty()) {

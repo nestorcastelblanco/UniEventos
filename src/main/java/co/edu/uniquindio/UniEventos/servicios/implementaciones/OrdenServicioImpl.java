@@ -10,7 +10,12 @@ import co.edu.uniquindio.UniEventos.modelo.vo.DetalleOrden;
 import co.edu.uniquindio.UniEventos.modelo.vo.Localidad;
 import co.edu.uniquindio.UniEventos.modelo.vo.Pago;
 import co.edu.uniquindio.UniEventos.repositorios.OrdenRepo;
+import co.edu.uniquindio.UniEventos.servicios.interfaces.EventoServicio;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.OrdenServicio;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
@@ -18,42 +23,42 @@ import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.payment.Payment;
+import com.mercadopago.resources.preference.Preference;
+import jakarta.mail.internet.MimeMessage;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Map;
-import com.mercadopago.resources.preference.Preference;
-
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.io.IOException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Service
 @Transactional
 public class OrdenServicioImpl implements OrdenServicio {
 
     private final OrdenRepo ordenRepo;
+    private final JavaMailSender mailSender;
+    private final EventoServicio eventoServicio;
 
-    public OrdenServicioImpl(OrdenRepo ordenRepo) {
+    public OrdenServicioImpl(OrdenRepo ordenRepo, JavaMailSender mailSender, EventoServicio eventoServicio) {
         this.ordenRepo = ordenRepo;
+        this.mailSender = mailSender;
+        this.eventoServicio = eventoServicio;
     }
-
 
     @Override
     public String crearOrden(CrearOrdenDTO orden) throws Exception {
-
-        // Validar si existe una orden con el mismo ID
-        // Se verifica si ya existe una orden en la base de datos con el ID proporcionado en el objeto CrearOrdenDTO.
         if (existeOrden(orden.id())) {
-            throw new Exception("Ya existe un cupón con este código");
+            throw new Exception("Ya existe una orden con este código");
         }
-        // Crear una nueva instancia de Orden
-        Orden nuevaOrden = new Orden();
 
-        // Asignar los valores del DTO a la entidad Orden
+        Orden nuevaOrden = new Orden();
         nuevaOrden.setIdCliente(orden.idCliente());
         nuevaOrden.setFecha(LocalDateTime.now());
         nuevaOrden.setCodigoPasarela(orden.codigoPasarela());
@@ -63,59 +68,47 @@ public class OrdenServicioImpl implements OrdenServicio {
         nuevaOrden.setIdCupon(orden.idCupon());
         nuevaOrden.setEstado(EstadoOrden.DISPONIBLE);
 
-        // Guardar la Orden en la base de datos
         Orden ordenCreada = ordenRepo.save(nuevaOrden);
-
-        // Retornar el ID de la Orden creada
         return ordenCreada.getId();
     }
 
-    //Método auxiliar para verificar si una Orden con el mismo código ya existe
     private boolean existeOrden(String id) {
         return ordenRepo.buscarOrdenPorId(id).isPresent();
     }
 
     @Override
     public String cancelarOrden(String idOrden) throws Exception {
-        // Obtener la orden por su ID
         Orden orden = obtenerOrden(idOrden);
-
-        // Cambiar el estado de la orden a "CANCELADA"
         orden.setEstado(EstadoOrden.CANCELADA);
-
-        // Guardar los cambios en la base de datos
         ordenRepo.save(orden);
-
-        // Retornar un mensaje indicando que la orden ha sido cancelada
         return "Orden cancelada";
     }
 
-    // Método auxiliar para obtener una Orden por su ID
-    private Orden obtenerOrden(String idOrden) throws Exception {
-        // Buscar la orden en la base de datos utilizando el ID
-        Optional<Orden> ordenOptional = ordenRepo.findById(idOrden);
+    @Override
+    public List<Orden> ordenesUsuario(ObjectId idUsuario) throws Exception {
+        if (ordenRepo.findByIdCliente(idUsuario).isEmpty()) {
+            throw new Exception("No existe una orden");
+        }
+        return ordenRepo.findByIdCliente(idUsuario);
+    }
 
-        // Si la orden no existe, lanzar una excepción
+    private Orden obtenerOrden(String idOrden) throws Exception {
+        Optional<Orden> ordenOptional = ordenRepo.findById(idOrden);
         if (ordenOptional.isEmpty()) {
             throw new Exception("La orden con el id: " + idOrden + " no existe");
         }
-
-        // Retornar la orden encontrada
         return ordenOptional.get();
     }
 
     @Override
     public List<ItemOrdenDTO> obtenerHistorialOrdenes(String idCuenta) throws Exception {
-
-        // Convertir el ID de orden a ObjectId
         ObjectId objectId = new ObjectId(idCuenta);
-
-        // Buscar todas las órdenes asociadas a la cuenta
         List<Orden> ordenes = ordenRepo.findByIdCliente(objectId);
+
         if (ordenes.isEmpty()) {
             throw new Exception("No se encontraron órdenes para la cuenta proporcionada");
         }
-        // Convertir las órdenes en DTOs de historial de órdenes
+
         return ordenes.stream()
                 .map(orden -> new ItemOrdenDTO(
                         orden.getId(),
@@ -127,16 +120,13 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     @Override
     public InformacionOrdenCompraDTO obtenerInformacionOrden(String idOrden) throws Exception {
-
-        // Buscar la orden por ID
         Optional<Orden> ordenOptional = ordenRepo.buscarOrdenPorId(idOrden);
         if (ordenOptional.isEmpty()) {
             throw new Exception("La orden con el id: " + idOrden + " no existe");
         }
 
-
         Orden orden = obtenerOrden(idOrden);
-        // Obtener información detallada de la orden
+
         return new InformacionOrdenCompraDTO(
                 orden.getIdCliente(),
                 orden.getFecha(),
@@ -149,7 +139,49 @@ public class OrdenServicioImpl implements OrdenServicio {
                 orden.getEstado()
         );
     }
-    @Override
+
+
+    public String generarQR(String codigoOrden) throws Exception {
+        String qrText = "Orden ID: " + codigoOrden;
+        int width = 300;
+        int height = 300;
+        String fileType = "png";
+
+        String qrFileName = "qr_" + codigoOrden + ".png";
+        Path path = Paths.get("src/main/resources/qrCodes/" + qrFileName);
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(qrText, BarcodeFormat.QR_CODE, width, height);
+        MatrixToImageWriter.writeToPath(bitMatrix, fileType, path);
+
+        return path.toString();
+    }
+
+
+    public void enviarCorreoOrden(String idOrden, String emailCliente) throws Exception {
+        // Generar QR
+        String qrFilePath = generarQR(idOrden);
+
+        // Crear mensaje de correo
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setSubject("Detalles de tu orden " + idOrden);
+        helper.setTo(emailCliente);
+
+        String correoContenido = "<p>Hola,</p>" +
+                "<p>Gracias por tu compra. A continuación te enviamos los detalles de tu orden y el código QR:</p>" +
+                "<p>Orden ID: " + idOrden + "</p>" +
+                "<p>Adjunto encontrarás tu código QR para el evento.</p>";
+
+        helper.setText(correoContenido, true);
+        Path qrPath = Path.of(qrFilePath);
+        helper.addAttachment("qr_" + idOrden + ".png", qrPath.toFile());
+
+        mailSender.send(message);
+    }
+
+
     public Preference realizarPago(String idOrden) throws Exception {
 
 
@@ -163,9 +195,8 @@ public class OrdenServicioImpl implements OrdenServicio {
 
 
             // Obtener el evento y la localidad del ítem
-            Evento evento = eventoServicio.obtenerEvento(item.getCodigoEvento().toString());
+            Evento evento = eventoServicio.obtenerEvento(item.getIdEvento().toString());
             Localidad localidad = evento.obtenerLocalidad(item.getNombreLocalidad());
-
 
             // Crear el item de la pasarela
             PreferenceItemRequest itemRequest =
@@ -218,7 +249,6 @@ public class OrdenServicioImpl implements OrdenServicio {
         return preference;
     }
 
-    @Override
     public void recibirNotificacionMercadoPago(Map<String, Object> request) {
         try {
 
@@ -247,8 +277,6 @@ public class OrdenServicioImpl implements OrdenServicio {
                 // Obtener el id de la orden asociada al pago que viene en los metadatos
                 String idOrden = payment.getMetadata().get("id_orden").toString();
 
-
-                // Se obtiene la orden guardada en la base de datos y se le asigna el pago
                 Orden orden = obtenerOrden(idOrden);
                 Pago pago = crearPago(payment);
                 orden.setPago(pago);

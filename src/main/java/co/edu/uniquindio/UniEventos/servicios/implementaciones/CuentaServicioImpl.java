@@ -60,7 +60,7 @@ public class CuentaServicioImpl implements CuentaServicio {
                 )
         );
 
-        Cuenta cuentaCreada = cuentaRepo.save(nuevaCuenta);
+        cuentaRepo.save(nuevaCuenta);
     }
 
     private boolean existeCedula(String cedula) {
@@ -176,11 +176,9 @@ public class CuentaServicioImpl implements CuentaServicio {
         Cuenta cuenta = obtenerPorEmail(loginDTO.correo());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-
         if( !passwordEncoder.matches(loginDTO.password(), cuenta.getPassword()) ) {
             throw new Exception("La contraseña es incorrecta");
         }
-
 
         Map<String, Object> map = construirClaims(cuenta);
         return new TokenDTO( jwtUtils.generarToken(cuenta.getEmail(), map) );

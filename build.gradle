@@ -4,11 +4,9 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
-
 group = 'co.edu.uniquindio'
 version = '0.0.1-SNAPSHOT'
 description = 'Breve descripción del proyecto'
-
 
 java {
     toolchain {
@@ -16,18 +14,15 @@ java {
     }
 }
 
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
 }
 
-
 repositories {
     mavenCentral()
 }
-
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -37,17 +32,35 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Librería para enviar correos
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Librería para manejo de emails simplificado
     implementation 'org.simplejavamail:simple-java-mail:8.11.2'
+
+    // Seguridad - Criptografía
     implementation 'org.springframework.security:spring-security-crypto:6.3.3'
+
+    // JWT para autenticación
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
-    implementation 'com.google.firebase:firebase-admin:9.2.0'
-    implementation 'com.mercadopago:sdk-java:2.1.27'
-}
 
+    // Firebase
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+
+    // MercadoPago SDK
+    implementation 'com.mercadopago:sdk-java:2.1.27'
+
+    // QR Code generación
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.google.zxing:javase:3.4.1'
+
+    // Swagger para documentación de la API
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+}
 
 test {
     useJUnitPlatform()
 }
-

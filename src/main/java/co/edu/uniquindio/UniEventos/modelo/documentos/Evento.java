@@ -33,4 +33,14 @@ public class Evento {
     private String imagenLocalidades;
 
 
+    public Localidad obtenerLocalidad(String nombreLocalidad) {
+        if (localidades != null) {
+            for (Localidad localidad : localidades) {
+                if (localidad.getNombre().equalsIgnoreCase(nombreLocalidad)) {
+                    return localidad;
+                }
+            }
+        }
+        return null;
+    }
 }

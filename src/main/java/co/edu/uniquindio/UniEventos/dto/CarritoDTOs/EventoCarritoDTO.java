@@ -14,7 +14,6 @@ public record EventoCarritoDTO(
         ObjectId idEvento,
         int numBoletas,
         String nombreLocalidad,
-        ObjectId idCliente
-
+        String idCliente
     ) {
 }
