@@ -5,9 +5,11 @@ import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
 
 import co.edu.uniquindio.UniEventos.modelo.documentos.Orden;
+import com.mercadopago.resources.preference.Preference;
 import org.bson.types.ObjectId;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrdenServicio {
 
@@ -19,9 +21,10 @@ public interface OrdenServicio {
 
     InformacionOrdenCompraDTO obtenerInformacionOrden(String idOrden) throws Exception;
 
-//    Preference realizarPago(String idOrden) throws Exception;
-//    void recibirNotificacionMercadoPago(Map<String, Object> request);
-
     List<Orden> ordenesUsuario(ObjectId idUsuario) throws Exception;
+
+    Preference realizarPago(String idOrden) throws Exception;
+
+    void recibirNotificacionMercadoPago(Map<String, Object> request);
 
 }

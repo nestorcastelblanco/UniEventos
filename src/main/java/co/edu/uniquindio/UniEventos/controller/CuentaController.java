@@ -1,36 +1,73 @@
 package co.edu.uniquindio.UniEventos.controller;
 
-import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.CrearCuentaDTO;
-import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.EditarCuentaDTO;
-import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.InformacionCuentaDTO;
+import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
+import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuentaServicio;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/cuenta");
+@RequestMapping("api/cuenta")
 public class CuentaController {
 
     private final CuentaServicio cuentaServicio;
 
     @PostMapping("/crear-cuenta")
-    public void crearCuenta(CrearCuentaDTO crearCuentaDTO) throws Exception{
+    public ResponseEntity<MensajeDTO<String>> crearCuenta(@Valid @RequestBody CrearCuentaDTO cuenta) throws Exception{
+        cuentaServicio.crearCuenta(cuenta);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta creada exitosamente"));
     }
 
-    public void editarCuenta(EditarCuentaDTO editarCuentaDTO) throws Exception{
-
+    @PutMapping("/editar-perfil")
+    public ResponseEntity<MensajeDTO<String>> editarCuenta(@Valid @RequestBody EditarCuentaDTO cuenta) throws Exception{
+        cuentaServicio.editarCuenta(cuenta);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta editada exitosamente"));
     }
 
-    public void eliminarCuenta(String id) throws Exception{
-
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<MensajeDTO<String>> eliminarCuenta(@PathVariable String id) throws Exception{
+        cuentaServicio.eliminarCuenta(id);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta eliminada exitosamente"));
     }
 
-    public InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception{
-        return null;
+    @GetMapping("/obtener/{id}")
+    public ResponseEntity<MensajeDTO<InformacionCuentaDTO>> obtenerInformacionCuenta(@PathVariable String id) throws Exception{
+        InformacionCuentaDTO info = cuentaServicio.obtenerInformacionCuenta(id);
+        return ResponseEntity.ok(new MensajeDTO<>(false, info));
     }
 
+    @PostMapping("/enviar-codigo-recuperacion")
+    public String enviarCodigoRecuperacionPassword(@RequestParam String correo) throws Exception {
+        return cuentaServicio.enviarCodigoRecuperacionPassword(correo);
+    }
+
+    @PostMapping("/cambiar-password")
+    public String cambiarPassword(@RequestBody CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
+        return cuentaServicio.cambiarPassword(cambiarPasswordDTO);
+    }
+
+    @PostMapping("/iniciar-sesion")
+    public String iniciarSesion(@RequestBody LoginDTO loginDTO) throws Exception {
+        return "holaa";
+    }
+
+    @PostMapping("/validar-cuenta")
+    public String validarCuenta(@RequestBody ValidarCuentaDTO validarCuentaDTO) throws Exception {
+        return cuentaServicio.validarCuenta(validarCuentaDTO);
+    }
+
+    @PostMapping("/encriptar-password")
+    public String encriptarPassword(@RequestParam String password) throws Exception {
+        return cuentaServicio.encriptarPassword(password);
+    }
+
+    @GetMapping("/listar-todo")
+    public ResponseEntity<MensajeDTO<List<ItemCuentaDTO>>> listarCuentas(){
+        List<ItemCuentaDTO> lista = cuentaServicio.listarCuentas();
+        return ResponseEntity.ok(new MensajeDTO<>(false, lista));
+    }
 
 }

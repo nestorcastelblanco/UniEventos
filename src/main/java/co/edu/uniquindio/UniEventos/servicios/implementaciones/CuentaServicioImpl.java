@@ -2,6 +2,7 @@ package co.edu.uniquindio.UniEventos.servicios.implementaciones;
 
 import co.edu.uniquindio.UniEventos.config.JWTUtils;
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
+import co.edu.uniquindio.UniEventos.dto.EmailDTOs.EmailDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.TokenDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCuenta;
@@ -22,12 +23,14 @@ import java.util.Optional;
 @Transactional
 public class CuentaServicioImpl implements CuentaServicio {
 
+    private final EmailServicioImpl emailServicioImpl;
     private JWTUtils jwtUtils;
 
     private final CuentaRepo cuentaRepo;
 
-    public CuentaServicioImpl(CuentaRepo cuentaRepo) {
+    public CuentaServicioImpl(CuentaRepo cuentaRepo, EmailServicioImpl emailServicioImpl) {
         this.cuentaRepo = cuentaRepo;
+        this.emailServicioImpl = emailServicioImpl;
     }
 
     @Override
@@ -135,6 +138,8 @@ public class CuentaServicioImpl implements CuentaServicio {
                         LocalDateTime.now()
                 )
         );
+
+        emailServicioImpl.enviarCorreo( new EmailDTO("Asunto", "Cuerpo mensaje", "Correo destino") );
 
         cuentaRepo.save(cuentaUsuario);
 

@@ -1,5 +1,6 @@
 package co.edu.uniquindio.UniEventos.config;
 
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -9,4 +10,3 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
 }
-

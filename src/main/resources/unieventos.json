@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "unieventos-2446e",
+  "private_key_id": "8450a3c9f57474e3e04b0a0d8eeb2b669b68a0c4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDaarwXUd5I1IbX\n53bRMP2W7YWSHtKBvWY7F+ordC5QOZPsrQRdCvnADWfCOdu5kfLNk8hxrQfaTp6c\nS4OrFfxCWn0fbXGrnciJ3hpTmBflR92LD7qr64TCvssPjOFkx0Yv3L4V6lamZZUW\nMzkRcB1zZvH6zHp6MOawv1agqwXwHPjhDkR61nXTwhtFLWYV0EHeioLgAwssf24b\ncMtQ1o83q4LK7wrqU2UpTw5SWnCM/Mhcrw4zZdPqHSwo1wUEMObLjo/QkfLekJXh\nG952ilIQuwAK72rj38dkg2xOK1q7WBJPhrH06+S6HcX5nzkJkhK0EV59lCOQPk52\n1kRBLxrVAgMBAAECggEAH/068BVq/3K1DyEU612H/pdqFTUTcrIJK4V8pAGfmNtd\n+W97sJ7fZkvwUueDcWHZVFedJ10Gxef23gBHWALfz94N7lDqsY5p5RtU8sJXWZrV\nbT0QA4b6ikVEW1IwXsC63F6xrmcEatl85OP6qz2m6pR8w1U4aPYJi4BykRSLSZfH\nSQj32kGfCP71MGbrE3onUmyxL5jMKq1tpoXHv9/tWQpbzNfObypd6mPrZ58ZNJlT\nPbSaLEw4zu/vzwK3ddULiUQjOFkbvrB05MEPOpiWw0pLTj5bpaejsQzc7KBPeWzf\nluX+dJA92iJ1K+0LoP/r7C0lS8SfCFSj9gxX/xhKUQKBgQD8Lv7oDgf3+PmKNG68\nDuR8yp+NMqNC6jTLpRmJ9IIxNdtLq0aQfmI7v4KauBJ8Xqz1Cx6ksfJrm4ox/0rl\no1ktucpWZppR9tSnDORFE0mhpMDLP2+DQH/EKimA6EM3Farg9pZaGckwWfvwk3y/\n9l/OQMBWY9VF0ZH7tSG6HJHX/QKBgQDduOvFlQbkhVf4hnr1+Zspn/B22Yc1Q2jA\nJfGGhv+I4Z27T/FcuXPp0rnhfENRVjy7wQ1oghf9hqgG+qH3faI5iNV0OTez5nY9\nZUf2UW2X39+7nW9KtOdKimpnHGwhafOF+uUvcroyeoBYy8IR249FSbi3GoIFoeCa\niUL5WUSpuQKBgQDQtpSBuhseQBFHMN31Bt5T6d7jHWXBm9TWNm5MnvChidFVbwuX\nywHCMV4GbxHdnP3IUMurwxq/tJtLhd6W7/p+vaWYnJJcA8079I94G950ycZGcNn5\n5wfXco2nApOeo3Apf+wv5ed8/Pxmv6oftejU6wJEfZuljS0lBWREhCCwgQKBgADH\nM1ygJ0QKC8L9hdTzKU4+F3PzU3wmXmm+OFjGhIMQd6M+ppQyumtpp+lYrEvOx6vJ\nA6kIO9lR7akInCToNfeJuWYNBVsGRgf1IQmGQ6Iy0PAxn0Bd3inuzmzKNr7vRkGE\nHeXKu0iOEYE+RdIWOSx/E7zgxPAMH2Orc6a4X3tRAoGBAMxh0aKEUgkzHvmWHOKC\nMRMXN7XRsO5UiSR75A3jz6FdmYSduduvymtRrus/284ZxtUG2Ox/NIsP8uzEXsvf\nkPrYm5JnTzjAlUuM2o+dul+I3MsMTI+sQS/j0lXr8/h/G4V6plWt7Z7jhez9qK4h\nNf03p0fol+CXFUjEUmpb8m6p\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-jnc3w@unieventos-2446e.iam.gserviceaccount.com",
+  "client_id": "110322040893674147799",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-jnc3w%40unieventos-2446e.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

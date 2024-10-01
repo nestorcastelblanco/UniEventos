@@ -46,9 +46,8 @@ public class OrdenServicioImpl implements OrdenServicio {
     private final JavaMailSender mailSender;
     private final EventoServicio eventoServicio;
 
-    public OrdenServicioImpl(OrdenRepo ordenRepo, JavaMailSender mailSender, EventoServicio eventoServicio) {
+    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio) {
         this.ordenRepo = ordenRepo;
-        this.mailSender = mailSender;
         this.eventoServicio = eventoServicio;
     }
 
@@ -182,6 +181,7 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
 
+    @Override
     public Preference realizarPago(String idOrden) throws Exception {
 
 
@@ -191,17 +191,18 @@ public class OrdenServicioImpl implements OrdenServicio {
 
 
         // Recorrer los items de la orden y crea los ítems de la pasarela
-        for(DetalleOrden item : ordenGuardada.getItems()){
+        for(DetalleOrden item : ordenGuardada.getDetalle()){
 
 
             // Obtener el evento y la localidad del ítem
-            Evento evento = eventoServicio.obtenerEvento(item.getIdEvento().toString());
+            Evento evento = eventoServicio.obtenerEvento(item.getCodigoEvento().toString());
             Localidad localidad = evento.obtenerLocalidad(item.getNombreLocalidad());
+
 
             // Crear el item de la pasarela
             PreferenceItemRequest itemRequest =
                     PreferenceItemRequest.builder()
-                            .id(evento.getId())
+                            .id(evento.getCodigo())
                             .title(evento.getNombre())
                             .pictureUrl(evento.getImagenPortada())
                             .categoryId(evento.getTipo().name())
@@ -231,7 +232,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .backUrls(backUrls)
                 .items(itemsPasarela)
-                .metadata(Map.of("id_orden", ordenGuardada.getId()))
+                .metadata(Map.of("id_orden", ordenGuardada.getCodigo()))
                 .notificationUrl("URL NOTIFICACION")
                 .build();
 
@@ -248,6 +249,7 @@ public class OrdenServicioImpl implements OrdenServicio {
 
         return preference;
     }
+
 
     public void recibirNotificacionMercadoPago(Map<String, Object> request) {
         try {
@@ -288,6 +290,7 @@ public class OrdenServicioImpl implements OrdenServicio {
             e.printStackTrace();
         }
     }
+
     private Pago crearPago(Payment payment) {
         Pago pago = new Pago();
         pago.setId(payment.getId().toString());
@@ -300,4 +303,5 @@ public class OrdenServicioImpl implements OrdenServicio {
         pago.setValorTransaccion(payment.getTransactionAmount().floatValue());
         return pago;
     }
+    
 }

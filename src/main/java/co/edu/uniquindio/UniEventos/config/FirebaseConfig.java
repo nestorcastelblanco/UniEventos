@@ -1,5 +1,6 @@
 package co.edu.uniquindio.UniEventos.config;
 
+
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -16,19 +17,23 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp intializeFirebase() throws IOException {
         FileInputStream serviceAccount = new FileInputStream(
-                "src/main/resources/NOMBRE_ARCHIVO.json"
+                "src/main/resources/unieventos.json"
         );
 
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("NOMBRE_BUCKET")
+                .setStorageBucket("Unieventos")
                 .build();
 
 
         if(FirebaseApp.getApps().isEmpty()) {
             return FirebaseApp.initializeApp(options);
         }
+
+
         return null;
     }
+
+
 }
