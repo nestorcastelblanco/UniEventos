@@ -1,5 +1,6 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
 
+import co.edu.uniquindio.UniEventos.dto.EmailDTOs.EmailDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.CrearOrdenDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
@@ -34,16 +35,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.io.IOException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Service
 @Transactional
 public class OrdenServicioImpl implements OrdenServicio {
 
     private final OrdenRepo ordenRepo;
-    private final JavaMailSender mailSender;
     private final EventoServicio eventoServicio;
 
     public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio) {
@@ -160,24 +157,16 @@ public class OrdenServicioImpl implements OrdenServicio {
     public void enviarCorreoOrden(String idOrden, String emailCliente) throws Exception {
         // Generar QR
         String qrFilePath = generarQR(idOrden);
-
-        // Crear mensaje de correo
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-        helper.setSubject("Detalles de tu orden " + idOrden);
-        helper.setTo(emailCliente);
+        EmailServicioImpl emailServicio = new EmailServicioImpl();
 
         String correoContenido = "<p>Hola,</p>" +
                 "<p>Gracias por tu compra. A continuación te enviamos los detalles de tu orden y el código QR:</p>" +
                 "<p>Orden ID: " + idOrden + "</p>" +
                 "<p>Adjunto encontrarás tu código QR para el evento.</p>";
 
-        helper.setText(correoContenido, true);
-        Path qrPath = Path.of(qrFilePath);
-        helper.addAttachment("qr_" + idOrden + ".png", qrPath.toFile());
+        emailServicio.enviarCorreo(new EmailDTO("Detalles Compra", correoContenido, emailCliente));
 
-        mailSender.send(message);
+
     }
 
 
@@ -191,18 +180,18 @@ public class OrdenServicioImpl implements OrdenServicio {
 
 
         // Recorrer los items de la orden y crea los ítems de la pasarela
-        for(DetalleOrden item : ordenGuardada.getDetalle()){
+        for(DetalleOrden item : ordenGuardada.getItems()){
 
 
             // Obtener el evento y la localidad del ítem
-            Evento evento = eventoServicio.obtenerEvento(item.getCodigoEvento().toString());
+            Evento evento = eventoServicio.obtenerEvento(item.getId().toString());
             Localidad localidad = evento.obtenerLocalidad(item.getNombreLocalidad());
 
 
             // Crear el item de la pasarela
             PreferenceItemRequest itemRequest =
                     PreferenceItemRequest.builder()
-                            .id(evento.getCodigo())
+                            .id(evento.getId())
                             .title(evento.getNombre())
                             .pictureUrl(evento.getImagenPortada())
                             .categoryId(evento.getTipo().name())
@@ -232,7 +221,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .backUrls(backUrls)
                 .items(itemsPasarela)
-                .metadata(Map.of("id_orden", ordenGuardada.getCodigo()))
+                .metadata(Map.of("id_orden", ordenGuardada.getId()))
                 .notificationUrl("URL NOTIFICACION")
                 .build();
 
@@ -303,5 +292,5 @@ public class OrdenServicioImpl implements OrdenServicio {
         pago.setValorTransaccion(payment.getTransactionAmount().floatValue());
         return pago;
     }
-    
+
 }

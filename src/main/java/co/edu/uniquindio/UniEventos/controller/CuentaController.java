@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/cuenta")
@@ -65,7 +67,7 @@ public class CuentaController {
     }
 
     @GetMapping("/listar-todo")
-    public ResponseEntity<MensajeDTO<List<ItemCuentaDTO>>> listarCuentas(){
+    public ResponseEntity<MensajeDTO<List<ItemCuentaDTO>>> listarCuentas() throws Exception {
         List<ItemCuentaDTO> lista = cuentaServicio.listarCuentas();
         return ResponseEntity.ok(new MensajeDTO<>(false, lista));
     }

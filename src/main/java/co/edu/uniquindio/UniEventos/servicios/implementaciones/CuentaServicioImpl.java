@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -112,6 +113,9 @@ public class CuentaServicioImpl implements CuentaServicio {
     @Override
     public InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception {
         Cuenta cuentaUsuario = obtenerCuenta(id);
+        if (cuentaUsuario ==  null){
+            return null;
+        }
         return new InformacionCuentaDTO(
                 cuentaUsuario.getId(),
                 cuentaUsuario.getUsuario().getNombre(),
@@ -216,6 +220,25 @@ public class CuentaServicioImpl implements CuentaServicio {
     public String encriptarPassword(String password) throws Exception {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode ( password);
+    }
+
+    @Override
+    public List<ItemCuentaDTO> listarCuentas() throws Exception {
+        List<Cuenta> cuentas = cuentaRepo.findAll();
+
+        if(cuentas.isEmpty()){
+            throw new Exception("No se encontraron cuentas registradas");
+        }
+
+        // Convertimos las cuentas a una lista de ItemCuentaDTO para retornar la información
+        return cuentas.stream().map(cuenta -> new ItemCuentaDTO(
+                cuenta.getId(),
+                cuenta.getUsuario().getNombre(),
+                cuenta.getEmail(),
+                cuenta.getUsuario().getTelefono(),
+                cuenta.getEstadoCuenta(),
+                cuenta.getRol()
+        )).toList();
     }
 
     private Cuenta obtenerCuenta (String id) throws Exception {

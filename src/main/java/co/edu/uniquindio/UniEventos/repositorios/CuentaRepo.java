@@ -10,13 +10,15 @@ import java.util.Optional;
 @Repository
 public interface CuentaRepo extends MongoRepository<Cuenta, String> {
 
-    @Query ( "{ usuario.cedula : ?0 }")
+    @Query("{ 'usuario.cedula' : ?0 }")
     Optional<Cuenta> buscarCuentaPorCedula(String cedula);
 
-    @Query ( "{ email : ?0 }")
+    @Query("{ 'email' : ?0 }")
     Optional<Cuenta> buscarCuentaPorCorreo(String correo);
 
-    @Query("{email : ?0, password : ?1}")
+    @Query("{ 'email' : ?0, 'password' : ?1 }")
     Optional<Cuenta> validarDatosAutenticacion(String email, String password);
 
+    @Query("{ 'id' : ?0 }")
+    Optional<Cuenta> obtenerCuentaPorId(String id);
 }
