@@ -11,6 +11,8 @@ import co.edu.uniquindio.UniEventos.modelo.vo.CodigoValidacion;
 import co.edu.uniquindio.UniEventos.modelo.vo.Usuario;
 import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuentaServicio;
+import co.edu.uniquindio.UniEventos.servicios.interfaces.EmailServicio;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +26,14 @@ import java.util.Optional;
 @Transactional
 public class CuentaServicioImpl implements CuentaServicio {
 
-    private final EmailServicioImpl emailServicioImpl;
+    private final EmailServicio emailServicio;
     private JWTUtils jwtUtils;
-
     private final CuentaRepo cuentaRepo;
 
-    public CuentaServicioImpl(CuentaRepo cuentaRepo, EmailServicioImpl emailServicioImpl) {
+    @Autowired
+    public CuentaServicioImpl(CuentaRepo cuentaRepo, EmailServicio emailServicio) {
         this.cuentaRepo = cuentaRepo;
-        this.emailServicioImpl = emailServicioImpl;
+        this.emailServicio = emailServicio;
     }
 
     @Override
@@ -143,7 +145,7 @@ public class CuentaServicioImpl implements CuentaServicio {
                 )
         );
 
-        emailServicioImpl.enviarCorreo( new EmailDTO("Asunto", "Cuerpo mensaje", "Correo destino") );
+        emailServicio.enviarCorreo( new EmailDTO("Asunto", "Cuerpo mensaje", "Correo destino") );
 
         cuentaRepo.save(cuentaUsuario);
 

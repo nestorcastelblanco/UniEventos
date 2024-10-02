@@ -5,6 +5,7 @@ import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.LoginDTO;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuentaServicio;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AutenticacionControlador {
 
-
+    @Autowired
     private final CuentaServicio cuentaServicio;
 
 
@@ -26,6 +27,7 @@ public class AutenticacionControlador {
         TokenDTO token = cuentaServicio.iniciarSesion(loginDTO);
         return ResponseEntity.ok(new MensajeDTO<>(false, token));
     }
+
 
 
 }

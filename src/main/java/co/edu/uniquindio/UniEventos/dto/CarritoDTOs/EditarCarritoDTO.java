@@ -13,5 +13,5 @@ public record EditarCarritoDTO(
         @NotBlank(message = "La fecha no se encuentra") LocalDateTime fecha,
         @NotBlank(message = "No se ingreso el campo de cédula") String id,
         @NotBlank ObjectId idUsuario
-    ) {
+) {
 }

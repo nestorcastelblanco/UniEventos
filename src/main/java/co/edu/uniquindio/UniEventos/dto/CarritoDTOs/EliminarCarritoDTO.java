@@ -5,5 +5,5 @@ import org.bson.types.ObjectId;
 
 public record EliminarCarritoDTO(
         @NotBlank ObjectId idCarrito
-    ) {
+) {
 }

@@ -4,6 +4,5 @@ public record ActualizarItemCarritoDTO(
         String idCliente,
         String idEvento,
         int nuevaCantidad
-    ) {
-
+) {
 }

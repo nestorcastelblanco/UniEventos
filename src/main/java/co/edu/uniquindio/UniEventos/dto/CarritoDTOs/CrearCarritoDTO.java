@@ -10,5 +10,5 @@ import java.util.List;
 
 public record CrearCarritoDTO(
         @NotBlank ObjectId idUsuario
-    ) {
+) {
 }

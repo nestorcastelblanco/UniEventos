@@ -22,5 +22,4 @@ public class Carrito {
     private LocalDateTime fecha;
     private String id;
     private ObjectId idUsuario;
-
 }

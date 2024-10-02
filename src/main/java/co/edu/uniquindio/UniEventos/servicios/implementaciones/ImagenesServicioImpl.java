@@ -6,7 +6,7 @@ import com.google.firebase.cloud.StorageClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
-
+@Service
 public class ImagenesServicioImpl implements ImagenesServicio {
 
 

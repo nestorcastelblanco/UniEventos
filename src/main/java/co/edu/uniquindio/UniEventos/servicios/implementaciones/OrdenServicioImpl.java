@@ -7,6 +7,7 @@ import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Evento;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Orden;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoOrden;
+import co.edu.uniquindio.UniEventos.modelo.vo.DetalleCarrito;
 import co.edu.uniquindio.UniEventos.modelo.vo.DetalleOrden;
 import co.edu.uniquindio.UniEventos.modelo.vo.Localidad;
 import co.edu.uniquindio.UniEventos.modelo.vo.Pago;
@@ -50,23 +51,31 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     @Override
     public String crearOrden(CrearOrdenDTO orden) throws Exception {
-        if (existeOrden(orden.id())) {
+        // Verificar si ya existe una orden con el mismo ID
+        if (existeOrden(String.valueOf(orden.id()))) {
             throw new Exception("Ya existe una orden con este código");
         }
 
+        // Convertir de List<DetalleOrden> a List<DetalleCarrito>
+        List<DetalleCarrito> itemsConvertidos = convertirDetalleOrdenACarrito(orden.items());
+
+        // Crear una nueva instancia de Orden
         Orden nuevaOrden = new Orden();
-        nuevaOrden.setIdCliente(orden.idCliente());
+        nuevaOrden.setIdCliente(orden.id());
         nuevaOrden.setFecha(LocalDateTime.now());
         nuevaOrden.setCodigoPasarela(orden.codigoPasarela());
-        nuevaOrden.setItems(orden.items());
+        nuevaOrden.setItems(itemsConvertidos);  // Asignar los items convertidos
         nuevaOrden.setPago(orden.pago());
         nuevaOrden.setTotal(orden.total());
         nuevaOrden.setIdCupon(orden.idCupon());
         nuevaOrden.setEstado(EstadoOrden.DISPONIBLE);
 
+        // Guardar la nueva orden en el repositorio y devolver su ID
         Orden ordenCreada = ordenRepo.save(nuevaOrden);
         return ordenCreada.getId();
     }
+
+
 
     private boolean existeOrden(String id) {
         return ordenRepo.buscarOrdenPorId(id).isPresent();
@@ -122,12 +131,14 @@ public class OrdenServicioImpl implements OrdenServicio {
         }
 
         Orden orden = obtenerOrden(idOrden);
+        // Asegurarse de que getItems() devuelve List<DetalleOrden>
+        List<DetalleOrden> itemsOrden = convertirDetalleCarritoAOrden(orden.getItems());
 
         return new InformacionOrdenCompraDTO(
                 orden.getIdCliente(),
                 orden.getFecha(),
                 orden.getCodigoPasarela(),
-                orden.getItems(),
+                itemsOrden,
                 orden.getPago(),
                 orden.getId(),
                 orden.getTotal(),
@@ -178,9 +189,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         Orden ordenGuardada = obtenerOrden(idOrden);
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
-
-        // Recorrer los items de la orden y crea los ítems de la pasarela
-        for(DetalleOrden item : ordenGuardada.getItems()){
+        for (DetalleOrden item : convertirDetalleCarritoAOrden(ordenGuardada.getItems())) {
 
 
             // Obtener el evento y la localidad del ítem
@@ -203,7 +212,6 @@ public class OrdenServicioImpl implements OrdenServicio {
 
             itemsPasarela.add(itemRequest);
         }
-
 
         // Configurar las credenciales de MercadoPago
         MercadoPagoConfig.setAccessToken("ACCESS_TOKEN");
@@ -291,6 +299,30 @@ public class OrdenServicioImpl implements OrdenServicio {
         pago.setCodigoAutorizacion(payment.getAuthorizationCode());
         pago.setValorTransaccion(payment.getTransactionAmount().floatValue());
         return pago;
+    }
+
+    public List<DetalleOrden> convertirDetalleCarritoAOrden(List<DetalleCarrito> detallesCarrito) {
+        List<DetalleOrden> detallesOrden = new ArrayList<>();
+        for (DetalleCarrito detalle : detallesCarrito) {
+            DetalleOrden detalleOrden = new DetalleOrden();
+            detalleOrden.setIdEvento(detalle.getIdEvento());
+            detalleOrden.setCantidad(detalle.getCantidad());
+            // Asigna otros campos que sean necesarios
+            detallesOrden.add(detalleOrden);
+        }
+        return detallesOrden;
+    }
+
+    public List<DetalleCarrito> convertirDetalleOrdenACarrito(List<DetalleOrden> detallesOrden) {
+        List<DetalleCarrito> detallesCarrito = new ArrayList<>();
+        for (DetalleOrden detalle : detallesOrden) {
+            DetalleCarrito detalleCarrito = new DetalleCarrito();
+            detalleCarrito.setIdEvento(detalle.getIdEvento());
+            detalleCarrito.setCantidad(detalle.getCantidad());
+            // Asigna otros campos necesarios
+            detallesCarrito.add(detalleCarrito);
+        }
+        return detallesCarrito;
     }
 
 }
