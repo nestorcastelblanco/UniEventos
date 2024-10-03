@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.excepciones;
+package co.edu.uniquindio.UniEventos.exceptions;
 
 
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;

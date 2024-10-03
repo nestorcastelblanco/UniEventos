@@ -3,6 +3,7 @@ package co.edu.uniquindio.UniEventos.controller;
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuentaServicio;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/cuenta")
+@SecurityRequirement(name = "bearerAuth")
 public class CuentaController {
 
     private final CuentaServicio cuentaServicio;
