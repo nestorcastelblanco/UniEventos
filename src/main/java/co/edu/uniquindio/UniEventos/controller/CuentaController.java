@@ -2,6 +2,7 @@ package co.edu.uniquindio.UniEventos.controller;
 
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
+import co.edu.uniquindio.UniEventos.dto.TokenDTOs.TokenDTO;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuentaServicio;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -54,8 +55,8 @@ public class CuentaController {
     }
 
     @PostMapping("/iniciar-sesion")
-    public String iniciarSesion(@RequestBody LoginDTO loginDTO) throws Exception {
-        return "holaa";
+    public TokenDTO iniciarSesion(@RequestBody LoginDTO loginDTO) throws Exception {
+        return cuentaServicio.iniciarSesion(loginDTO);
     }
 
     @PostMapping("/validar-cuenta")

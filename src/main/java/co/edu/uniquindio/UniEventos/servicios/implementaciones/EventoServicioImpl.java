@@ -9,7 +9,6 @@ import co.edu.uniquindio.UniEventos.servicios.interfaces.EventoServicio;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -92,36 +91,6 @@ public class EventoServicioImpl implements EventoServicio {
     }
 
     @Override
-    public List<ItemEventoDTO> filtrarEventos(FiltroEventoDTO filtroEventoDTO) throws Exception {
-
-        // Obtener los parámetros de filtro del DTO
-        String nombre = filtroEventoDTO.getNombre();
-        String ciudad = filtroEventoDTO.getCiudad();
-        String tipo = filtroEventoDTO.getTipo();
-        LocalDate fechaInicio = filtroEventoDTO.getFechaInicio();
-        LocalDate fechaFin = filtroEventoDTO.getFechaFin();
-
-        // Realizar la búsqueda aplicando los filtros dinámicamente
-        List<Evento> eventosFiltrados = eventoRepo.findAll().stream()
-                .filter(evento -> (nombre == null || evento.getNombre().toLowerCase().contains(nombre.toLowerCase())))
-                .filter(evento -> (ciudad == null || evento.getCiudad().toLowerCase().equals(ciudad.toLowerCase())))
-                .filter(evento -> (tipo == null || evento.getTipo().equalsIgnoreCase(tipo)))
-                .filter(evento -> (fechaInicio == null || !evento.getFecha().isBefore(fechaInicio)))
-                .filter(evento -> (fechaFin == null || !evento.getFecha().isAfter(fechaFin)))
-                .collect(Collectors.toList());
-
-        // Convertir los eventos filtrados a DTOs
-        return eventosFiltrados.stream()
-                .map(evento -> new ItemEventoDTO(
-                        evento.getId(),
-                        evento.getNombre(),
-                        evento.getFecha(),
-                        evento.getTipo()))
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
     public List<ItemEventoDTO> listarEventos() throws Exception{
         List<Evento> eventos = eventoRepo.findAll();
         return eventos.stream()
@@ -131,6 +100,11 @@ public class EventoServicioImpl implements EventoServicio {
                         evento.getFecha(),
                         evento.getTipo()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Evento> filtrarEventos(FiltroEventoDTO filtroEventoDTO) throws Exception {
+        return eventoRepo.filtrarEventos(filtroEventoDTO.nombre(), filtroEventoDTO.tipo() , filtroEventoDTO.ciudad());
     }
 
     @Override
