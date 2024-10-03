@@ -12,5 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "bearerAuth")
 
 public class EventoController {
+
+
     
 }
