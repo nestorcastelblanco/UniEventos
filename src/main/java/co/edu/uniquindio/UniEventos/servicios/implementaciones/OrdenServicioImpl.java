@@ -184,20 +184,13 @@ public class OrdenServicioImpl implements OrdenServicio {
     @Override
     public Preference realizarPago(String idOrden) throws Exception {
 
-
-        // Obtener la orden guardada en la base de datos y los ítems de la orden
         Orden ordenGuardada = obtenerOrden(idOrden);
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
-
         for (DetalleOrden item : convertirDetalleCarritoAOrden(ordenGuardada.getItems())) {
 
-
-            // Obtener el evento y la localidad del ítem
             Evento evento = eventoServicio.obtenerEvento(item.getId().toString());
             Localidad localidad = evento.obtenerLocalidad(item.getNombreLocalidad());
 
-
-            // Crear el item de la pasarela
             PreferenceItemRequest itemRequest =
                     PreferenceItemRequest.builder()
                             .id(evento.getId())
@@ -209,12 +202,11 @@ public class OrdenServicioImpl implements OrdenServicio {
                             .unitPrice(BigDecimal.valueOf(localidad.getPrecio()))
                             .build();
 
-
             itemsPasarela.add(itemRequest);
         }
 
         // Configurar las credenciales de MercadoPago
-        MercadoPagoConfig.setAccessToken("ACCESS_TOKEN");
+        MercadoPagoConfig.setAccessToken("APP_USR-4368524607273593-100311-0cffd4069075c573924d2bcbc08042b7-518706539");
 
 
         // Configurar las urls de retorno de la pasarela (Frontend)
