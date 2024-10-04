@@ -6,8 +6,11 @@ import co.edu.uniquindio.UniEventos.servicios.interfaces.CarritoServicio;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,11 +45,16 @@ public class CarritoController {
     }
 
     @GetMapping("/obtener-informacion/{id}")
-    public ResponseEntity<MensajeDTO<VistaCarritoDTO>> obtenerInformacionCarrito(@PathVariable String id) throws Exception {
+    public ResponseEntity<MensajeDTO<VistaCarritoDTO>> obtenerInformacionCarrito(@PathVariable ObjectId id) throws Exception {
         VistaCarritoDTO carritoDTO = carritoServicio.obtenerInformacionCarrito(new VistaCarritoDTO(id, null, null)); // Se deben obtener los detallesCarrito y fecha desde el servicio
         return ResponseEntity.ok(new MensajeDTO<>(false, carritoDTO));
     }
 
+    @GetMapping("/listar")
+    public ResponseEntity<MensajeDTO<List<CarritoListDTO>>> listarCarritos() throws Exception {
+        List<CarritoListDTO> carritos = carritoServicio.listarCarritos();
+        return ResponseEntity.ok(new MensajeDTO<>(false, carritos));
+    }
 
     @PutMapping("/actualizar-item")
     public ResponseEntity<MensajeDTO<String>> actualizarItemCarrito(@Valid @RequestBody ActualizarItemCarritoDTO actualizarItemCarritoDTO) throws Exception {

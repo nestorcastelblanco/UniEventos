@@ -42,6 +42,9 @@ public class EventoServicioImpl implements EventoServicio {
         nuevoEvento.setImagenPortada(crearEventoDTO.imagenPoster());
         nuevoEvento.setImagenLocalidades(crearEventoDTO.imagenLocalidades());
 
+        // Establecer el estado inicial como ACTIVO
+        nuevoEvento.setEstado(EstadoEvento.ACTIVO);
+
         // Procesar las localidades
         List<Localidad> localidades = crearEventoDTO.localidades().stream().map(localidadDTO -> {
             Localidad localidad = new Localidad();
@@ -49,7 +52,7 @@ public class EventoServicioImpl implements EventoServicio {
             localidad.setPrecio(localidadDTO.getPrecio());
             localidad.setCapacidadMaxima(localidadDTO.getCapacidadMaxima());
             return localidad;
-        }).collect(Collectors.toList());;
+        }).collect(Collectors.toList());
 
         nuevoEvento.setLocalidades(localidades);
 
@@ -63,6 +66,11 @@ public class EventoServicioImpl implements EventoServicio {
     public String editarEvento(EditarEventoDTO evento) throws Exception {
 
         Evento eventoExistente = obtenerEvento(evento.id());
+
+        // Verificar que el evento esté ACTIVO antes de permitir la edición
+        if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
+            throw new Exception("Solo se pueden editar eventos activos.");
+        }
 
         eventoExistente.setNombre(evento.nombre());
         eventoExistente.setDescripcion(evento.descripcion());
@@ -83,17 +91,23 @@ public class EventoServicioImpl implements EventoServicio {
     public String eliminarEvento(String id) throws Exception {
 
         Evento eventoExistente = obtenerEvento(id);
-        eventoExistente.setEstado(EstadoEvento.INACTIVO);
 
+        // Cambiar el estado del evento a INACTIVO en lugar de eliminarlo
+        if (eventoExistente.getEstado() == EstadoEvento.INACTIVO) {
+            throw new Exception("El evento ya está inactivo.");
+        }
+
+        eventoExistente.setEstado(EstadoEvento.INACTIVO);
         eventoRepo.save(eventoExistente);
 
         return "Eliminado";
     }
 
     @Override
-    public List<ItemEventoDTO> listarEventos() throws Exception{
+    public List<ItemEventoDTO> listarEventos() throws Exception {
         List<Evento> eventos = eventoRepo.findAll();
         return eventos.stream()
+                .filter(evento -> evento.getEstado() == EstadoEvento.ACTIVO) // Solo listar eventos activos
                 .map(evento -> new ItemEventoDTO(
                         evento.getId(),
                         evento.getNombre(),
@@ -104,12 +118,21 @@ public class EventoServicioImpl implements EventoServicio {
 
     @Override
     public List<Evento> filtrarEventos(FiltroEventoDTO filtroEventoDTO) throws Exception {
-        return eventoRepo.filtrarEventos(filtroEventoDTO.nombre(), filtroEventoDTO.tipo() , filtroEventoDTO.ciudad());
+        // Filtrar eventos activos
+        return eventoRepo.filtrarEventos(filtroEventoDTO.nombre(), filtroEventoDTO.tipo(), filtroEventoDTO.ciudad())
+                .stream().filter(evento -> evento.getEstado() == EstadoEvento.ACTIVO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception {
         Evento eventoExistente = obtenerEvento(id);
+
+        // Verificar que el evento esté activo antes de obtener la información
+        if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
+            throw new Exception("El evento no está activo.");
+        }
+
         return new InformacionEventoDTO(
                 eventoExistente.getId(),
                 eventoExistente.getNombre(),
@@ -120,7 +143,8 @@ public class EventoServicioImpl implements EventoServicio {
                 eventoExistente.getTipo(),
                 eventoExistente.getImagenPortada(),
                 eventoExistente.getImagenLocalidades(),
-                eventoExistente.getLocalidades());
+                eventoExistente.getLocalidades()
+        );
     }
 
     @Override
@@ -138,4 +162,3 @@ public class EventoServicioImpl implements EventoServicio {
         return eventoRepo.buscarPorNombre(nombre).isPresent();
     }
 }
-

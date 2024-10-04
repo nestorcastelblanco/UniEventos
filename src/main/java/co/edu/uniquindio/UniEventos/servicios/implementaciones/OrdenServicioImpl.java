@@ -72,7 +72,7 @@ public class OrdenServicioImpl implements OrdenServicio {
 
         // Guardar la nueva orden en el repositorio y devolver su ID
         Orden ordenCreada = ordenRepo.save(nuevaOrden);
-        return ordenCreada.getId();
+        return "La orden fue creada";
     }
 
 

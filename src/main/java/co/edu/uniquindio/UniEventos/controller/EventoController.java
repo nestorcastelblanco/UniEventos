@@ -61,15 +61,20 @@ public class EventoController {
     }
 
     @GetMapping("/informacion/{id}")
-    public ResponseEntity<InformacionEventoDTO> obtenerInformacionEvento(@PathVariable String id) {
+    public ResponseEntity<?> obtenerInformacionEvento(@PathVariable String id) {
         try {
             InformacionEventoDTO eventoDTO = eventoServicio.obtenerInformacionEvento(id);
             return ResponseEntity.ok(eventoDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
+
+            if (e.getMessage().contains("no existe")) {
+                return ResponseEntity.status(404).body(new MensajeDTO<>(true, "Evento no encontrado: " + e.getMessage()));
+            } else {
+
+                return ResponseEntity.status(500).body(new MensajeDTO<>(true, "Error al buscar el evento: " + e.getMessage()));
+            }
         }
     }
-
     @GetMapping("/filtrar")
     public ResponseEntity<List<Evento>> filtrarEventos(FiltroEventoDTO filtroEventoDTO) throws Exception {
         List<Evento> eventos = eventoServicio.filtrarEventos(filtroEventoDTO);

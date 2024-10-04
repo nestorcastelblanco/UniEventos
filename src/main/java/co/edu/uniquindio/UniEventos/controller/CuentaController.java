@@ -23,7 +23,13 @@ public class CuentaController {
     @PostMapping("/crear-cuenta")
     public ResponseEntity<MensajeDTO<String>> crearCuenta(@Valid @RequestBody CrearCuentaDTO cuenta) throws Exception{
         cuentaServicio.crearCuenta(cuenta);
-        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta creada exitosamente"));
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta creada exitosamente, se envio un codigo de activación de la cuenta a su correo registrado"));
+    }
+
+    @PostMapping("/activar-cuenta")
+    public ResponseEntity<MensajeDTO<String>> activarCuenta(@Valid @RequestBody ValidarCuentaDTO cuenta) throws Exception{
+        cuentaServicio.activarCuenta(cuenta);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta activada exitosamente"));
     }
 
     @PutMapping("/editar-perfil")
@@ -57,11 +63,6 @@ public class CuentaController {
     @PostMapping("/iniciar-sesion")
     public TokenDTO iniciarSesion(@RequestBody LoginDTO loginDTO) throws Exception {
         return cuentaServicio.iniciarSesion(loginDTO);
-    }
-
-    @PostMapping("/validar-cuenta")
-    public String validarCuenta(@RequestBody ValidarCuentaDTO validarCuentaDTO) throws Exception {
-        return cuentaServicio.validarCuenta(validarCuentaDTO);
     }
 
     @PostMapping("/encriptar-password")

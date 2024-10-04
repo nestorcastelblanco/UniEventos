@@ -5,6 +5,7 @@ import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.UniEventos.modelo.enums.Rol;
 import co.edu.uniquindio.UniEventos.modelo.vo.Usuario;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class Cuenta{
     private String email;
     private CodigoValidacion codigoValidacionRegistro;
     private Usuario usuario;
-    private String id;
+    private ObjectId id;
     private LocalDateTime fechaRegistro;
     private String password;
     private EstadoCuenta estadoCuenta;

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -37,12 +38,12 @@ public class CarritoServicioImpl implements CarritoServicio {
                 .build();
 
         Carrito carritoCliente = carritoRepo.save(carro);
-        return carritoCliente.getId();
+        return  "carrito creado";
     }
 
     @Override
     public String agregarItemCarrito(EventoCarritoDTO eventoCarritoDTO) throws Exception {
-        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorIdCliente(eventoCarritoDTO.idCliente());
+        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorIdCliente(String.valueOf(eventoCarritoDTO.idCliente()));
         if (carritoCliente.isEmpty()) {
             throw new Exception("El carrito no existe para el cliente con ID: " + eventoCarritoDTO.idCliente());
         }
@@ -99,6 +100,15 @@ public class CarritoServicioImpl implements CarritoServicio {
         LocalDateTime fecha = carrito.getFecha();
 
         return new VistaCarritoDTO(carrito.getId(), detallesCarrito, fecha);
+    }
+
+    @Override
+    public List<CarritoListDTO> listarCarritos() {
+        List<Carrito> carritos = carritoRepo.findAll();  // Obtener todos los carritos
+        return carritos.stream().map(carrito -> {
+            // Mapear cada Carrito a CarritoListDTO
+            return new CarritoListDTO(carrito.getId(), carrito.getFecha(), carrito.getItems());
+        }).collect(Collectors.toList());
     }
 
     @Override

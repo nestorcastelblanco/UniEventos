@@ -2,6 +2,8 @@ package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
 import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.*;
 
+import java.util.List;
+
 public interface CarritoServicio {
 
     String crearCarrito(CrearCarritoDTO carritoDTO) throws Exception;
@@ -19,4 +21,6 @@ public interface CarritoServicio {
     double calcularTotalCarrito(String idCliente) throws Exception;
 
     String vaciarCarrito(String id) throws Exception;
+
+    List<CarritoListDTO> listarCarritos() throws Exception;
 }

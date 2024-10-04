@@ -2,6 +2,7 @@ package co.edu.uniquindio.UniEventos.modelo.vo;
 
 import co.edu.uniquindio.UniEventos.modelo.documentos.Carrito;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,7 +18,7 @@ public class Usuario {
 
     @Id
     @EqualsAndHashCode.Include
-    private String id;
+    private ObjectId id;
 
     private String telefono;
     private String cedula;
