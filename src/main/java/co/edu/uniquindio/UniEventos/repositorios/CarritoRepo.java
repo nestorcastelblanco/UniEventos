@@ -12,12 +12,11 @@ import java.util.Optional;
 @Repository
 public interface CarritoRepo extends MongoRepository<Carrito, String> {
 
-    @Query ( "{ id : ?0 }")
-    Optional<Carrito> buscarCarritoPorId(String id);
+    @Query("{ '_id': ?0 }")
+    Optional<Carrito> buscarCarritoPorId(ObjectId id);
 
-    @Query ( "{ idUsuario : ?0 }")
-    Optional<Carrito> buscarCarritoPorIdCliente(String id);
+    @Query("{ 'idUsuario' : ?0 }")
+    Optional<Carrito> buscarCarritoPorIdCliente(ObjectId idUsuario);
 
-    @Query ( "{ items.id : ?0}")
-    Optional<DetalleCarrito> buscarEventoCarrito(ObjectId objectId);
+
 }

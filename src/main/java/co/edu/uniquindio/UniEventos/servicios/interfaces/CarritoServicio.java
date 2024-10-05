@@ -1,12 +1,11 @@
 package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
 import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.*;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
 public interface CarritoServicio {
-
-    String crearCarrito(CrearCarritoDTO carritoDTO) throws Exception;
 
     String agregarItemCarrito(EventoCarritoDTO eventoCarritoDTO) throws Exception;
 
@@ -14,13 +13,13 @@ public interface CarritoServicio {
 
     void eliminarCarrito(EliminarCarritoDTO eliminarCarritoDTO) throws Exception;
 
-    VistaCarritoDTO obtenerInformacionCarrito(VistaCarritoDTO carritoDTO) throws Exception;
+    VistaCarritoDTO obtenerInformacionCarrito(ObjectId id) throws Exception;
 
     String actualizarItemCarrito(ActualizarItemCarritoDTO actualizarItemCarritoDTO) throws Exception;
 
-    double calcularTotalCarrito(String idCliente) throws Exception;
+    double calcularTotalCarrito(ObjectId idCliente) throws Exception;
 
-    String vaciarCarrito(String id) throws Exception;
+    String vaciarCarrito(ObjectId id) throws Exception;
 
     List<CarritoListDTO> listarCarritos() throws Exception;
 }

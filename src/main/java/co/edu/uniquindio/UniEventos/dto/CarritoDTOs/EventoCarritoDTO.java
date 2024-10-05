@@ -13,10 +13,10 @@ public record EventoCarritoDTO(
         ObjectId idEvento,
 
         @NotNull(message = "El ID del cliente es obligatorio")
-        ObjectId idCliente,
+        ObjectId idUsuario,
 
         @NotBlank(message = "El nombre es obligatorio")
-        String nombre,
+        String nombreEvento,
 
         @NotNull(message = "La fecha del evento es obligatoria")
         LocalDateTime fechaEvento,
