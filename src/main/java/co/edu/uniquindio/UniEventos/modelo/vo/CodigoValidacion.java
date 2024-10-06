@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CodigoValidacion {
 
-    private String codigo;
+    private String codigoValidacion;
     private LocalDateTime fechaCreacion;
 }

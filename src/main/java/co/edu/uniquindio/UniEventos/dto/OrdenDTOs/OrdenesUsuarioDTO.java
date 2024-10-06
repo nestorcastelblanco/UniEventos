@@ -8,15 +8,8 @@ import org.bson.types.ObjectId;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record InformacionOrdenCompraDTO (
-        ObjectId idCliente,
-        LocalDateTime fecha,
-        String codigoPasarela,
-        List<DetalleOrden>items,
-        Pago pago,
-        ObjectId id,
-        float total,
-        ObjectId idCupon,
-        EstadoOrden estado
-){
+public record OrdenesUsuarioDTO(
+        ObjectId idCliente
+) {
+
 }

@@ -1,8 +1,10 @@
 package co.edu.uniquindio.UniEventos.dto.CarritoDTOs;
 
+import org.bson.types.ObjectId;
+
 public record ActualizarItemCarritoDTO(
-        String idCliente,
-        String idEvento,
+        ObjectId idCliente,
+        ObjectId idEvento,
         int nuevaCantidad
 ) {
 }

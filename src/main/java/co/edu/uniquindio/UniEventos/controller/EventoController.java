@@ -2,9 +2,11 @@ package co.edu.uniquindio.UniEventos.controller;
 
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.*;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
+import co.edu.uniquindio.UniEventos.modelo.documentos.Evento;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.EventoServicio;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,22 +61,23 @@ public class EventoController {
     }
 
     @GetMapping("/informacion/{id}")
-    public ResponseEntity<InformacionEventoDTO> obtenerInformacionEvento(@PathVariable String id) {
+    public ResponseEntity<?> obtenerInformacionEvento(@PathVariable String id) {
         try {
             InformacionEventoDTO eventoDTO = eventoServicio.obtenerInformacionEvento(id);
             return ResponseEntity.ok(eventoDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
+
+            if (e.getMessage().contains("no existe")) {
+                return ResponseEntity.status(404).body(new MensajeDTO<>(true, "Evento no encontrado: " + e.getMessage()));
+            } else {
+
+                return ResponseEntity.status(500).body(new MensajeDTO<>(true, "Error al buscar el evento: " + e.getMessage()));
+            }
         }
     }
-
-    @PostMapping("/filtrar")
-    public ResponseEntity<List<ItemEventoDTO>> filtrarEventos(@RequestBody FiltroEventoDTO filtroEventoDTO) {
-        try {
-            List<ItemEventoDTO> eventosFiltrados = eventoServicio.filtrarEventos(filtroEventoDTO);
-            return ResponseEntity.ok(eventosFiltrados);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
-        }
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<Evento>> filtrarEventos(FiltroEventoDTO filtroEventoDTO) throws Exception {
+        List<Evento> eventos = eventoServicio.filtrarEventos(filtroEventoDTO);
+        return new ResponseEntity<>(eventos, HttpStatus.OK);
     }
 }

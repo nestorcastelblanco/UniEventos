@@ -16,10 +16,13 @@ public interface EventoRepo extends MongoRepository<Evento, String> {
     Optional<Evento> buscarPorNombre(String nombre);
 
     @Query("{ '_id' :?0  }")
-    Optional<Evento> buscarPorIdEvento(ObjectId nombre);
+    Optional<Evento> buscarPorIdEvento(ObjectId id);
 
-    // Consulta dinámica usando JSON
-    @Query("{'nombre': {$regex: ?0, $options: 'i'}, 'tipo': {$regex: ?1, $options: 'i'}, 'ciudad': {$regex: ?2, $options: 'i'}}")
+    @Query("{$or: [" +
+            "{ 'nombre': { $regex: ?0, $options: 'i' } }, " +
+            "{ 'tipo': { $regex: ?1, $options: 'i' } }, " +
+            "{ 'ciudad': { $regex: ?2, $options: 'i' } }" +
+            "]}")
     List<Evento> filtrarEventos(String nombre, String tipo, String ciudad);
 }
 

@@ -16,4 +16,3 @@ public record LocalidadDTO(
         int capacidad
 ) {
 }
-

@@ -3,7 +3,7 @@ package co.edu.uniquindio.UniEventos.servicios.interfaces;
 
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.*;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Evento;
-import com.google.inject.spi.StaticInjectionRequest;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -17,9 +17,10 @@ public interface EventoServicio {
 
     List<ItemEventoDTO> listarEventos() throws Exception;
 
-    List<ItemEventoDTO> filtrarEventos (FiltroEventoDTO filtroEventoDTO) throws Exception;
+    List<Evento> filtrarEventos (FiltroEventoDTO filtroEventoDTO) throws Exception;
 
     InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception;
 
-    Evento obtenerEvento(String id) throws Exception;
+    Evento obtenerEvento(ObjectId id) throws Exception;
+
 }

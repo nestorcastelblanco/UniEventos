@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class Localidad {
 
-    private String nombre;
+    private String nombreLocalidad;
     private float precio;
     private int capacidadMaxima, entradasVendidas;
 

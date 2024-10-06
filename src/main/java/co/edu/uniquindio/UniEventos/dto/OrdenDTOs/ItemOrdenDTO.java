@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ItemOrdenDTO (
-    String id,
+    ObjectId id,
     LocalDateTime fecha,
     float total,
     EstadoOrden estado

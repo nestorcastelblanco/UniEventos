@@ -16,10 +16,12 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "carritos")  // Asegúrate de especificar la colección
 public class Carrito {
 
+    @Id  // Añadir la anotación @Id para indicar que este es el campo ID del documento
+    private ObjectId id;  // Cambiar a ObjectId
     private List<DetalleCarrito> items;
     private LocalDateTime fecha;
-    private String id;
-    private ObjectId idUsuario;
+    private ObjectId idUsuario;  // Asegúrate de que sea ObjectId para el idUsuario
 }

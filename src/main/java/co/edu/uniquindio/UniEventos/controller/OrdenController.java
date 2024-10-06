@@ -1,8 +1,10 @@
 package co.edu.uniquindio.UniEventos.controller;
 
+import co.edu.uniquindio.UniEventos.dto.EmailDTOs.EmailDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.CrearOrdenDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
+import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.OrdenesUsuarioDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Orden;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.OrdenServicio;
@@ -34,28 +36,28 @@ public class OrdenController {
     // Cancelar una orden existente
     @PostMapping("/cancelar")
     public ResponseEntity<MensajeDTO<String>> cancelarOrden(@RequestParam("idOrden") String idOrden) throws Exception {
-        String mensaje = ordenServicio.cancelarOrden(idOrden);
+        String mensaje = ordenServicio.cancelarOrden(new ObjectId(idOrden));
         return ResponseEntity.ok().body(new MensajeDTO<>(false, mensaje));
     }
 
     // Obtener todas las órdenes de un usuario
     @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<MensajeDTO<List<Orden>>> obtenerOrdenesUsuario(@PathVariable("idUsuario") ObjectId idUsuario) throws Exception {
-        List<Orden> ordenes = ordenServicio.ordenesUsuario(idUsuario);
+    public ResponseEntity<MensajeDTO<List<Orden>>> obtenerOrdenesUsuario(@PathVariable String idUsuario) throws Exception {
+        List<Orden> ordenes = ordenServicio.ordenesUsuario(new OrdenesUsuarioDTO(new ObjectId(idUsuario)).idCliente());
         return ResponseEntity.ok().body(new MensajeDTO<>(false, ordenes));
     }
 
     // Obtener historial de órdenes de una cuenta
     @GetMapping("/historial")
     public ResponseEntity<MensajeDTO<List<ItemOrdenDTO>>> obtenerHistorialOrdenes(@RequestParam("idCuenta") String idCuenta) throws Exception {
-        List<ItemOrdenDTO> historial = ordenServicio.obtenerHistorialOrdenes(idCuenta);
+        List<ItemOrdenDTO> historial = ordenServicio.obtenerHistorialOrdenes(new ObjectId(idCuenta));
         return ResponseEntity.ok().body(new MensajeDTO<>(false, historial));
     }
 
     // Obtener detalles de una orden específica
     @GetMapping("/detalles/{idOrden}")
     public ResponseEntity<MensajeDTO<InformacionOrdenCompraDTO>> obtenerDetallesOrden(@PathVariable("idOrden") String idOrden) throws Exception {
-        InformacionOrdenCompraDTO detallesOrden = ordenServicio.obtenerInformacionOrden(idOrden);
+        InformacionOrdenCompraDTO detallesOrden = ordenServicio.obtenerInformacionOrden(new ObjectId(idOrden));
         return ResponseEntity.ok().body(new MensajeDTO<>(false, detallesOrden));
     }
 
@@ -70,5 +72,12 @@ public class OrdenController {
     @PostMapping("/notificacion-pago")
     public void recibirNotificacionMercadoPago(@RequestBody Map<String, Object> requestBody) {
         ordenServicio.recibirNotificacionMercadoPago(requestBody);
+    }
+
+    // Enviar código QR por correo
+    @PostMapping("/enviar-qr")
+    public ResponseEntity<MensajeDTO<String>> enviarCorreoQR(@RequestParam("idOrden") String idOrden, @RequestParam("email") String email) throws Exception {
+        ordenServicio.enviarCorreoOrden(new ObjectId(idOrden), email);
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, "Correo enviado con éxito."));
     }
 }

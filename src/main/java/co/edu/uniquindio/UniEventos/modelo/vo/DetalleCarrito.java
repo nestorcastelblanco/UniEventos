@@ -2,7 +2,6 @@ package co.edu.uniquindio.UniEventos.modelo.vo;
 
 import lombok.*;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ import org.springframework.data.annotation.Id;
 public class DetalleCarrito {
 
     @EqualsAndHashCode.Include
-    private ObjectId id;
+    private ObjectId idDetalleCarrito;
 
     private int cantidad;
     private String nombreLocalidad;
