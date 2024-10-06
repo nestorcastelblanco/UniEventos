@@ -16,7 +16,7 @@ public interface EventoRepo extends MongoRepository<Evento, String> {
     Optional<Evento> buscarPorNombre(String nombre);
 
     @Query("{ '_id' :?0  }")
-    Optional<Evento> buscarPorIdEvento(ObjectId nombre);
+    Optional<Evento> buscarPorIdEvento(ObjectId id);
 
     @Query("{$or: [" +
             "{ 'nombre': { $regex: ?0, $options: 'i' } }, " +

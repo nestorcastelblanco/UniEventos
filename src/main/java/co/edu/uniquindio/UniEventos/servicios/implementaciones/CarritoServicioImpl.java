@@ -42,7 +42,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         // Si el carrito existe, procedemos a agregar el item
         Carrito carrito = carritoCliente.get();
         DetalleCarrito detalleCarrito = DetalleCarrito.builder()
-                .id(new ObjectId())
+                .idDetalleCarrito(new ObjectId())
                 .cantidad(eventoCarritoDTO.numBoletas())
                 .nombreLocalidad(eventoCarritoDTO.nombreLocalidad())
                 .idEvento(eventoCarritoDTO.idEvento()).build();
@@ -51,7 +51,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         carrito.getItems().add(detalleCarrito);
         carritoRepo.save(carrito);
 
-        return "Item agregado al carrito correctamente";
+        return "Item agregado al carrito correctamente " + "nombre localidad : " +eventoCarritoDTO.nombreLocalidad();
     }
 
 
@@ -64,7 +64,7 @@ public class CarritoServicioImpl implements CarritoServicio {
 
         Carrito carrito = carritoCliente.get();
         List<DetalleCarrito> lista = carrito.getItems();
-        boolean removed = lista.removeIf(i -> i.getId().equals(eventoEliminarCarritoDTO.idDetalle()));
+        boolean removed = lista.removeIf(i -> i.getIdDetalleCarrito().equals(eventoEliminarCarritoDTO.idDetalle()));
 
         if (!removed) {
             throw new Exception("El elemento no se encontró en el carrito");
@@ -143,10 +143,10 @@ public class CarritoServicioImpl implements CarritoServicio {
         if (evento.isEmpty()) {
             throw new Exception("El evento no existe");
         }
-
+        System.out.println("NOMBRE DEL EVENTO + LOCALIDAD "+ evento.get().getNombre() + " " + evento.get().getLocalidades());
         List<Localidad> localidades = evento.get().getLocalidades();
         for (Localidad localidad : localidades) {
-            if (localidad.getNombre().equals(nombreLocalidad)) {
+            if (localidad.getNombreLocalidad().equals(nombreLocalidad)) {
                 return localidad.getPrecio();
             }
         }

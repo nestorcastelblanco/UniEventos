@@ -15,16 +15,17 @@ public interface OrdenServicio {
 
     String crearOrden(CrearOrdenDTO crearOrdenDTO) throws Exception;
 
-    String cancelarOrden(String idOrden) throws Exception;
+    String cancelarOrden(ObjectId idOrden) throws Exception;
 
-    List<ItemOrdenDTO> obtenerHistorialOrdenes(String idCuenta) throws Exception;
+    List<ItemOrdenDTO> obtenerHistorialOrdenes(ObjectId idCuenta) throws Exception;
 
-    InformacionOrdenCompraDTO obtenerInformacionOrden(String idOrden) throws Exception;
+    InformacionOrdenCompraDTO obtenerInformacionOrden(ObjectId idOrden) throws Exception;
 
     List<Orden> ordenesUsuario(ObjectId idUsuario) throws Exception;
 
-    Preference realizarPago(String idOrden) throws Exception;
+    Preference realizarPago(ObjectId idOrden) throws Exception;
 
     void recibirNotificacionMercadoPago(Map<String, Object> request);
 
+    void enviarCorreoOrden(ObjectId objectId, String email) throws Exception;
 }

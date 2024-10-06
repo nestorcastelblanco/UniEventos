@@ -48,7 +48,7 @@ public class EventoServicioImpl implements EventoServicio {
         // Procesar las localidades
         List<Localidad> localidades = crearEventoDTO.localidades().stream().map(localidadDTO -> {
             Localidad localidad = new Localidad();
-            localidad.setNombre(localidadDTO.getNombre());
+            localidad.setNombreLocalidad(localidadDTO.getNombreLocalidad());
             localidad.setPrecio(localidadDTO.getPrecio());
             localidad.setCapacidadMaxima(localidadDTO.getCapacidadMaxima());
             return localidad;

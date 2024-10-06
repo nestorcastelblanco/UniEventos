@@ -26,7 +26,7 @@ import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
-import jakarta.mail.internet.MimeMessage;
+import jakarta.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,38 +51,52 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     @Override
     public String crearOrden(CrearOrdenDTO orden) throws Exception {
-        // Verificar si ya existe una orden con el mismo ID
-        if (existeOrden(String.valueOf(orden.id()))) {
+        if (existeOrden(new ObjectId(orden.idCliente()))) {
             throw new Exception("Ya existe una orden con este código");
         }
 
-        // Convertir de List<DetalleOrden> a List<DetalleCarrito>
         List<DetalleCarrito> itemsConvertidos = convertirDetalleOrdenACarrito(orden.items());
 
-        // Crear una nueva instancia de Orden
         Orden nuevaOrden = new Orden();
-        nuevaOrden.setIdCliente(orden.id());
+        nuevaOrden.setIdCliente(new ObjectId(orden.idCliente()));
         nuevaOrden.setFecha(LocalDateTime.now());
         nuevaOrden.setCodigoPasarela(orden.codigoPasarela());
-        nuevaOrden.setItems(itemsConvertidos);  // Asignar los items convertidos
-        nuevaOrden.setPago(orden.pago());
+        nuevaOrden.setItems(itemsConvertidos);
+        nuevaOrden.setIdUsuario(new ObjectId(orden.idCliente()));
+        nuevaOrden.setPago(
+                new Pago(orden.pago().moneda(),
+                        orden.pago().tipoPago(),
+                        orden.pago().detalleEstado(),
+                        orden.pago().codigoAutorizacion(),
+                        orden.pago().fecha(),
+                        orden.pago().idPago(),
+                        orden.pago().valorTransaccion(),
+                        orden.pago().estado()
+                        ));
         nuevaOrden.setTotal(orden.total());
-        nuevaOrden.setIdCupon(orden.idCupon());
+        nuevaOrden.setIdCupon(new ObjectId(orden.idCupon()));
         nuevaOrden.setEstado(EstadoOrden.DISPONIBLE);
 
-        // Guardar la nueva orden en el repositorio y devolver su ID
-        Orden ordenCreada = ordenRepo.save(nuevaOrden);
-        return "La orden fue creada";
+        ordenRepo.save(nuevaOrden);
+        return "La orden fue creada con éxito.";
+    }
+
+    private List<ObjectId> listaIDEventos(@NotNull(message = "Debe proporcionar al menos un ítem en la orden") List<CrearOrdenDTO.ItemDTO> items) {
+
+        List<ObjectId> idsEventos = new ArrayList<>();
+        for (CrearOrdenDTO.ItemDTO item : items) {
+            idsEventos.add(new ObjectId(item.idEvento()));
+        }
+        return idsEventos;
     }
 
 
-
-    private boolean existeOrden(String id) {
+    private boolean existeOrden(ObjectId id) {
         return ordenRepo.buscarOrdenPorId(id).isPresent();
     }
 
     @Override
-    public String cancelarOrden(String idOrden) throws Exception {
+    public String cancelarOrden(ObjectId idOrden) throws Exception {
         Orden orden = obtenerOrden(idOrden);
         orden.setEstado(EstadoOrden.CANCELADA);
         ordenRepo.save(orden);
@@ -91,25 +105,21 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     @Override
     public List<Orden> ordenesUsuario(ObjectId idUsuario) throws Exception {
-        if (ordenRepo.findByIdCliente(idUsuario).isEmpty()) {
-            throw new Exception("No existe una orden");
+        List<Orden> ordenes = ordenRepo.findByIdCliente(idUsuario);
+        if (ordenes.isEmpty()) {
+            throw new Exception("No existen órdenes para el usuario.");
         }
-        return ordenRepo.findByIdCliente(idUsuario);
+        return ordenes;
     }
 
-    private Orden obtenerOrden(String idOrden) throws Exception {
-        Optional<Orden> ordenOptional = ordenRepo.findById(idOrden);
-        if (ordenOptional.isEmpty()) {
-            throw new Exception("La orden con el id: " + idOrden + " no existe");
-        }
-        return ordenOptional.get();
+    private Orden obtenerOrden(ObjectId idOrden) throws Exception {
+        return ordenRepo.buscarOrdenPorId(idOrden)
+                .orElseThrow(() -> new Exception("La orden con el id: " + idOrden + " no existe"));
     }
 
     @Override
-    public List<ItemOrdenDTO> obtenerHistorialOrdenes(String idCuenta) throws Exception {
-        ObjectId objectId = new ObjectId(idCuenta);
-        List<Orden> ordenes = ordenRepo.findByIdCliente(objectId);
-
+    public List<ItemOrdenDTO> obtenerHistorialOrdenes(ObjectId idCuenta) throws Exception {
+        List<Orden> ordenes = ordenRepo.findByIdCliente(idCuenta);
         if (ordenes.isEmpty()) {
             throw new Exception("No se encontraron órdenes para la cuenta proporcionada");
         }
@@ -124,14 +134,8 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
     @Override
-    public InformacionOrdenCompraDTO obtenerInformacionOrden(String idOrden) throws Exception {
-        Optional<Orden> ordenOptional = ordenRepo.buscarOrdenPorId(idOrden);
-        if (ordenOptional.isEmpty()) {
-            throw new Exception("La orden con el id: " + idOrden + " no existe");
-        }
-
+    public InformacionOrdenCompraDTO obtenerInformacionOrden(ObjectId idOrden) throws Exception {
         Orden orden = obtenerOrden(idOrden);
-        // Asegurarse de que getItems() devuelve List<DetalleOrden>
         List<DetalleOrden> itemsOrden = convertirDetalleCarritoAOrden(orden.getItems());
 
         return new InformacionOrdenCompraDTO(
@@ -146,7 +150,6 @@ public class OrdenServicioImpl implements OrdenServicio {
                 orden.getEstado()
         );
     }
-
 
     public String generarQR(String codigoOrden) throws Exception {
         String qrText = "Orden ID: " + codigoOrden;
@@ -164,10 +167,8 @@ public class OrdenServicioImpl implements OrdenServicio {
         return path.toString();
     }
 
-
-    public void enviarCorreoOrden(String idOrden, String emailCliente) throws Exception {
-        // Generar QR
-        String qrFilePath = generarQR(idOrden);
+    public void enviarCorreoOrden(ObjectId idOrden, String emailCliente) throws Exception {
+        String qrFilePath = generarQR(String.valueOf(idOrden));
         EmailServicioImpl emailServicio = new EmailServicioImpl();
 
         String correoContenido = "<p>Hola,</p>" +
@@ -176,19 +177,15 @@ public class OrdenServicioImpl implements OrdenServicio {
                 "<p>Adjunto encontrarás tu código QR para el evento.</p>";
 
         emailServicio.enviarCorreo(new EmailDTO("Detalles Compra", correoContenido, emailCliente));
-
-
     }
 
-
     @Override
-    public Preference realizarPago(String idOrden) throws Exception {
-
+    public Preference realizarPago(ObjectId idOrden) throws Exception {
         Orden ordenGuardada = obtenerOrden(idOrden);
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
-        for (DetalleOrden item : convertirDetalleCarritoAOrden(ordenGuardada.getItems())) {
 
-            Evento evento = eventoServicio.obtenerEvento(item.getId().toString());
+        for (DetalleOrden item : convertirDetalleCarritoAOrden(ordenGuardada.getItems())) {
+            Evento evento = eventoServicio.obtenerEvento(item.getIdEvento().toString());
             Localidad localidad = evento.obtenerLocalidad(item.getNombreLocalidad());
 
             PreferenceItemRequest itemRequest =
@@ -205,19 +202,14 @@ public class OrdenServicioImpl implements OrdenServicio {
             itemsPasarela.add(itemRequest);
         }
 
-        // Configurar las credenciales de MercadoPago
-        MercadoPagoConfig.setAccessToken("APP_USR-4368524607273593-100311-0cffd4069075c573924d2bcbc08042b7-518706539");
+        MercadoPagoConfig.setAccessToken("APP_USR-..."); // Mantén tu token en un archivo seguro
 
-
-        // Configurar las urls de retorno de la pasarela (Frontend)
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
                 .success("URL PAGO EXITOSO")
                 .failure("URL PAGO FALLIDO")
                 .pending("URL PAGO PENDIENTE")
                 .build();
 
-
-        // Construir la preferencia de la pasarela con los ítems, metadatos y urls de retorno
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .backUrls(backUrls)
                 .items(itemsPasarela)
@@ -225,56 +217,31 @@ public class OrdenServicioImpl implements OrdenServicio {
                 .notificationUrl("URL NOTIFICACION")
                 .build();
 
-
-        // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();
         Preference preference = client.create(preferenceRequest);
 
-
-        // Guardar el código de la pasarela en la orden
-        ordenGuardada.setCodigoPasarela( preference.getId() );
+        ordenGuardada.setCodigoPasarela(preference.getId());
         ordenRepo.save(ordenGuardada);
-
 
         return preference;
     }
 
-
     public void recibirNotificacionMercadoPago(Map<String, Object> request) {
         try {
-
-
-            // Obtener el tipo de notificación
-            Object tipo = request.get("type");
-
-
-            // Si la notificación es de un pago entonces obtener el pago y la orden asociada
+            String tipo = (String) request.get("type");
             if ("payment".equals(tipo)) {
-
-
-                // Capturamos el JSON que viene en el request y lo convertimos a un String
                 String input = request.get("data").toString();
-
-
-                // Extraemos los números de la cadena, es decir, el id del pago
                 String idPago = input.replaceAll("\\D+", "");
 
-
-                // Se crea el cliente de MercadoPago y se obtiene el pago con el id
                 PaymentClient client = new PaymentClient();
-                Payment payment = client.get( Long.parseLong(idPago) );
+                Payment payment = client.get(Long.parseLong(idPago));
 
-
-                // Obtener el id de la orden asociada al pago que viene en los metadatos
                 String idOrden = payment.getMetadata().get("id_orden").toString();
-
-                Orden orden = obtenerOrden(idOrden);
+                Orden orden = obtenerOrden(new ObjectId(idOrden));
                 Pago pago = crearPago(payment);
                 orden.setPago(pago);
                 ordenRepo.save(orden);
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -282,39 +249,38 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     private Pago crearPago(Payment payment) {
         Pago pago = new Pago();
-        pago.setId(payment.getId().toString());
-        pago.setFecha( payment.getDateCreated().toLocalDateTime() );
+        pago.setIdPago(payment.getId().toString());
+        pago.setFecha(payment.getDateCreated().toLocalDateTime());
         pago.setEstado(payment.getStatus());
         pago.setDetalleEstado(payment.getStatusDetail());
         pago.setTipoPago(payment.getPaymentTypeId());
         pago.setMoneda(payment.getCurrencyId());
         pago.setCodigoAutorizacion(payment.getAuthorizationCode());
-        pago.setValorTransaccion(payment.getTransactionAmount().floatValue());
         return pago;
     }
 
-    public List<DetalleOrden> convertirDetalleCarritoAOrden(List<DetalleCarrito> detallesCarrito) {
+    private List<DetalleOrden> convertirDetalleCarritoAOrden(List<DetalleCarrito> items) {
         List<DetalleOrden> detallesOrden = new ArrayList<>();
-        for (DetalleCarrito detalle : detallesCarrito) {
+        for (DetalleCarrito item : items) {
             DetalleOrden detalleOrden = new DetalleOrden();
-            detalleOrden.setIdEvento(detalle.getIdEvento());
-            detalleOrden.setCantidad(detalle.getCantidad());
-            // Asigna otros campos que sean necesarios
+            detalleOrden.setIdDetalleOrden(item.getIdDetalleCarrito());
+            detalleOrden.setCantidad(item.getCantidad());
+            detalleOrden.setNombreLocalidad(item.getNombreLocalidad());
             detallesOrden.add(detalleOrden);
         }
         return detallesOrden;
     }
 
-    public List<DetalleCarrito> convertirDetalleOrdenACarrito(List<DetalleOrden> detallesOrden) {
+
+    private List<DetalleCarrito> convertirDetalleOrdenACarrito(@NotNull(message = "Debe proporcionar al menos un ítem en la orden") List<CrearOrdenDTO.ItemDTO> items) {
         List<DetalleCarrito> detallesCarrito = new ArrayList<>();
-        for (DetalleOrden detalle : detallesOrden) {
+        for (CrearOrdenDTO.ItemDTO item : items) {
             DetalleCarrito detalleCarrito = new DetalleCarrito();
-            detalleCarrito.setIdEvento(detalle.getIdEvento());
-            detalleCarrito.setCantidad(detalle.getCantidad());
-            // Asigna otros campos necesarios
+            detalleCarrito.setIdDetalleCarrito(new ObjectId(item.idDetalleCarrito()));
+            detalleCarrito.setCantidad(item.cantidad());
+            detalleCarrito.setNombreLocalidad(item.nombreLocalidad());
             detallesCarrito.add(detalleCarrito);
         }
         return detallesCarrito;
     }
-
 }

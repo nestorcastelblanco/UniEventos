@@ -200,7 +200,7 @@ public class CuentaServicioImpl implements CuentaServicio {
 
         CodigoValidacion codigoValidacion = cuentaUsuario.getCodigoValidacionPassword();
 
-        if (codigoValidacion.getCodigo().equals(cambiarPasswordDTO.codigoVerificacion())) {
+        if (codigoValidacion.getCodigoValidacion().equals(cambiarPasswordDTO.codigoVerificacion())) {
             if (codigoValidacion.getFechaCreacion().plusMinutes(15).isAfter(LocalDateTime.now())) {
                 cuentaUsuario.setPassword(passwordEncoder.encode(cambiarPasswordDTO.passwordNueva()));
                 cuentaRepo.save(cuentaUsuario);
@@ -291,7 +291,7 @@ public class CuentaServicioImpl implements CuentaServicio {
             throw new Exception("La cuenta ya esta activa");
         }
 
-        if (cuenta_usuario.getCodigoValidacionRegistro().getCodigo().equals(validarCuentaDTO.codigo())){
+        if (cuenta_usuario.getCodigoValidacionRegistro().getCodigoValidacion().equals(validarCuentaDTO.codigo())){
             if (cuenta_usuario.getCodigoValidacionRegistro().getFechaCreacion().plusMinutes(15).isAfter(LocalDateTime.now())) {
                 cuenta_usuario.setEstadoCuenta(EstadoCuenta.ACTIVO);
                 cuentaRepo.save(cuenta_usuario);

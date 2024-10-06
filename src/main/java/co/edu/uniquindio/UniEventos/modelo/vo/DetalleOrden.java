@@ -12,7 +12,7 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 public class DetalleOrden {
 
-    private String id;
+    private ObjectId idDetalleOrden;
     private ObjectId idEvento;
     private float precio;
     private String nombreLocalidad;
