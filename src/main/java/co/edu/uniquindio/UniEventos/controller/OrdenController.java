@@ -49,8 +49,8 @@ public class OrdenController {
 
     // Obtener historial de órdenes de una cuenta
     @GetMapping("/historial")
-    public ResponseEntity<MensajeDTO<List<ItemOrdenDTO>>> obtenerHistorialOrdenes(@RequestParam("idCuenta") String idCuenta) throws Exception {
-        List<ItemOrdenDTO> historial = ordenServicio.obtenerHistorialOrdenes(new ObjectId(idCuenta));
+    public ResponseEntity<MensajeDTO<List<ItemOrdenDTO>>> obtenerHistorialOrdenes() throws Exception {
+        List<ItemOrdenDTO> historial = ordenServicio.obtenerHistorialOrdenes();
         return ResponseEntity.ok().body(new MensajeDTO<>(false, historial));
     }
 

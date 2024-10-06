@@ -17,7 +17,7 @@ public interface OrdenServicio {
 
     String cancelarOrden(ObjectId idOrden) throws Exception;
 
-    List<ItemOrdenDTO> obtenerHistorialOrdenes(ObjectId idCuenta) throws Exception;
+    List<ItemOrdenDTO> obtenerHistorialOrdenes() throws Exception;
 
     InformacionOrdenCompraDTO obtenerInformacionOrden(ObjectId idOrden) throws Exception;
 
