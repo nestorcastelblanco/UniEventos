@@ -34,7 +34,6 @@ public class CuentaServicioImpl implements CuentaServicio {
     public CuentaServicioImpl(CuentaRepo cuentaRepo, EmailServicio emailServicio) {
         this.cuentaRepo = cuentaRepo;
         this.emailServicio = emailServicio;
-        this.jwtUtils = jwtUtils;
     }
 
     @Override
