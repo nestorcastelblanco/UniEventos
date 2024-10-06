@@ -33,7 +33,7 @@ public class Orden extends Carrito {
     private float total;
     private ObjectId idCupon;
     private EstadoOrden estado;
-
+    private List<ObjectId> idsEventos;
     // Método que convierte List<DetalleCarrito> a List<DetalleOrden>
     public void setItemsFromCarrito(List<DetalleCarrito> itemsCarrito) {
         this.detallesOrden = itemsCarrito.stream()

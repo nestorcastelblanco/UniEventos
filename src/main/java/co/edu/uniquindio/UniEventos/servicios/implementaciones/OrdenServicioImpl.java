@@ -63,6 +63,8 @@ public class OrdenServicioImpl implements OrdenServicio {
         nuevaOrden.setCodigoPasarela(orden.codigoPasarela());
         nuevaOrden.setItems(itemsConvertidos);
         nuevaOrden.setIdUsuario(new ObjectId(orden.idCliente()));
+        nuevaOrden.setIdsEventos(listaIDEventos(orden.items()));
+
         nuevaOrden.setPago(
                 new Pago(orden.pago().moneda(),
                         orden.pago().tipoPago(),
