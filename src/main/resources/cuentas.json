@@ -1,0 +1,97 @@
+[
+  {
+    "id": "1",
+    "email": "usuario1@example.com",
+    "password": "password123",
+    "rol": "CLIENTE",
+    "codigoValidacionRegistro": {
+      "codigo": "abc123",
+      "fechaCreacion": "2024-10-01T10:00:00"
+    },
+    "usuario": {
+      "id": "u1",
+      "telefono": "1234567890",
+      "cedula": "12345678",
+      "nombre": "Juan Perez",
+      "direccion": "Calle 123"
+    },
+    "fechaRegistro": "2024-10-01T10:00:00",
+    "estadoCuenta": "ACTIVO"
+  },
+  {
+    "id": "2",
+    "email": "usuario2@example.com",
+    "password": "$2a$10$g3.B1r9p3Z6vZ/7Yu6N6ne8u//P/Pl4eIUV0OXvmGxgL/ihSWlXQO",
+    "rol": "ADMINISTRADOR",
+    "codigoValidacionRegistro": {
+      "codigo": "def456",
+      "fechaCreacion": "2024-10-02T12:00:00"
+    },
+    "usuario": {
+      "id": "u2",
+      "telefono": "0987654321",
+      "cedula": "87654321",
+      "nombre": "Maria Gomez",
+      "direccion": "Calle 456"
+    },
+    "fechaRegistro": "2024-10-02T12:00:00",
+    "estadoCuenta": "INACTIVO"
+  },
+  {
+    "id": "3",
+    "email": "usuario3@example.com",
+    "password": "$2a$10$T5c69d/QmX2/ZRu2fqM6Be08D/Q5GH3a3wL0pYOq5RclD9xA4PMH.",
+    "rol": "CLIENTE",
+    "codigoValidacionRegistro": {
+      "codigo": "ghi789",
+      "fechaCreacion": "2024-10-03T14:00:00"
+    },
+    "usuario": {
+      "id": "u3",
+      "telefono": "5555555555",
+      "cedula": "11111111",
+      "nombre": "Carlos Ruiz",
+      "direccion": "Calle 789"
+    },
+    "fechaRegistro": "2024-10-03T14:00:00",
+    "estadoCuenta": "ACTIVO"
+  },
+  {
+    "id": "4",
+    "email": "usuario4@example.com",
+    "password": "$2a$10$JtB4Qj3/UxQ6m0j8Y1W8t.TkG9eRWefKmXbc7F0/U0EBrU/0CTbeK",
+    "rol": "CLIENTE",
+    "codigoValidacionRegistro": {
+      "codigo": "jkl012",
+      "fechaCreacion": "2024-10-04T16:00:00"
+    },
+    "usuario": {
+      "id": "u4",
+      "telefono": "7777777777",
+      "cedula": "22222222",
+      "nombre": "Laura Martínez",
+      "direccion": "Calle 101"
+    },
+    "fechaRegistro": "2024-10-04T16:00:00",
+    "estadoCuenta": "ACTIVO"
+  },
+  {
+    "id": "5",
+    "email": "usuario5@example.com",
+    "password": "$2a$10$Vi8vVQyGg57C1hF8F4Zz4uD3y9mD4UqIL9Y3pkZr4t8q8JH2DXjUS",
+    "rol": "ADMINISTRADOR",
+    "codigoValidacionRegistro": {
+      "codigo": "mno345",
+      "fechaCreacion": "2024-10-05T18:00:00"
+    },
+    "usuario": {
+      "id": "u5",
+      "telefono": "8888888888",
+      "cedula": "33333333",
+      "nombre": "Andrés López",
+      "direccion": "Calle 202"
+    },
+    "fechaRegistro": "2024-10-05T18:00:00",
+    "estadoCuenta": "INACTIVO"
+  }
+]
