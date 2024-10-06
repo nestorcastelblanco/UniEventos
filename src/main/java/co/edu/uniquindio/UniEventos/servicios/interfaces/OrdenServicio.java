@@ -23,7 +23,7 @@ public interface OrdenServicio {
 
     List<Orden> ordenesUsuario(ObjectId idUsuario) throws Exception;
 
-    Preference realizarPago(ObjectId idOrden) throws Exception;
+    Preference realizarPago(String idOrden) throws Exception;
 
     void recibirNotificacionMercadoPago(Map<String, Object> request);
 

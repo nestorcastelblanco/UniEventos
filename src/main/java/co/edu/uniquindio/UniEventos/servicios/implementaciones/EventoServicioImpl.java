@@ -6,6 +6,7 @@ import co.edu.uniquindio.UniEventos.modelo.enums.EstadoEvento;
 import co.edu.uniquindio.UniEventos.modelo.vo.Localidad;
 import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.EventoServicio;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +66,7 @@ public class EventoServicioImpl implements EventoServicio {
     @Override
     public String editarEvento(EditarEventoDTO evento) throws Exception {
 
-        Evento eventoExistente = obtenerEvento(evento.id());
+        Evento eventoExistente = obtenerEvento(new ObjectId(evento.id()));
 
         // Verificar que el evento esté ACTIVO antes de permitir la edición
         if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
@@ -90,7 +91,7 @@ public class EventoServicioImpl implements EventoServicio {
     @Override
     public String eliminarEvento(String id) throws Exception {
 
-        Evento eventoExistente = obtenerEvento(id);
+        Evento eventoExistente = obtenerEvento(new ObjectId(id));
 
         // Cambiar el estado del evento a INACTIVO en lugar de eliminarlo
         if (eventoExistente.getEstado() == EstadoEvento.INACTIVO) {
@@ -126,7 +127,7 @@ public class EventoServicioImpl implements EventoServicio {
 
     @Override
     public InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception {
-        Evento eventoExistente = obtenerEvento(id);
+        Evento eventoExistente = obtenerEvento(new ObjectId(id));
 
         // Verificar que el evento esté activo antes de obtener la información
         if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
@@ -148,8 +149,8 @@ public class EventoServicioImpl implements EventoServicio {
     }
 
     @Override
-    public Evento obtenerEvento(String id) throws Exception {
-        Optional<Evento> eventoOptional = eventoRepo.findById(id);
+    public Evento obtenerEvento(ObjectId id) throws Exception {
+        Optional<Evento> eventoOptional = eventoRepo.buscarPorIdEvento(id);
 
         if (eventoOptional.isEmpty()) {
             throw new Exception("El evento con el id: " + id + " no existe");

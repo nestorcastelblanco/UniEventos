@@ -64,7 +64,7 @@ public class OrdenController {
     // Realizar el pago de una orden
     @PostMapping("/realizar-pago")
     public ResponseEntity<MensajeDTO<Preference>> realizarPago(@RequestParam("idOrden") String idOrden) throws Exception {
-        Preference preference = ordenServicio.realizarPago(new ObjectId(idOrden));
+        Preference preference = ordenServicio.realizarPago(idOrden);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, preference));
     }
 

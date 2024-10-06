@@ -37,6 +37,8 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static co.edu.uniquindio.UniEventos.modelo.vo.DetalleOrden.fromDTOList;
+
 @Service
 @Transactional
 public class OrdenServicioImpl implements OrdenServicio {
@@ -56,6 +58,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         }
 
         List<DetalleCarrito> itemsConvertidos = convertirDetalleOrdenACarrito(orden.items());
+        List<DetalleOrden> detallesOrden = DetalleOrden.fromDTOList(orden.items());
 
         Orden nuevaOrden = new Orden();
         nuevaOrden.setIdCliente(new ObjectId(orden.idCliente()));
@@ -63,8 +66,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         nuevaOrden.setCodigoPasarela(orden.codigoPasarela());
         nuevaOrden.setItems(itemsConvertidos);
         nuevaOrden.setIdUsuario(new ObjectId(orden.idCliente()));
-        nuevaOrden.setIdsEventos(listaIDEventos(orden.items()));
-
+        nuevaOrden.setDetallesOrden(detallesOrden);
         nuevaOrden.setPago(
                 new Pago(orden.pago().moneda(),
                         orden.pago().tipoPago(),
@@ -182,51 +184,53 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
     @Override
-    public Preference realizarPago(ObjectId idOrden) throws Exception {
-        Orden ordenGuardada = obtenerOrden(idOrden);
+    public Preference realizarPago(String idOrden) throws Exception {
+
+        Orden ordenGuardada = obtenerOrden(new ObjectId(idOrden));
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
-        for (DetalleOrden item : convertirDetalleCarritoAOrden(ordenGuardada.getItems())) {
-            Evento evento = eventoServicio.obtenerEvento(item.getIdEvento().toString());
+        for (DetalleOrden item : ordenGuardada.getDetallesOrden()) {
+            Evento evento = eventoServicio.obtenerEvento(item.getIdEvento());
             Localidad localidad = evento.obtenerLocalidad(item.getNombreLocalidad());
 
-            PreferenceItemRequest itemRequest =
-                    PreferenceItemRequest.builder()
-                            .id(evento.getId())
-                            .title(evento.getNombre())
-                            .pictureUrl(evento.getImagenPortada())
-                            .categoryId(evento.getTipo().name())
-                            .quantity(item.getCantidad())
-                            .currencyId("COP")
-                            .unitPrice(BigDecimal.valueOf(localidad.getPrecio()))
-                            .build();
+            PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
+                    .id(evento.getId())
+                    .title(evento.getNombre())
+                    .pictureUrl(evento.getImagenPortada())
+                    .categoryId(evento.getTipo().name())
+                    .quantity(item.getCantidad())
+                    .currencyId("COP")
+                    .unitPrice(BigDecimal.valueOf(localidad.getPrecio()))
+                    .build();
 
             itemsPasarela.add(itemRequest);
         }
 
-        MercadoPagoConfig.setAccessToken("APP_USR-..."); // Mantén tu token en un archivo seguro
+        MercadoPagoConfig.setAccessToken("APP_USR-4368524607273593-100311-0cffd4069075c573924d2bcbc08042b7-518706539");
 
+        String baseUrl = "https://unieventos.com/pago"; // Reemplaza esto con tu URL base
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("URL PAGO EXITOSO")
-                .failure("URL PAGO FALLIDO")
-                .pending("URL PAGO PENDIENTE")
+                .success(baseUrl + "/exito?id_orden=" + ordenGuardada.getOrdenId())
+                .failure(baseUrl + "/error?id_orden=" + ordenGuardada.getOrdenId())
+                .pending(baseUrl + "/pendiente?id_orden=" + ordenGuardada.getOrdenId())
                 .build();
 
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .backUrls(backUrls)
                 .items(itemsPasarela)
-                .metadata(Map.of("id_orden", ordenGuardada.getId()))
+                .metadata(Map.of("id_orden", ordenGuardada.getOrdenId()))
                 .notificationUrl("URL NOTIFICACION")
                 .build();
 
         PreferenceClient client = new PreferenceClient();
         Preference preference = client.create(preferenceRequest);
-
+        
         ordenGuardada.setCodigoPasarela(preference.getId());
         ordenRepo.save(ordenGuardada);
 
         return preference;
     }
+
 
     public void recibirNotificacionMercadoPago(Map<String, Object> request) {
         try {
