@@ -41,16 +41,9 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto:6.3.3'
 
     // JWT para autenticación
-    implementation 'org.springframework.security:spring-security-crypto:6.3.3'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
-
-    // Firebase
-    implementation 'com.google.firebase:firebase-admin:9.2.0'
-
-    // MercadoPago SDK
-    implementation 'com.mercadopago:sdk-java:2.1.27'
 
     // QR Code generación
     implementation 'com.google.zxing:core:3.4.1'

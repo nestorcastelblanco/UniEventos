@@ -20,7 +20,7 @@ import java.util.List;
 public class Carrito {
 
     @Id  // Añadir la anotación @Id para indicar que este es el campo ID del documento
-    private ObjectId id;  // Cambiar a ObjectId
+    private String id;  // Cambiar a ObjectId
     private List<DetalleCarrito> items;
     private LocalDateTime fecha;
     private ObjectId idUsuario;  // Asegúrate de que sea ObjectId para el idUsuario

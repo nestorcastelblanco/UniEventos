@@ -1,5 +1,11 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
+import com.mercadopago.client.preference.*;
+import com.mercadopago.resources.preference.Preference;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import com.mercadopago.client.payment.*;
 import co.edu.uniquindio.UniEventos.dto.EmailDTOs.EmailDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.CrearOrdenDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
@@ -19,13 +25,13 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.mercadopago.MercadoPagoConfig;
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
-import com.mercadopago.client.preference.PreferenceClient;
-import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.client.preference.PreferenceRequest;
+import com.mercadopago.client.preference.*;
+import com.mercadopago.resources.common.Address;
+import com.mercadopago.resources.common.Identification;
+import com.mercadopago.resources.common.Phone;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
+import com.mercadopago.resources.preference.PreferencePayer;
 import jakarta.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -130,7 +136,7 @@ public class OrdenServicioImpl implements OrdenServicio {
 
         return ordenes.stream()
                 .map(orden -> new ItemOrdenDTO(
-                        orden.getId(),
+                        new ObjectId(orden.getId()),
                         orden.getFecha(),
                         orden.getTotal(),
                         orden.getEstado()))
@@ -148,7 +154,7 @@ public class OrdenServicioImpl implements OrdenServicio {
                 orden.getCodigoPasarela(),
                 itemsOrden,
                 orden.getPago(),
-                orden.getId(),
+                new ObjectId(orden.getId()),
                 orden.getTotal(),
                 orden.getIdCupon(),
                 orden.getEstado()
@@ -182,55 +188,52 @@ public class OrdenServicioImpl implements OrdenServicio {
 
         emailServicio.enviarCorreo(new EmailDTO("Detalles Compra", correoContenido, emailCliente));
     }
-
     @Override
     public Preference realizarPago(String idOrden) throws Exception {
 
+        // Obtener la orden guardada en la base de datos y los ítems de la orden
         Orden ordenGuardada = obtenerOrden(new ObjectId(idOrden));
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
+        // Recorrer los items de la orden y crea los ítems de la pasarela
         for (DetalleOrden item : ordenGuardada.getDetallesOrden()) {
+
             Evento evento = eventoServicio.obtenerEvento(item.getIdEvento());
             Localidad localidad = evento.obtenerLocalidad(item.getNombreLocalidad());
 
+            // Crear el item de la pasarela
             PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
-                    .id(evento.getId())
-                    .title(evento.getNombre())
-                    .pictureUrl(evento.getImagenPortada())
-                    .categoryId(evento.getTipo().name())
+                    .id(evento.getId()).title(evento.getNombre())
+                    .pictureUrl(null).categoryId(String.valueOf(evento.getTipo()))
                     .quantity(item.getCantidad())
-                    .currencyId("COP")
-                    .unitPrice(BigDecimal.valueOf(localidad.getPrecio()))
-                    .build();
+                    .currencyId("COP").unitPrice(BigDecimal.valueOf(localidad.getPrecio())).build();
 
             itemsPasarela.add(itemRequest);
         }
 
-        MercadoPagoConfig.setAccessToken("APP_USR-4368524607273593-100311-0cffd4069075c573924d2bcbc08042b7-518706539");
+        // Configurar las credenciales de MercadoPago
+        MercadoPagoConfig.setAccessToken("APP_USR-4368524607273593-100523-5ecdf138298f2f251854edb28b1d6957-518706539");
 
-        String baseUrl = "https://unieventos.com/pago"; // Reemplaza esto con tu URL base
-        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success(baseUrl + "/exito?id_orden=" + ordenGuardada.getOrdenId())
-                .failure(baseUrl + "/error?id_orden=" + ordenGuardada.getOrdenId())
-                .pending(baseUrl + "/pendiente?id_orden=" + ordenGuardada.getOrdenId())
-                .build();
+        // Configurar las urls de retorno de la pasarela (Frontend)
+        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder().success("URL PAGO EXITOSO")
+                .failure("URL PAGO FALLIDO").pending("URL PAGO PENDIENTE").build();
 
-        PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .backUrls(backUrls)
-                .items(itemsPasarela)
-                .metadata(Map.of("id_orden", ordenGuardada.getOrdenId()))
-                .notificationUrl("URL NOTIFICACION")
-                .build();
+        // Construir la preferencia de la pasarela con los ítems, metadatos y urls de
+        // retorno
+        PreferenceRequest preferenceRequest = PreferenceRequest.builder().backUrls(backUrls).items(itemsPasarela)
+                .metadata(Map.of("id_orden", ordenGuardada.getId()))
+                .notificationUrl("https://f049-152-202-207-38.ngrok-free.app").build();
 
+        // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();
         Preference preference = client.create(preferenceRequest);
-        
-        ordenGuardada.setCodigoPasarela(preference.getId());
+
+        // Guardar el código de la pasarela en la orden
+        ordenGuardada.setId(preference.getId());
         ordenRepo.save(ordenGuardada);
 
         return preference;
     }
-
 
     public void recibirNotificacionMercadoPago(Map<String, Object> request) {
         try {

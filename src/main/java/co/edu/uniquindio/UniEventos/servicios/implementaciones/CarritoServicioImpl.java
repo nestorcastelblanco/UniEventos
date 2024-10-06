@@ -95,7 +95,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         List<DetalleCarrito> detallesCarrito = carrito.getItems();
         LocalDateTime fecha = carrito.getFecha();
 
-        return new VistaCarritoDTO(carrito.getId(), detallesCarrito, fecha);
+        return new VistaCarritoDTO(new ObjectId(carrito.getId()), detallesCarrito, fecha);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         List<Carrito> carritos = carritoRepo.findAll();  // Obtener todos los carritos
         return carritos.stream().map(carrito -> {
             // Mapear cada Carrito a CarritoListDTO
-            return new CarritoListDTO(carrito.getId(), carrito.getFecha(), carrito.getItems());
+            return new CarritoListDTO(new ObjectId(carrito.getId()), carrito.getFecha(), carrito.getItems());
         }).collect(Collectors.toList());
     }
 
