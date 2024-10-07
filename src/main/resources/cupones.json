@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "codigo": "0001",
+    "descuento": 15,
+    "nombre": "Cupon de Bienvenida",
+    "tipo": "MULTIPLE",
+    "estado": "DISPONIBLE",
+    "fechaVencimiento": "2025-01-01T00:00:00"
+  },
+  {
+    "id": "2",
+    "codigo": "0002",
+    "descuento": 20,
+    "nombre": "Cupon de Navidad",
+    "tipo": "UNICO",
+    "estado": "DISPONIBLE",
+    "fechaVencimiento": "2025-12-25T00:00:00"
+  },
+  {
+    "id": "3",
+    "codigo": "0003",
+    "descuento": 10,
+    "nombre": "Cupon de Verano",
+    "tipo": "MULTIPLE",
+    "estado": "DISPONIBLE",
+    "fechaVencimiento": "2025-06-30T00:00:00"
+  },
+  {
+    "id": "4",
+    "codigo": "0004",
+    "descuento": 25,
+    "nombre": "Cupon de Fin de Año",
+    "tipo": "UNICO",
+    "estado": "DISPONIBLE",
+    "fechaVencimiento": "2025-12-31T00:00:00"
+  },
+  {
+    "id": "5",
+    "codigo": "0005",
+    "descuento": 5,
+    "nombre": "Cupon de Otoño",
+    "tipo": "MULTIPLE",
+    "estado": "DISPONIBLE",
+    "fechaVencimiento": "2025-09-30T00:00:00"
+  }
+]

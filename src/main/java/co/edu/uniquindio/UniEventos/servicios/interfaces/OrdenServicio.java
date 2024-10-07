@@ -15,7 +15,7 @@ public interface OrdenServicio {
 
     String crearOrden(CrearOrdenDTO crearOrdenDTO) throws Exception;
 
-    String cancelarOrden(ObjectId idOrden) throws Exception;
+    String cancelarOrden(String idOrden) throws Exception;
 
     List<ItemOrdenDTO> obtenerHistorialOrdenes() throws Exception;
 

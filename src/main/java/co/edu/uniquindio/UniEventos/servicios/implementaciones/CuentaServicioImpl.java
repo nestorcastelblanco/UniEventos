@@ -315,7 +315,7 @@ public class CuentaServicioImpl implements CuentaServicio {
         return "Se activo la cuenta correctamente y se creo el carrito";
     }
 
-    private Cuenta obtenerCuenta(String id) throws Exception {
+    public Cuenta obtenerCuenta(String id) throws Exception {
         Optional<Cuenta> cuentaOptional = cuentaRepo.findById(id);
 
         if (cuentaOptional.isEmpty()) {
@@ -324,4 +324,7 @@ public class CuentaServicioImpl implements CuentaServicio {
 
         return cuentaOptional.get();
     }
+
+
+
 }

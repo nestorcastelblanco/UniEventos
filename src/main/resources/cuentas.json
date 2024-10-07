@@ -1,15 +1,19 @@
 [
   {
-    "id": "1",
+    "id": "60d21b4667d0d8992e610c85",
     "email": "usuario1@example.com",
     "password": "password123",
     "rol": "CLIENTE",
     "codigoValidacionRegistro": {
-      "codigo": "abc123",
+      "codigoValidacion": "abc123",
       "fechaCreacion": "2024-10-01T10:00:00"
     },
+    "codigoValidacionPassword": {
+      "codigoValidacion": "pwd456",
+      "fechaCreacion": "2024-10-07T10:30:00"
+    },
     "usuario": {
-      "id": "u1",
+      "idUsuario": "u1",
       "telefono": "1234567890",
       "cedula": "12345678",
       "nombre": "Juan Perez",
@@ -19,16 +23,20 @@
     "estadoCuenta": "ACTIVO"
   },
   {
-    "id": "2",
+    "id": "60d21b4667d0d8992e610c86",
     "email": "usuario2@example.com",
-    "password": "$2a$10$g3.B1r9p3Z6vZ/7Yu6N6ne8u//P/Pl4eIUV0OXvmGxgL/ihSWlXQO",
+    "password": "password456",
     "rol": "ADMINISTRADOR",
     "codigoValidacionRegistro": {
-      "codigo": "def456",
+      "codigoValidacion": "def456",
+      "fechaCreacion": "2024-10-02T12:00:00"
+    },
+    "codigoValidacionPassword": {
+      "codigoValidacion": "pwd789",
       "fechaCreacion": "2024-10-02T12:00:00"
     },
     "usuario": {
-      "id": "u2",
+      "idUsuario": "u2",
       "telefono": "0987654321",
       "cedula": "87654321",
       "nombre": "Maria Gomez",
@@ -38,60 +46,73 @@
     "estadoCuenta": "INACTIVO"
   },
   {
-    "id": "3",
+    "id": "60d21b4667d0d8992e610c87",
     "email": "usuario3@example.com",
-    "password": "$2a$10$T5c69d/QmX2/ZRu2fqM6Be08D/Q5GH3a3wL0pYOq5RclD9xA4PMH.",
+    "password": "password789",
     "rol": "CLIENTE",
     "codigoValidacionRegistro": {
-      "codigo": "ghi789",
-      "fechaCreacion": "2024-10-03T14:00:00"
+      "codigoValidacion": "ghi789",
+      "fechaCreacion": "2024-10-03T14:30:00"
+    },
+    "codigoValidacionPassword": {
+      "codigoValidacion": "pwd012",
+      "fechaCreacion": "2024-10-03T14:30:00"
     },
     "usuario": {
-      "id": "u3",
-      "telefono": "5555555555",
+      "idUsuario": "u3",
+      "telefono": "1231231234",
       "cedula": "11111111",
       "nombre": "Carlos Ruiz",
       "direccion": "Calle 789"
     },
-    "fechaRegistro": "2024-10-03T14:00:00",
+    "fechaRegistro": "2024-10-03T14:30:00",
     "estadoCuenta": "ACTIVO"
   },
   {
-    "id": "4",
+    "id": "60d21b4667d0d8992e610c88",
     "email": "usuario4@example.com",
-    "password": "$2a$10$JtB4Qj3/UxQ6m0j8Y1W8t.TkG9eRWefKmXbc7F0/U0EBrU/0CTbeK",
-    "rol": "CLIENTE",
-    "codigoValidacionRegistro": {
-      "codigo": "jkl012",
-      "fechaCreacion": "2024-10-04T16:00:00"
-    },
-    "usuario": {
-      "id": "u4",
-      "telefono": "7777777777",
-      "cedula": "22222222",
-      "nombre": "Laura Martínez",
-      "direccion": "Calle 101"
-    },
-    "fechaRegistro": "2024-10-04T16:00:00",
-    "estadoCuenta": "ACTIVO"
-  },
-  {
-    "id": "5",
-    "email": "usuario5@example.com",
-    "password": "$2a$10$Vi8vVQyGg57C1hF8F4Zz4uD3y9mD4UqIL9Y3pkZr4t8q8JH2DXjUS",
+    "password": "password012",
     "rol": "ADMINISTRADOR",
     "codigoValidacionRegistro": {
-      "codigo": "mno345",
-      "fechaCreacion": "2024-10-05T18:00:00"
+      "codigoValidacion": "jkl012",
+      "fechaCreacion": "2024-10-04T08:45:00"
+    },
+    "codigoValidacionPassword": {
+      "codigoValidacion": "pwd345",
+      "fechaCreacion": "2024-10-04T08:45:00"
     },
     "usuario": {
-      "id": "u5",
-      "telefono": "8888888888",
-      "cedula": "33333333",
-      "nombre": "Andrés López",
-      "direccion": "Calle 202"
+      "idUsuario": "u4",
+      "telefono": "4564564567",
+      "cedula": "22222222",
+      "nombre": "Laura Torres",
+      "direccion": "Calle 321"
     },
-    "fechaRegistro": "2024-10-05T18:00:00",
+    "fechaRegistro": "2024-10-04T08:45:00",
     "estadoCuenta": "INACTIVO"
+  },
+  {
+    "id": "60d21b4667d0d8992e610c89",
+    "email": "usuario5@example.com",
+    "password": "password345",
+    "rol": "CLIENTE",
+    "codigoValidacionRegistro": {
+      "codigoValidacion": "mno345",
+      "fechaCreacion": "2024-10-05T11:00:00"
+    },
+    "codigoValidacionPassword": {
+      "codigoValidacion": "pwd678",
+      "fechaCreacion": "2024-10-05T11:00:00"
+    },
+    "usuario": {
+      "idUsuario": "u5",
+      "telefono": "3213214321",
+      "cedula": "33333333",
+      "nombre": "Pedro Martinez",
+      "direccion": "Calle 654"
+    },
+    "fechaRegistro": "2024-10-05T11:00:00",
+    "estadoCuenta": "ACTIVO"
   }
 ]
+

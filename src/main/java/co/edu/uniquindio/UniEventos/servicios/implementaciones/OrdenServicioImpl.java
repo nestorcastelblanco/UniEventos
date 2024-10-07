@@ -59,7 +59,7 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     @Override
     public String crearOrden(CrearOrdenDTO orden) throws Exception {
-        if (existeOrden(new ObjectId(orden.idCliente()))) {
+        if (existeOrden(orden.idCliente())) {
             throw new Exception("Ya existe una orden con este código");
         }
 
@@ -101,12 +101,12 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
 
-    private boolean existeOrden(ObjectId id) {
+    private boolean existeOrden(String id) {
         return ordenRepo.buscarOrdenPorId(id).isPresent();
     }
 
     @Override
-    public String cancelarOrden(ObjectId idOrden) throws Exception {
+    public String cancelarOrden(String idOrden) throws Exception {
         Orden orden = obtenerOrden(idOrden);
         orden.setEstado(EstadoOrden.CANCELADA);
         ordenRepo.save(orden);
@@ -122,8 +122,8 @@ public class OrdenServicioImpl implements OrdenServicio {
         return ordenes;
     }
 
-    private Orden obtenerOrden(ObjectId idOrden) throws Exception {
-        return ordenRepo.buscarOrdenPorId(idOrden)
+    public Orden obtenerOrden(String idOrden) throws Exception {
+        return ordenRepo.findById(idOrden)
                 .orElseThrow(() -> new Exception("La orden con el id: " + idOrden + " no existe"));
     }
 
@@ -145,7 +145,7 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     @Override
     public InformacionOrdenCompraDTO obtenerInformacionOrden(String idOrden) throws Exception {
-        Orden orden = obtenerOrden(new ObjectId(idOrden));
+        Orden orden = obtenerOrden(idOrden);
         List<DetalleOrden> itemsOrden = convertirDetalleCarritoAOrden(orden.getItems());
 
         return new InformacionOrdenCompraDTO(
@@ -192,7 +192,7 @@ public class OrdenServicioImpl implements OrdenServicio {
     public Preference realizarPago(String idOrden) throws Exception {
 
         // Obtener la orden guardada en la base de datos y los ítems de la orden
-        Orden ordenGuardada = obtenerOrden(new ObjectId(idOrden));
+        Orden ordenGuardada = obtenerOrden(idOrden);
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
         // Recorrer los items de la orden y crea los ítems de la pasarela
@@ -246,7 +246,7 @@ public class OrdenServicioImpl implements OrdenServicio {
                 Payment payment = client.get(Long.parseLong(idPago));
 
                 String idOrden = payment.getMetadata().get("id_orden").toString();
-                Orden orden = obtenerOrden(new ObjectId(idOrden));
+                Orden orden = obtenerOrden(idOrden);
                 Pago pago = crearPago(payment);
                 orden.setPago(pago);
                 ordenRepo.save(orden);

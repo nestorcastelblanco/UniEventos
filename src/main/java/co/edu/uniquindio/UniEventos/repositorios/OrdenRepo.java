@@ -13,11 +13,11 @@ import java.util.Optional;
 public interface OrdenRepo extends MongoRepository<Orden, String> {
 
     // Buscar una orden por su ID
-    @Query("{ id : ?0 }")
-    Optional<Orden> buscarOrdenPorId(ObjectId id);
+    @Query("{ ordenId : ?0 }") // Cambiado de 'id' a 'ordenId'
+    Optional<Orden> buscarOrdenPorId(String ordenId);
 
     // Buscar todas las órdenes asociadas a un cliente específico
     @Query("{ idCliente : ?0 }")
     List<Orden> findByIdCliente(ObjectId idCliente);
-
 }
+

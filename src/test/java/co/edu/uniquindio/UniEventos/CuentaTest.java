@@ -1,34 +1,33 @@
 package co.edu.uniquindio.UniEventos;
 
+import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.CambiarPasswordDTO;
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.LoginDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.TokenDTO;
+import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCuenta;
+import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
 import co.edu.uniquindio.UniEventos.servicios.implementaciones.CuentaServicioImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
-import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 @SpringBootTest
-public class CuentaRepoTest {
+public class CuentaTest {
 
     @Autowired
     private CuentaServicioImpl cuentaServicio;
-
-    private Cuenta cuenta;
 
     @Autowired
     private CuentaRepo cuentaRepo;
@@ -43,15 +42,15 @@ public class CuentaRepoTest {
 
         // Cargar el archivo JSON desde el directorio de recursos
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("cuentas.json");
-        if (inputStream == null) {
-            throw new FileNotFoundException("Archivo cuentas.json no encontrado");
-        }
+        assertNotNull(inputStream, "Archivo cuentas.json no encontrado");
+
         List<Cuenta> cuentas = objectMapper.readValue(inputStream, new TypeReference<List<Cuenta>>() {});
 
         // Codificar las contraseñas y guardar las cuentas en el repositorio
         for (Cuenta cuenta : cuentas) {
             cuenta.setPassword(passwordEncoder.encode(cuenta.getPassword())); // Codifica la contraseña
         }
+        cuentaRepo.deleteAll(); // Limpiar el repositorio antes de agregar nuevos registros
         cuentaRepo.saveAll(cuentas);
     }
 
@@ -70,8 +69,7 @@ public class CuentaRepoTest {
     }
 
     @Test
-    public void testEditarCuenta() throws Exception {
-        // Obtener la cuenta existente
+    public void testEditarCuenta() {
         Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCedula("12345678");
         assertTrue(cuentaOptional.isPresent(), "La cuenta debería estar presente");
 
@@ -79,14 +77,13 @@ public class CuentaRepoTest {
         cuenta.getUsuario().setNombre("Usuario Modificado");
         cuentaRepo.save(cuenta);
 
-        // Verificar que se haya modificado
         Optional<Cuenta> cuentaModificada = cuentaRepo.buscarCuentaPorCedula("12345678");
         assertTrue(cuentaModificada.isPresent(), "La cuenta debería estar presente después de la modificación");
         assertEquals("Usuario Modificado", cuentaModificada.get().getUsuario().getNombre(), "El nombre debería haber sido modificado");
     }
 
     @Test
-    public void testEliminarCuenta() throws Exception {
+    public void testEliminarCuenta() {
         Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCedula("12345678");
         assertTrue(cuentaOptional.isPresent(), "La cuenta debería estar presente");
 
@@ -94,7 +91,6 @@ public class CuentaRepoTest {
         cuenta.setEstadoCuenta(EstadoCuenta.ELIMINADO);
         cuentaRepo.save(cuenta);
 
-        // Verificar que el estado de cuenta haya cambiado
         Optional<Cuenta> cuentaEliminada = cuentaRepo.buscarCuentaPorCedula("12345678");
         assertTrue(cuentaEliminada.isPresent(), "La cuenta debería estar presente después de eliminarla");
         assertEquals(EstadoCuenta.ELIMINADO, cuentaEliminada.get().getEstadoCuenta(), "El estado de la cuenta debería ser ELIMINADO");
@@ -108,31 +104,90 @@ public class CuentaRepoTest {
 
     @Test
     public void testValidarCuentaPorCorreoYCodigo() {
-        // Datos de prueba del archivo cuentas.json
         String email = "usuario2@example.com";  // correo del usuario
         String codigoValidacion = "def456";      // código de validación
 
-        // Simula la búsqueda de la cuenta por el email
         Optional<Cuenta> optionalCuenta = cuentaRepo.buscarCuentaPorCorreo(email);
         assertTrue(optionalCuenta.isPresent(), "La cuenta no fue encontrada por el email proporcionado.");
 
         Cuenta cuenta = optionalCuenta.get();
-
-        // Verifica si el código de validación coincide
-        String codigoGuardado = cuenta.getCodigoValidacionRegistro().getCodigo();
+        String codigoGuardado = cuenta.getCodigoValidacionRegistro().getCodigoValidacion();
         assertEquals(codigoValidacion, codigoGuardado, "El código de validación no coincide.");
 
-        // Simula la activación de la cuenta
-        cuenta.setEstadoCuenta(EstadoCuenta.ACTIVO);  // Utiliza el enum directamente
+        cuenta.setEstadoCuenta(EstadoCuenta.ACTIVO);
         cuentaRepo.save(cuenta);
 
-        // Verificamos que la cuenta fue activada correctamente
-        Cuenta cuentaActualizada = cuentaRepo.findById(cuenta.getId()).get();
-        assertEquals(EstadoCuenta.ACTIVO, cuentaActualizada.getEstadoCuenta(), "La cuenta no fue activada correctamente.");  // Compara el enum
+        Cuenta cuentaActualizada = cuentaRepo.findById(String.valueOf(cuenta.getId())).orElseThrow();
+        assertEquals(EstadoCuenta.ACTIVO, cuentaActualizada.getEstadoCuenta(), "La cuenta no fue activada correctamente.");
+    }
+
+    @Test
+    public void testBuscarCuentaPorId() {
+        // ID que existe en el archivo cuentas.json
+        String cuentaId = "60d21b4667d0d8992e610c85";
+
+        // Ejecutar la búsqueda por ID
+        Optional<Cuenta> cuentaOptional = cuentaRepo.findById(cuentaId);
+
+        // Verificar que la cuenta fue encontrada
+        assertTrue(cuentaOptional.isPresent(), "La cuenta debería estar presente");
+
+        // Verificar que los campos importantes coinciden
+        Cuenta cuenta = cuentaOptional.get();
+        assertEquals("usuario1@example.com", cuenta.getEmail(), "El correo debería coincidir");
+        assertEquals("12345678", cuenta.getUsuario().getCedula(), "La cédula debería coincidir");
+        assertEquals(EstadoCuenta.ACTIVO, cuenta.getEstadoCuenta(), "El estado de la cuenta debería ser ACTIVO");
+    }
+
+    @Test
+    public void testCambiarPassword() throws Exception {
+        CambiarPasswordDTO cambiarPasswordDTO = new CambiarPasswordDTO(
+                "pwd456",
+                "nuevaPassword123",
+                "usuario1@example.com"
+        );
+
+        String resultado = cuentaServicio.cambiarPassword(cambiarPasswordDTO);
+        Assertions.assertEquals("La clave se ha cambiado correctamente", resultado);
+
+        // Verifica que la contraseña haya sido cambiada correctamente
+        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCorreo("usuario1@example.com");
+        Assertions.assertTrue(cuentaOptional.isPresent());
+        Assertions.assertTrue(passwordEncoder.matches("nuevaPassword123", cuentaOptional.get().getPassword()));
+    }
+
+    @Test
+    void testEnviarCodigoRecuperacionPassword() throws Exception {
+        // Datos de prueba
+        String email = "usuario1@example.com";
+
+        // Llamada al metodo para enviar el código de recuperación
+        String respuesta = cuentaServicio.enviarCodigoRecuperacionPassword(email);
+
+        // Verifica que la respuesta sea la esperada
+        assertEquals("Se ha enviado un código a su correo, con una duración de 15 minutos", respuesta);
+
+        // Verifica que el código de validación se haya actualizado
+        Cuenta cuentaActualizada = cuentaRepo.buscarCuentaPorCorreo(email).orElseThrow(() -> new Exception("El correo no está registrado"));
+
+        // Verifica que el código de validación no sea nulo
+        assertNotNull(cuentaActualizada.getCodigoValidacionPassword());
+
+        // Verifica que el código de validación sea correcto (puedes verificar con un patrón o similar)
+        assertNotNull(cuentaActualizada.getCodigoValidacionPassword().getCodigoValidacion());
+
+        // Verifica que la fecha de creación del código sea reciente (dentro de los últimos minutos)
+        assertTrue(cuentaActualizada.getCodigoValidacionPassword().getFechaCreacion().isAfter(LocalDateTime.now().minusMinutes(1)));
+    }
+
+    @Test
+    public void testIniciarSesion_Correcto() throws Exception {
+        LoginDTO loginDTO = new LoginDTO("usuario1@example.com", "password123");
+        TokenDTO tokenDTO = cuentaServicio.iniciarSesion(loginDTO);
+
+        // Verificar que se genera un token no nulo
+        assertEquals(tokenDTO.token() != null, true);
     }
 
 
-
 }
-
-

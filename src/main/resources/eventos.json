@@ -1,0 +1,127 @@
+[
+  {
+    "id": "651fb39e67d99177cd75e4a1",
+    "nombre": "Concierto de Rock",
+    "direccion": "Calle 123 #45-67",
+    "ciudad": "Bogotá",
+    "descripcion": "El mejor concierto de rock del año.",
+    "tipo": "CONCIERTO",
+    "estado": "ACTIVO",
+    "imagenPortada": "imagen_concierto_rock.jpg",
+    "fecha": "2024-12-15T20:00:00",
+    "localidades": [
+      {
+        "nombreLocalidad": "VIP",
+        "precio": 200000,
+        "capacidadMaxima": 500,
+        "entradasVendidas": 250
+      },
+      {
+        "nombreLocalidad": "General",
+        "precio": 100000,
+        "capacidadMaxima": 1000,
+        "entradasVendidas": 600
+      }
+    ],
+    "imagenLocalidades": "imagen_localidades_concierto_rock.jpg"
+  },
+  {
+    "id": "651fb39e67d99177cd75e4a2",
+    "nombre": "Feria Gastronómica",
+    "direccion": "Plaza Central",
+    "ciudad": "Medellín",
+    "descripcion": "Una feria con lo mejor de la gastronomía.",
+    "tipo": "BELLEZA",
+    "estado": "ACTIVO",
+    "imagenPortada": "imagen_feria_gastronomica.jpg",
+    "fecha": "2024-11-20T10:00:00",
+    "localidades": [
+      {
+        "nombreLocalidad": "Entrada General",
+        "precio": 50000,
+        "capacidadMaxima": 2000,
+        "entradasVendidas": 1200
+      }
+    ],
+    "imagenLocalidades": "imagen_localidades_feria_gastronomica.jpg"
+  },
+  {
+    "id": "651fb39e67d99177cd75e4a3",
+    "nombre": "Teatro al Parque",
+    "direccion": "Parque Metropolitano",
+    "ciudad": "Cali",
+    "descripcion": "Una presentación de teatro al aire libre.",
+    "tipo": "MODA",
+    "estado": "ACTIVO",
+    "imagenPortada": "imagen_teatro_parque.jpg",
+    "fecha": "2024-10-30T18:00:00",
+    "localidades": [
+      {
+        "nombreLocalidad": "Preferencial",
+        "precio": 150000,
+        "capacidadMaxima": 300,
+        "entradasVendidas": 200
+      },
+      {
+        "nombreLocalidad": "General",
+        "precio": 80000,
+        "capacidadMaxima": 1000,
+        "entradasVendidas": 700
+      }
+    ],
+    "imagenLocalidades": "imagen_localidades_teatro_parque.jpg"
+  },
+  {
+    "id": "651fb39e67d99177cd75e4a4",
+    "nombre": "Festival de Jazz",
+    "direccion": "Auditorio Mayor",
+    "ciudad": "Cartagena",
+    "descripcion": "El evento más importante de jazz en Colombia.",
+    "tipo": "DEPORTE",
+    "estado": "ACTIVO",
+    "imagenPortada": "imagen_festival_jazz.jpg",
+    "fecha": "2024-11-15T19:00:00",
+    "localidades": [
+      {
+        "nombreLocalidad": "VIP",
+        "precio": 250000,
+        "capacidadMaxima": 200,
+        "entradasVendidas": 150
+      },
+      {
+        "nombreLocalidad": "General",
+        "precio": 120000,
+        "capacidadMaxima": 800,
+        "entradasVendidas": 500
+      }
+    ],
+    "imagenLocalidades": "imagen_localidades_festival_jazz.jpg"
+  },
+  {
+    "id": "651fb39e67d99177cd75e4a5",
+    "nombre": "Congreso de Tecnología",
+    "direccion": "Centro de Convenciones",
+    "ciudad": "Barranquilla",
+    "descripcion": "Un congreso sobre las últimas tendencias tecnológicas.",
+    "tipo": "CONCIERTO",
+    "estado": "ACTIVO",
+    "imagenPortada": "imagen_congreso_tecnologia.jpg",
+    "fecha": "2024-12-01T09:00:00",
+    "localidades": [
+      {
+        "nombreLocalidad": "Preferencial",
+        "precio": 300000,
+        "capacidadMaxima": 100,
+        "entradasVendidas": 80
+      },
+      {
+        "nombreLocalidad": "General",
+        "precio": 150000,
+        "capacidadMaxima": 500,
+        "entradasVendidas": 350
+      }
+    ],
+    "imagenLocalidades": "imagen_localidades_congreso_tecnologia.jpg"
+  }
+]
+

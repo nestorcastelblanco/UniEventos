@@ -36,7 +36,7 @@ public class OrdenController {
     // Cancelar una orden existente
     @PostMapping("/cancelar")
     public ResponseEntity<MensajeDTO<String>> cancelarOrden(@RequestParam("idOrden") String idOrden) throws Exception {
-        String mensaje = ordenServicio.cancelarOrden(new ObjectId(idOrden));
+        String mensaje = ordenServicio.cancelarOrden(idOrden);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, mensaje));
     }
 

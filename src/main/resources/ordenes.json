@@ -1,0 +1,137 @@
+[
+  {
+    "idCliente": "60d21b4667d0d8992e610c85",
+    "fecha": "2024-10-06T10:00:00",
+    "codigoPasarela": "MP123456",
+    "detallesOrden": [
+      {
+        "idEvento": "651fb39e67d99177cd75e4a1",
+        "precio": 200000,
+        "nombreLocalidad": "VIP",
+        "cantidad": 2
+      }
+    ],
+    "pago": {
+      "moneda": "COP",
+      "tipoPago": "CREDITO",
+      "detalleEstado": "APROBADO",
+      "codigoAutorizacion": "AUTO123",
+      "fecha": "2024-10-06T10:05:00",
+      "idPago": "PAY123456",
+      "valorTransaccion": 400000,
+      "estado": "CONFIRMADO"
+    },
+    "ordenId": "60d21b4667d0d8992e610c90",
+    "total": 400000,
+    "idCupon": "6461c7e73b6a9b53ab3a50e2",
+    "estado": "DISPONIBLE"
+  },
+  {
+    "idCliente": "60d21b4667d0d8992e610c86",
+    "fecha": "2024-10-06T11:00:00",
+    "codigoPasarela": "MP123457",
+    "detallesOrden": [
+      {
+        "idEvento": "651fb39e67d99177cd75e4a2",
+        "precio": 50000,
+        "nombreLocalidad": "Entrada General",
+        "cantidad": 1
+      }
+    ],
+    "pago": {
+      "moneda": "COP",
+      "tipoPago": "DEBITO",
+      "detalleEstado": "PENDIENTE",
+      "codigoAutorizacion": null,
+      "fecha": "2024-10-06T11:05:00",
+      "idPago": "PAY123457",
+      "valorTransaccion": 50000,
+      "estado": "PENDIENTE"
+    },
+    "ordenId": "60d21b4667d0d8992e610c91",
+    "total": 50000,
+    "idCupon": null,
+    "estado": "DISPONIBLE"
+  },
+  {
+    "idCliente": "60d21b4667d0d8992e610c87",
+    "fecha": "2024-10-06T12:00:00",
+    "codigoPasarela": "MP123458",
+    "detallesOrden": [
+      {
+        "idEvento": "651fb39e67d99177cd75e4a3",
+        "precio": 150000,
+        "nombreLocalidad": "Preferencial",
+        "cantidad": 1
+      }
+    ],
+    "pago": {
+      "moneda": "COP",
+      "tipoPago": "CREDITO",
+      "detalleEstado": "APROBADO",
+      "codigoAutorizacion": "AUTO456",
+      "fecha": "2024-10-06T12:05:00",
+      "idPago": "PAY123458",
+      "valorTransaccion": 150000,
+      "estado": "CONFIRMADO"
+    },
+    "ordenId": "60d21b4667d0d8992e610c92",
+    "total": 150000,
+    "idCupon": "6461c7e73b6a9b53ab3a50e7",
+    "estado": "DISPONIBLE"
+  },
+  {
+    "idCliente": "60d21b4667d0d8992e610c88",
+    "fecha": "2024-10-06T13:00:00",
+    "codigoPasarela": "MP123459",
+    "detallesOrden": [
+      {
+        "idEvento": "651fb39e67d99177cd75e4a4",
+        "precio": 120000,
+        "nombreLocalidad": "General",
+        "cantidad": 2
+      }
+    ],
+    "pago": {
+      "moneda": "COP",
+      "tipoPago": "CREDITO",
+      "detalleEstado": "APROBADO",
+      "codigoAutorizacion": "AUTO789",
+      "fecha": "2024-10-06T13:05:00",
+      "idPago": "PAY123459",
+      "valorTransaccion": 240000,
+      "estado": "CONFIRMADO"
+    },
+    "ordenId": "60d21b4667d0d8992e610c93",
+    "total": 240000,
+    "idCupon": null,
+    "estado": "DISPONIBLE"
+  },
+  {
+    "idCliente": "60d21b4667d0d8992e610c89",
+    "fecha": "2024-10-06T14:00:00",
+    "codigoPasarela": "MP123460",
+    "detallesOrden": [
+      {
+        "idEvento": "651fb39e67d99177cd75e4a5",
+        "precio": 300000,
+        "nombreLocalidad": "Preferencial",
+        "cantidad": 1
+      }
+    ],
+    "pago": {
+      "moneda": "COP",
+      "tipoPago": "DEBITO",
+      "detalleEstado": "RECHAZADO",
+      "codigoAutorizacion": null,
+      "fecha": "2024-10-06T14:05:00",
+      "idPago": "PAY123460",
+      "valorTransaccion": 300000,
+      "estado": "RECHAZADO"
+    },
+    "ordenId": "60d21b4667d0d8992e610c94",
+    "total": 300000,
+    "idCupon": null,
+    "estado": "CANCELADA"
+  }
+]
