@@ -1,12 +1,8 @@
 package co.edu.uniquindio.UniEventos.dto.OrdenDTOs;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
@@ -23,13 +19,10 @@ public record CrearOrdenDTO(
         @NotNull(message = "Debe proporcionar al menos un ítem en la orden")
         List<ItemDTO> items,
 
-        @NotNull(message = "El pago es obligatorio")
-        @Valid PagoDTO pago,
-
         @Min(value = 0, message = "El total debe ser mayor o igual a cero")
         float total,
 
-        String idCupon
+        String codigoCupon
 ) {
         public record ItemDTO(
                 String idDetalleCarrito,

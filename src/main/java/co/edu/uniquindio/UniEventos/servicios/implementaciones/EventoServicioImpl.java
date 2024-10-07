@@ -1,10 +1,14 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
 
+import co.edu.uniquindio.UniEventos.dto.EmailDTOs.EmailDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.*;
+import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Evento;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoEvento;
 import co.edu.uniquindio.UniEventos.modelo.vo.Localidad;
+import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
 import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
+import co.edu.uniquindio.UniEventos.servicios.interfaces.EmailServicio;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.EventoServicio;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -19,9 +23,13 @@ import java.util.stream.Collectors;
 public class EventoServicioImpl implements EventoServicio {
 
     private final EventoRepo eventoRepo;
+    private final EmailServicio emailServicio;
+    private final CuentaRepo cuentaRepo;
 
-    public EventoServicioImpl(EventoRepo eventoRepo) {
+    public EventoServicioImpl(EventoRepo eventoRepo, EmailServicio emailServicio, CuentaRepo cuentaRepo, CuentaRepo cuentaRepo1) {
         this.eventoRepo = eventoRepo;
+        this.emailServicio = emailServicio;
+        this.cuentaRepo = cuentaRepo1;
     }
 
     @Override
@@ -56,6 +64,8 @@ public class EventoServicioImpl implements EventoServicio {
         }).collect(Collectors.toList());
 
         nuevoEvento.setLocalidades(localidades);
+
+        notificarUsuarios(nuevoEvento);
 
         // Guardar el nuevo evento en la base de datos
         Evento eventoCreado = eventoRepo.save(nuevoEvento);
@@ -161,5 +171,15 @@ public class EventoServicioImpl implements EventoServicio {
 
     private boolean existeNombreEvento(String nombre) {
         return eventoRepo.buscarPorNombre(nombre).isPresent();
+    }
+
+    private void notificarUsuarios(Evento nuevoEvento) throws Exception {
+        List<Cuenta> clientes = cuentaRepo.findAll();
+
+        for (Cuenta cliente : clientes) {
+            emailServicio.enviarCorreo(new EmailDTO("HAY UN NUEVO EVENTO DISPONIBLE EN UNIEVENTOS", "Entra a nuestra plataforma y descubre el nuevo evento disponible \n" + nuevoEvento.getNombre() +" \n"
+                    + nuevoEvento.getCiudad()
+                    +" \n " + nuevoEvento.getDescripcion() +" \n " + nuevoEvento.getFecha(), cliente.getEmail()));
+        }
     }
 }

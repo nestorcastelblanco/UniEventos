@@ -78,9 +78,9 @@ public class CuentaServicioImpl implements CuentaServicio {
                         LocalDateTime.now()
                 )
         );
-
-        emailServicio.enviarCorreo(new EmailDTO("Codigo de activación de cuenta de Unieventos", "El codigo de activacion asignado para recuperar la cuenta es el siguiente " + codigoActivacion, nuevaCuenta.getEmail()));
         cuentaRepo.save(nuevaCuenta);
+        emailServicio.enviarCorreo(new EmailDTO("Codigo de activación de cuenta de Unieventos", "El codigo de activacion asignado para recuperar la cuenta es el siguiente " + codigoActivacion, nuevaCuenta.getEmail()));
+
     }
 
     private boolean existeCedula(String cedula) {
