@@ -1,4 +1,6 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
+import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
+import co.edu.uniquindio.UniEventos.repositorios.CuponRepo;
 import com.mercadopago.client.preference.*;
 import com.mercadopago.resources.preference.Preference;
 
@@ -25,25 +27,17 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.mercadopago.MercadoPagoConfig;
-import com.mercadopago.client.preference.*;
-import com.mercadopago.resources.common.Address;
-import com.mercadopago.resources.common.Identification;
-import com.mercadopago.resources.common.Phone;
 import com.mercadopago.resources.payment.Payment;
-import com.mercadopago.resources.preference.Preference;
-import com.mercadopago.resources.preference.PreferencePayer;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
-
-import static co.edu.uniquindio.UniEventos.modelo.vo.DetalleOrden.fromDTOList;
 
 @Service
 @Transactional
@@ -51,10 +45,12 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     private final OrdenRepo ordenRepo;
     private final EventoServicio eventoServicio;
+    private final CuponRepo cuponRepo;
 
-    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio) {
+    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo) {
         this.ordenRepo = ordenRepo;
         this.eventoServicio = eventoServicio;
+        this.cuponRepo = cuponRepo;
     }
 
     @Override
@@ -73,23 +69,33 @@ public class OrdenServicioImpl implements OrdenServicio {
         nuevaOrden.setItems(itemsConvertidos);
         nuevaOrden.setIdUsuario(new ObjectId(orden.idCliente()));
         nuevaOrden.setDetallesOrden(detallesOrden);
-        nuevaOrden.setPago(
-                new Pago(orden.pago().moneda(),
-                        orden.pago().tipoPago(),
-                        orden.pago().detalleEstado(),
-                        orden.pago().codigoAutorizacion(),
-                        orden.pago().fecha(),
-                        orden.pago().idPago(),
-                        orden.pago().valorTransaccion(),
-                        orden.pago().estado()
-                        ));
-        nuevaOrden.setTotal(orden.total());
-        nuevaOrden.setIdCupon(new ObjectId(orden.idCupon()));
+        nuevaOrden.setPago(new Pago());
+        nuevaOrden.setTotal(calcularTotal(orden.total(), orden.codigoCupon()));
+        nuevaOrden.setIdCupon(orden.codigoCupon());
         nuevaOrden.setEstado(EstadoOrden.DISPONIBLE);
 
         ordenRepo.save(nuevaOrden);
         return "La orden fue creada con éxito.";
     }
+
+    private float calcularTotal(@Min(value = 0, message = "El total debe ser mayor o igual a cero") float total, String codigoCupon) {
+        float valor = total;
+
+        // Verifica si el código de cupón es válido
+        Optional<Cupon> cuponIngresado = cuponRepo.buscarCuponPorCodigo(codigoCupon);
+        if (cuponIngresado.isPresent()) {
+            Cupon cupon = cuponIngresado.get();
+
+            // Aplica el descuento del cupón al valor total
+            valor = valor - (valor * (cupon.getDescuento() / 100.0f));
+        } else {
+            System.out.println("Cupón no encontrado o no válido");
+        }
+
+        System.out.println("Valor postverificación cupón: " + valor);
+        return valor;
+    }
+
 
     private List<ObjectId> listaIDEventos(@NotNull(message = "Debe proporcionar al menos un ítem en la orden") List<CrearOrdenDTO.ItemDTO> items) {
 
@@ -205,8 +211,8 @@ public class OrdenServicioImpl implements OrdenServicio {
             PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                     .id(evento.getId()).title(evento.getNombre())
                     .pictureUrl(null).categoryId(String.valueOf(evento.getTipo()))
-                    .quantity(item.getCantidad())
-                    .currencyId("COP").unitPrice(BigDecimal.valueOf(localidad.getPrecio())).build();
+                    .quantity(1)
+                    .currencyId("COP").unitPrice(BigDecimal.valueOf(ordenGuardada.getTotal())).build();
 
             itemsPasarela.add(itemRequest);
         }
@@ -222,14 +228,14 @@ public class OrdenServicioImpl implements OrdenServicio {
         // retorno
         PreferenceRequest preferenceRequest = PreferenceRequest.builder().backUrls(backUrls).items(itemsPasarela)
                 .metadata(Map.of("id_orden", ordenGuardada.getId()))
-                .notificationUrl("https://f049-152-202-207-38.ngrok-free.app").build();
+                .notificationUrl("https://ae41-189-50-209-152.ngrok-free.app/api/publico/orden/notificacion-pago").build();
 
         // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();
         Preference preference = client.create(preferenceRequest);
 
         // Guardar el código de la pasarela en la orden
-        ordenGuardada.setId(preference.getId());
+        ordenGuardada.setCodigoPasarela(preference.getId());
         ordenRepo.save(ordenGuardada);
 
         return preference;

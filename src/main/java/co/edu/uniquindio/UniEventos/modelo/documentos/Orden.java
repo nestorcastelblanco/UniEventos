@@ -31,7 +31,7 @@ public class Orden extends Carrito {
     private Pago pago;
     private String ordenId;
     private float total;
-    private ObjectId idCupon;
+    private String idCupon;
     private EstadoOrden estado;
 
     // Método que convierte List<DetalleCarrito> a List<DetalleOrden>

@@ -16,7 +16,7 @@ public record InformacionOrdenCompraDTO (
         Pago pago,
         ObjectId id,
         float total,
-        ObjectId idCupon,
+        String codigoCupon,
         EstadoOrden estado
 ){
 }
