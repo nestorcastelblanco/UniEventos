@@ -57,7 +57,7 @@ public class OrdenController {
     // Obtener detalles de una orden específica
     @GetMapping("/detalles/{idOrden}")
     public ResponseEntity<MensajeDTO<InformacionOrdenCompraDTO>> obtenerDetallesOrden(@PathVariable("idOrden") String idOrden) throws Exception {
-        InformacionOrdenCompraDTO detallesOrden = ordenServicio.obtenerInformacionOrden(new ObjectId(idOrden));
+        InformacionOrdenCompraDTO detallesOrden = ordenServicio.obtenerInformacionOrden(idOrden);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, detallesOrden));
     }
 

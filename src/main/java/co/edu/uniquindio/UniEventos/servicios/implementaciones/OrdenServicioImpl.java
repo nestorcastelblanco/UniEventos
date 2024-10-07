@@ -136,7 +136,7 @@ public class OrdenServicioImpl implements OrdenServicio {
 
         return ordenes.stream()
                 .map(orden -> new ItemOrdenDTO(
-                        new ObjectId(orden.getId()),
+                        orden.getId(),
                         orden.getFecha(),
                         orden.getTotal(),
                         orden.getEstado()))
@@ -144,8 +144,8 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
     @Override
-    public InformacionOrdenCompraDTO obtenerInformacionOrden(ObjectId idOrden) throws Exception {
-        Orden orden = obtenerOrden(idOrden);
+    public InformacionOrdenCompraDTO obtenerInformacionOrden(String idOrden) throws Exception {
+        Orden orden = obtenerOrden(new ObjectId(idOrden));
         List<DetalleOrden> itemsOrden = convertirDetalleCarritoAOrden(orden.getItems());
 
         return new InformacionOrdenCompraDTO(

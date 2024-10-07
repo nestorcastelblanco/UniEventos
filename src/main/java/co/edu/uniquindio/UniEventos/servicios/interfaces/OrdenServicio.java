@@ -19,7 +19,7 @@ public interface OrdenServicio {
 
     List<ItemOrdenDTO> obtenerHistorialOrdenes() throws Exception;
 
-    InformacionOrdenCompraDTO obtenerInformacionOrden(ObjectId idOrden) throws Exception;
+    InformacionOrdenCompraDTO obtenerInformacionOrden(String idOrden) throws Exception;
 
     List<Orden> ordenesUsuario(ObjectId idUsuario) throws Exception;
 

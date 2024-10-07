@@ -24,8 +24,8 @@ public class DetalleOrden {
 
     public static DetalleOrden fromDTO(CrearOrdenDTO.ItemDTO itemDTO) {
         return DetalleOrden.builder()
-                .idDetalleOrden(ObjectId.get()) // Asigna un nuevo ObjectId para idDetalleOrden
-                .idEvento(new ObjectId(itemDTO.idEvento())) // Convierte el String a ObjectId
+                .idDetalleOrden(ObjectId.get())
+                .idEvento(new ObjectId(itemDTO.idEvento()))
                 .precio(itemDTO.precio())
                 .nombreLocalidad(itemDTO.nombreLocalidad())
                 .cantidad(itemDTO.cantidad())

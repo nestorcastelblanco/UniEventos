@@ -65,11 +65,6 @@ public class CuentaController {
         return cuentaServicio.iniciarSesion(loginDTO);
     }
 
-    @PostMapping("/encriptar-password")
-    public String encriptarPassword(@RequestParam String password) throws Exception {
-        return cuentaServicio.encriptarPassword(password);
-    }
-
     @GetMapping("/listar-todo")
     public ResponseEntity<MensajeDTO<List<ItemCuentaDTO>>> listarCuentas() throws Exception {
         List<ItemCuentaDTO> lista = cuentaServicio.listarCuentas();

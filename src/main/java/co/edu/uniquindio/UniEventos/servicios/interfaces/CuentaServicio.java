@@ -22,8 +22,6 @@ public interface CuentaServicio {
 
     TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 
-    String encriptarPassword(String password) throws Exception;
-
     List<ItemCuentaDTO> listarCuentas() throws Exception;
 
     String activarCuenta(ValidarCuentaDTO validarCuentaDTO) throws Exception;

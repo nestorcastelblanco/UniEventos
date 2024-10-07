@@ -250,11 +250,6 @@ public class CuentaServicioImpl implements CuentaServicio {
     }
 
     @Override
-    public String encriptarPassword(String password) throws Exception {
-        return passwordEncoder.encode(password);
-    }
-
-    @Override
     public List<ItemCuentaDTO> listarCuentas() throws Exception {
         List<Cuenta> cuentas = cuentaRepo.findAll();
 
