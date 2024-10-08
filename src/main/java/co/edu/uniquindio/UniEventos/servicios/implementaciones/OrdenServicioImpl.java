@@ -3,6 +3,7 @@ import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
 import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
 import co.edu.uniquindio.UniEventos.repositorios.CuponRepo;
+import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
 import com.mercadopago.client.preference.*;
 import com.mercadopago.resources.preference.Preference;
 
@@ -52,12 +53,14 @@ public class OrdenServicioImpl implements OrdenServicio {
     private final EventoServicio eventoServicio;
     private final CuponRepo cuponRepo;
     private final CuentaRepo cuentaRepo;
+    private final EventoRepo eventoRepo;
 
-    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo, CuentaRepo cuentaRepo) {
+    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo, CuentaRepo cuentaRepo, EventoRepo eventoRepo, EventoRepo eventoRepo1) {
         this.ordenRepo = ordenRepo;
         this.eventoServicio = eventoServicio;
         this.cuponRepo = cuponRepo;
         this.cuentaRepo = cuentaRepo;
+        this.eventoRepo = eventoRepo1;
     }
 
     @Override
@@ -244,7 +247,19 @@ public class OrdenServicioImpl implements OrdenServicio {
         for (DetalleOrden item : ordenGuardada.getDetallesOrden()) {
 
             Evento evento = eventoServicio.obtenerEvento(item.getIdEvento());
-            Localidad localidad = evento.obtenerLocalidad(item.getNombreLocalidad());
+            List<Localidad> localidadesEventos = evento.getLocalidades();
+
+            for (Localidad localidades : localidadesEventos){
+
+                if ( item.getNombreLocalidad().equals( localidades.getNombreLocalidad()) ) {
+                    if (item.getCantidad() + localidades.getEntradasVendidas() > localidades.getCapacidadMaxima()){
+                        throw new Exception("Las entradas ingresadas no pueden ser compradas, ya que se cuenta con el aforo maximo");
+                    }else{
+                        localidades.setEntradasVendidas(item.getCantidad() + localidades.getEntradasVendidas());
+                        eventoRepo.save(evento);
+                    }
+                }
+            }
 
             // Crear el item de la pasarela
             PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
@@ -272,7 +287,6 @@ public class OrdenServicioImpl implements OrdenServicio {
         // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();
         Preference preference = client.create(preferenceRequest);
-
         // Guardar el código de la pasarela en la orden
         ordenGuardada.setCodigoPasarela(preference.getId());
         ordenRepo.save(ordenGuardada);

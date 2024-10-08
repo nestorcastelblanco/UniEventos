@@ -9,6 +9,7 @@ import co.edu.uniquindio.UniEventos.repositorios.CarritoRepo;
 import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CarritoServicio;
 import org.bson.types.ObjectId;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,9 +39,22 @@ public class CarritoServicioImpl implements CarritoServicio {
         if (!carritoCliente.isPresent()) {
             throw new Exception("El carrito no existe para el cliente con ID: " + eventoCarritoDTO.idUsuario());
         }
-
+        Optional<Evento> evento = eventoRepo.buscarPorIdEvento(eventoCarritoDTO.idEvento());
+        Evento eventoSeleccionado = evento.get();
         // Si el carrito existe, procedemos a agregar el item
         Carrito carrito = carritoCliente.get();
+
+        for (Localidad localidad : eventoSeleccionado.getLocalidades()){
+            if (localidad.getNombreLocalidad().equals(eventoCarritoDTO.nombreLocalidad())){
+                if (eventoCarritoDTO.numBoletas()+ localidad.getEntradasVendidas() > localidad.getCapacidadMaxima()){
+                    throw new Exception("Las entradas ingresadas no pueden ser agregadas al carrito, ya que se cuenta con el aforo maximo");
+                }else{
+                    localidad.setEntradasVendidas(eventoCarritoDTO.numBoletas() + localidad.getEntradasVendidas());
+                    eventoRepo.save(eventoSeleccionado);
+                }
+            }
+        }
+
         DetalleCarrito detalleCarrito = DetalleCarrito.builder()
                 .idDetalleCarrito(new ObjectId())
                 .cantidad(eventoCarritoDTO.numBoletas())
@@ -64,24 +78,95 @@ public class CarritoServicioImpl implements CarritoServicio {
 
         Carrito carrito = carritoCliente.get();
         List<DetalleCarrito> lista = carrito.getItems();
+
+
+        List<Evento> eventosSistema = eventoRepo.findAll();
+        List<Evento> eventosCarrito = new ArrayList<>();
+
+
+        for (DetalleCarrito detalleCarrito : lista) {
+            eventosCarrito.add(eventoRepo.buscarPorIdEvento(detalleCarrito.getIdEvento()).get());
+        }
+
+        for (Evento eventoSistema : eventosSistema){
+
+            for (Localidad eventoSistemaLocalidad : eventoSistema.getLocalidades()){
+
+                for (Evento eventoCarrito : eventosCarrito){
+
+                    for (Localidad localidad : eventoCarrito.getLocalidades()){
+
+                        if (eventoSistemaLocalidad.getNombreLocalidad().equals(localidad.getNombreLocalidad())){
+
+                            for (DetalleCarrito detalleCarrito : carrito.getItems()){
+
+                                if (detalleCarrito.getNombreLocalidad().equals(eventoSistemaLocalidad.getNombreLocalidad())){
+
+                                    eventoSistemaLocalidad.setEntradasVendidas(eventoSistemaLocalidad.getEntradasVendidas() - detalleCarrito.getCantidad());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+
         boolean removed = lista.removeIf(i -> i.getIdDetalleCarrito().equals(eventoEliminarCarritoDTO.idDetalle()));
 
         if (!removed) {
             throw new Exception("El elemento no se encontró en el carrito");
         }
 
+        for ( Evento evento : eventosSistema){
+            eventoRepo.save(evento);
+        }
         carritoRepo.save(carrito);
         return "Elemento eliminado del carrito";
     }
 
     @Override
     public void eliminarCarrito(EliminarCarritoDTO eliminarCarritoDTO) throws Exception {
-        Optional<Carrito> carrito = carritoRepo.buscarCarritoPorId(eliminarCarritoDTO.idCarrito());
-        if (carrito.isEmpty()) {
+        // Buscar carrito por id
+        Optional<Carrito> carritoOptional = carritoRepo.buscarCarritoPorId(eliminarCarritoDTO.idCarrito());
+        if (carritoOptional.isEmpty()) {
             throw new Exception("El carrito no existe");
         }
 
-        carritoRepo.delete(carrito.get());
+        Carrito carrito = carritoOptional.get();
+        List<DetalleCarrito> lista = carrito.getItems();
+
+        // Iterar sobre los detalles del carrito
+        for (DetalleCarrito detalleCarrito : lista) {
+            Optional<Evento> eventoOptional = eventoRepo.buscarPorIdEvento(detalleCarrito.getIdEvento());
+            if (eventoOptional.isEmpty()) {
+                throw new Exception("El evento no existe");
+            }
+
+            Evento evento = eventoOptional.get();
+
+            // Actualizar las entradas vendidas para las localidades del evento
+            for (Localidad localidad : evento.getLocalidades()) {
+                if (localidad.getNombreLocalidad().equals(detalleCarrito.getNombreLocalidad())) {
+                    localidad.setEntradasVendidas(localidad.getEntradasVendidas() - detalleCarrito.getCantidad());
+                    break; // Rompe el ciclo cuando encuentre la localidad correspondiente
+                }
+            }
+
+            // Guardar el evento con las localidades actualizadas
+            eventoRepo.save(evento);
+        }
+
+        // Finalmente, eliminar el carrito
+        carritoRepo.delete(carrito);
+
+        Carrito nuevoCarritoCLiente = Carrito.builder()
+                .items(new ArrayList<>())
+                .fecha(LocalDateTime.now())
+                .idUsuario(carrito.getIdUsuario()).build();
+
+        carritoRepo.save(nuevoCarritoCLiente);
     }
 
     @Override
@@ -109,17 +194,53 @@ public class CarritoServicioImpl implements CarritoServicio {
 
     @Override
     public String actualizarItemCarrito(ActualizarItemCarritoDTO actualizarItemCarritoDTO) throws Exception {
+        // Buscar el carrito del cliente
         Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorIdCliente(actualizarItemCarritoDTO.idCliente());
         if (carritoCliente.isEmpty()) {
             throw new Exception("El carrito no existe");
         }
 
         Carrito carrito = carritoCliente.get();
+
+        // Buscar el item en el carrito
         for (DetalleCarrito item : carrito.getItems()) {
             if (item.getIdEvento().equals(actualizarItemCarritoDTO.idEvento())) {
-                item.setCantidad(actualizarItemCarritoDTO.nuevaCantidad());
-                carritoRepo.save(carrito);
-                return "Item actualizado exitosamente";
+
+                // Buscar el evento correspondiente
+                Optional<Evento> eventoOptional = eventoRepo.buscarPorIdEvento(item.getIdEvento());
+                if (eventoOptional.isEmpty()) {
+                    throw new Exception("El evento no existe");
+                }
+
+                Evento evento = eventoOptional.get();
+
+                // Buscar la localidad correspondiente al evento
+                for (Localidad localidad : evento.getLocalidades()) {
+                    if (localidad.getNombreLocalidad().equals(item.getNombreLocalidad())) {
+
+                        // Calcular la diferencia de entradas (si se agregan o se quitan)
+                        int diferenciaEntradas = actualizarItemCarritoDTO.nuevaCantidad() - item.getCantidad();
+
+                        // Modificar las entradas vendidas en función de la nueva cantidad
+                        localidad.setEntradasVendidas(localidad.getEntradasVendidas() + diferenciaEntradas);
+
+                        // Verificar que las entradas vendidas no sean negativas
+                        if (localidad.getEntradasVendidas() < 0) {
+                            throw new Exception("La cantidad de entradas vendidas no puede ser negativa");
+                        }
+
+                        // Actualizar la cantidad en el carrito
+                        item.setCantidad(actualizarItemCarritoDTO.nuevaCantidad());
+
+                        // Guardar los cambios en el evento y en el carrito
+                        eventoRepo.save(evento);
+                        carritoRepo.save(carrito);
+
+                        return "Item actualizado exitosamente";
+                    }
+                }
+
+                throw new Exception("La localidad del evento no existe");
             }
         }
 
