@@ -1,9 +1,13 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
+import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
+import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
 import co.edu.uniquindio.UniEventos.repositorios.CuponRepo;
 import com.mercadopago.client.preference.*;
 import com.mercadopago.resources.preference.Preference;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -47,11 +51,13 @@ public class OrdenServicioImpl implements OrdenServicio {
     private final OrdenRepo ordenRepo;
     private final EventoServicio eventoServicio;
     private final CuponRepo cuponRepo;
+    private final CuentaRepo cuentaRepo;
 
-    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo) {
+    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo, CuentaRepo cuentaRepo) {
         this.ordenRepo = ordenRepo;
         this.eventoServicio = eventoServicio;
         this.cuponRepo = cuponRepo;
+        this.cuentaRepo = cuentaRepo;
     }
 
     @Override
@@ -97,17 +103,6 @@ public class OrdenServicioImpl implements OrdenServicio {
         return valor;
     }
 
-
-    private List<ObjectId> listaIDEventos(@NotNull(message = "Debe proporcionar al menos un ítem en la orden") List<CrearOrdenDTO.ItemDTO> items) {
-
-        List<ObjectId> idsEventos = new ArrayList<>();
-        for (CrearOrdenDTO.ItemDTO item : items) {
-            idsEventos.add(new ObjectId(item.idEvento()));
-        }
-        return idsEventos;
-    }
-
-
     private boolean existeOrden(String id) {
         return ordenRepo.buscarOrdenPorId(id).isPresent();
     }
@@ -130,9 +125,9 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
     public Orden obtenerOrden(String idOrden) throws Exception {
-        Optional<Orden> ordenOptional = ordenRepo.buscarOrdenPorId(idOrden);
+        Optional<Orden> ordenOptional = ordenRepo.buscarOrdenPorObjectId(new ObjectId(idOrden));
 
-        if (ordenOptional.isEmpty()) {
+        if (!ordenOptional.isPresent()) {
             throw new Exception("La orden con el id: " + idOrden + " no existe");
         }
 
@@ -174,38 +169,70 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
     public String generarQR(String codigoOrden) throws Exception {
+        // Texto del QR
         String qrText = "Orden ID: " + codigoOrden;
+        // Configuraciones del QR
         int width = 300;
         int height = 300;
         String fileType = "png";
 
+        // Nombre del archivo QR
         String qrFileName = "qr_" + codigoOrden + ".png";
         Path path = Paths.get("src/main/resources/qrCodes/" + qrFileName);
 
+        // Crear el directorio si no existe
+        File directory = new File("src/main/resources/qrCodes/");
+        if (!directory.exists()) {
+            directory.mkdirs();  // Crea los directorios necesarios
+        }
+
+        // Crear el QR
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(qrText, BarcodeFormat.QR_CODE, width, height);
+
+        // Guardar el QR en un archivo
         MatrixToImageWriter.writeToPath(bitMatrix, fileType, path);
 
+        // Devolver la ruta del archivo generado
         return path.toString();
     }
 
     public void enviarCorreoOrden(ObjectId idOrden, String emailCliente) throws Exception {
+        // Generar QR
         String qrFilePath = generarQR(String.valueOf(idOrden));
         EmailServicioImpl emailServicio = new EmailServicioImpl();
 
-        String correoContenido = "<p>Hola,</p>" +
-                "<p>Gracias por tu compra. A continuación te enviamos los detalles de tu orden y el código QR:</p>" +
-                "<p>Orden ID: " + idOrden + "</p>" +
-                "<p>Adjunto encontrarás tu código QR para el evento.</p>";
+        // Contenido del correo (formato de texto)
+        String correoContenido = "Hola,\n" +
+                "Gracias por tu compra. A continuación te enviamos los detalles de tu orden y el código QR:\n" +
+                "Orden ID: " + idOrden + "\n" +
+                "Adjunto encontrarás tu código QR para el evento.";
 
-        emailServicio.enviarCorreo(new EmailDTO("Detalles Compra", correoContenido, emailCliente));
+        // Preparar el archivo adjunto (QR generado)
+        File archivoAdjunto = new File(qrFilePath);
+        if (!archivoAdjunto.exists()) {
+            throw new FileNotFoundException("No se encontró el archivo QR: " + qrFilePath);
+        }
+
+        // Enviar el correo con el archivo adjunto
+        EmailDTO emailDTO = new EmailDTO("Detalles Compra", correoContenido, emailCliente);
+        emailServicio.enviarCorreoPago(emailDTO, archivoAdjunto);
     }
+
     @Override
     public Preference realizarPago(String idOrden) throws Exception {
 
         // Obtener la orden guardada en la base de datos y los ítems de la orden
         Orden ordenGuardada = obtenerOrden(idOrden);
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
+
+        if ( ordenGuardada.getEstado() == EstadoOrden.CANCELADA) {
+            throw new Exception("LA ORDEN SELECCIONADA FUE CANCELADA");
+        }
+
+        if ( ordenGuardada.getEstado() == EstadoOrden.PAGADA) {
+            throw new Exception("LA ORDEN SELECCIONADA YA FUE PAGADA ");
+        }
 
         // Recorrer los items de la orden y crea los ítems de la pasarela
         for (DetalleOrden item : ordenGuardada.getDetallesOrden()) {
@@ -234,7 +261,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         // retorno
         PreferenceRequest preferenceRequest = PreferenceRequest.builder().backUrls(backUrls).items(itemsPasarela)
                 .metadata(Map.of("id_orden", ordenGuardada.getId()))
-                .notificationUrl("https://ae41-189-50-209-152.ngrok-free.app/api/publico/orden/notificacion-pago").build();
+                .notificationUrl("https://7139-152-202-207-38.ngrok-free.app/api/publico/orden/notificacion-pago").build();
 
         // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();
@@ -247,8 +274,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         return preference;
     }
 
-    @Override
-    public void recibirNotificacionMercadoPago(Map<String, Object> request) {
+    public void recibirNotificacionMercadoPagoJUNIT(Map<String, Object> request) {
         String tipo = (String) request.get("type");
         if ("payment".equals(tipo)) {
             Map<String, Object> data = (Map<String, Object>) request.get("data");
@@ -266,6 +292,34 @@ public class OrdenServicioImpl implements OrdenServicio {
             orden.getPago().setIdPago(idPago); // No hay conversión a número aquí
             orden.getPago().setEstado("CONFIRMADO");
             ordenRepo.save(orden);
+        }
+    }
+
+    @Override
+    public void recibirNotificacionMercadoPago(Map<String, Object> request) {
+        try {
+            String tipo = (String) request.get("type");
+            if ("payment".equals(tipo)) {
+                String input = request.get("data").toString();
+                String idPago = input.replaceAll("\\D+", "");
+
+                PaymentClient client = new PaymentClient();
+                Payment payment = client.get(Long.parseLong(idPago));
+
+                String idOrden = payment.getMetadata().get("id_orden").toString();
+                Orden orden = obtenerOrden(idOrden);
+
+                Optional<Cuenta> cuentaCliente = cuentaRepo.findById(orden.getIdCliente());
+                Cuenta cuentaPago = cuentaCliente.get();
+
+                Pago pago = crearPago(payment);
+                orden.setEstado(EstadoOrden.PAGADA);
+                orden.setPago(pago);
+                enviarCorreoOrden(new ObjectId(idOrden), cuentaPago.getEmail());
+                ordenRepo.save(orden);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

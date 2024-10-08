@@ -40,16 +40,6 @@ public class PublicoController {
         return ResponseEntity.ok(new MensajeDTO<>(false, token));
     }
 
-    @PostMapping("/enviar_recuperacion")
-    public ResponseEntity<MensajeDTO<String>> enviarCorreoRecuperacion(@RequestBody String emailRecuperacionDTO) {
-        try {
-            emailServicio.enviarCorreoRecuperacion(emailRecuperacionDTO);
-            return ResponseEntity.ok(new MensajeDTO<>(false, "Correo enviado exitosamente"));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(new MensajeDTO<>(true, "Error al enviar el correo: " + e.getMessage()));
-        }
-    }
-
     @GetMapping("/evento/listar")
     public ResponseEntity<List<ItemEventoDTO>> listarEventos() {
         try {

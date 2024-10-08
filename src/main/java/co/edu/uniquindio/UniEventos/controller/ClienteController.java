@@ -73,13 +73,6 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, preference));
     }
 
-    // Enviar código QR por correo
-    @PostMapping("/enviar-qr")
-    public ResponseEntity<MensajeDTO<String>> enviarCorreoQR(@RequestParam("idOrden") String idOrden, @RequestParam("email") String email) throws Exception {
-        ordenServicio.enviarCorreoOrden(new ObjectId(idOrden), email);
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, "Correo enviado con éxito."));
-    }
-
     @PostMapping("/carrito/agregar-item")
     public ResponseEntity<MensajeDTO<String>> agregarItemCarrito(@Valid @RequestBody EventoCarritoDTO eventoCarritoDTO) throws Exception {
         String respuesta = carritoServicio.agregarItemCarrito(eventoCarritoDTO);
@@ -126,11 +119,5 @@ public class ClienteController {
     public ResponseEntity<MensajeDTO<String>> vaciarCarrito(@PathVariable String id) throws Exception {
         String respuesta = carritoServicio.vaciarCarrito(new VaciarCarritoDTO(new ObjectId(id)).idCarrito());
         return ResponseEntity.ok(new MensajeDTO<>(false, respuesta));
-    }
-
-    @PostMapping("/cupon/redimir")
-    public ResponseEntity<MensajeDTO<String>> redimirCupon(@RequestParam String codigo) throws Exception {
-        String resultado = cuponServicio.redimirCupon(codigo);
-        return ResponseEntity.ok(new MensajeDTO<>(false, resultado));
     }
 }

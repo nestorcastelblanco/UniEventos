@@ -1,5 +1,5 @@
 package co.edu.uniquindio.UniEventos.modelo.enums;
 
 public enum EstadoOrden {
-    DISPONIBLE, CANCELADA;
+    DISPONIBLE, CANCELADA, PAGADA;
 }

@@ -115,7 +115,7 @@ public class CuentaServicioImpl implements CuentaServicio {
         cuentaUsuario.getUsuario().setNombre(cuenta.nombre());
         cuentaUsuario.getUsuario().setDireccion(cuenta.direccion());
         cuentaUsuario.getUsuario().setTelefono(cuenta.telefono());
-
+        cuentaUsuario.getUsuario().setCedula(cuentaUsuario.getUsuario().getCedula());
         // Cifrar la nueva contraseña antes de almacenarla
         cuentaUsuario.setPassword(passwordEncoder.encode(cuenta.password()));
 
@@ -247,25 +247,6 @@ public class CuentaServicioImpl implements CuentaServicio {
                 "nombre", cuenta.getUsuario().getNombre(),
                 "id", cuenta.getId()
         );
-    }
-
-    @Override
-    public List<ItemCuentaDTO> listarCuentas() throws Exception {
-        List<Cuenta> cuentas = cuentaRepo.findAll();
-
-        if (cuentas.isEmpty()) {
-            throw new Exception("No se encontraron cuentas registradas");
-        }
-
-        // Convertimos las cuentas a una lista de ItemCuentaDTO para retornar la información
-        return cuentas.stream().map(cuenta -> new ItemCuentaDTO(
-                cuenta.getId(),
-                cuenta.getUsuario().getNombre(),
-                cuenta.getEmail(),
-                cuenta.getUsuario().getTelefono(),
-                cuenta.getEstadoCuenta(),
-                cuenta.getRol()
-        )).toList();
     }
 
     @Override

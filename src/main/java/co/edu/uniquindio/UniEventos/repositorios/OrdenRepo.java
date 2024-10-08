@@ -16,6 +16,10 @@ public interface OrdenRepo extends MongoRepository<Orden, String> {
     @Query("{ ordenId : ?0 }") // Cambiado de 'id' a 'ordenId'
     Optional<Orden> buscarOrdenPorId(String ordenId);
 
+    // Buscar una orden por su ID
+    @Query("{ _id : ?0 }") // Cambiado de 'id' a 'ordenId'
+    Optional<Orden> buscarOrdenPorObjectId(ObjectId ordenId);
+
     // Buscar todas las órdenes asociadas a un cliente específico
     @Query("{ idCliente : ?0 }")
     List<Orden> findByIdCliente(ObjectId idCliente);

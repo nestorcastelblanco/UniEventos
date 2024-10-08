@@ -142,7 +142,7 @@ public class OrdenTest {
         request.put("data", data);
 
         // Invocar el método que estás probando
-        ordenServicio.recibirNotificacionMercadoPago(request);
+        ordenServicio.recibirNotificacionMercadoPagoJUNIT(request);
 
         // Comprobar que el ID de pago se haya establecido correctamente
         Orden orden = ordenRepo.buscarOrdenPorId("60d21b4667d0d8992e610c90").orElseThrow();

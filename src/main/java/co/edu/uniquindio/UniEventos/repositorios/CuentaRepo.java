@@ -1,6 +1,7 @@
 package co.edu.uniquindio.UniEventos.repositorios;
 
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,9 @@ public interface CuentaRepo extends MongoRepository<Cuenta, String> {
 
     @Query("{ 'email' : ?0 }")
     Optional<Cuenta> buscarCuentaPorCorreo(String correo);
+
+    @Query("{ '_id' : ?0 }")
+    Optional<Cuenta> findById(ObjectId cedula);
 
     @Query(value = "{}", fields = "{ 'email' : 1 }")
     List<String> obtenerTodosLosCorreos();

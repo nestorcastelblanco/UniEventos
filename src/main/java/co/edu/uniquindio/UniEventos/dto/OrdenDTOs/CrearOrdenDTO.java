@@ -12,8 +12,6 @@ public record CrearOrdenDTO(
         @NotNull(message = "El ID del cliente es obligatorio")
         String idCliente,
 
-        @NotBlank(message = "El código de la pasarela de pago es obligatorio")
-        @Length(max = 50, message = "El código de la pasarela no puede exceder 50 caracteres")
         String codigoPasarela,
 
         @NotNull(message = "Debe proporcionar al menos un ítem en la orden")

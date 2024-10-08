@@ -179,7 +179,7 @@ public class EventoServicioImpl implements EventoServicio {
         for (Cuenta cliente : clientes) {
             emailServicio.enviarCorreo(new EmailDTO("HAY UN NUEVO EVENTO DISPONIBLE EN UNIEVENTOS", "Entra a nuestra plataforma y descubre el nuevo evento disponible \n" + nuevoEvento.getNombre() +" \n"
                     + nuevoEvento.getCiudad()
-                    +" \n " + nuevoEvento.getDescripcion() +" \n " + nuevoEvento.getFecha(), cliente.getEmail()));
+                    +"\n" + nuevoEvento.getDescripcion() +"\n" + nuevoEvento.getFecha(), cliente.getEmail()));
         }
     }
 }
