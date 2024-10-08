@@ -3,7 +3,6 @@ package co.edu.uniquindio.UniEventos;
 import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.*;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Carrito;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Evento;
-import co.edu.uniquindio.UniEventos.modelo.documentos.Orden;
 import co.edu.uniquindio.UniEventos.modelo.vo.DetalleCarrito;
 import co.edu.uniquindio.UniEventos.repositorios.CarritoRepo;
 import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
@@ -23,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class CarritoTest {

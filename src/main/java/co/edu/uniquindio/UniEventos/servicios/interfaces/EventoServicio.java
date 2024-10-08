@@ -23,4 +23,23 @@ public interface EventoServicio {
 
     Evento obtenerEvento(ObjectId id) throws Exception;
 
+    // METODOS DE PRUEBA DE JUNIT
+    String crearEventoPrueba(CrearEventoDTO crearEventoDTO) throws Exception;
+
+    String editarEventoPrueba(EditarEventoDTO evento) throws Exception;
+
+    String eliminarEventoPrueba(String id) throws Exception;
+
+    List<ItemEventoDTO> listarEventosPrueba() throws Exception;
+
+    List<Evento> filtrarEventosPrueba(FiltroEventoDTO filtroEventoDTO) throws Exception;
+
+    InformacionEventoDTO obtenerInformacionEventoPrueba(String id) throws Exception;
+
+    Evento obtenerEventoPrueba(ObjectId id) throws Exception;
+
+    boolean existeNombreEventoPrueba(String nombre);
+
+    void notificarUsuariosPrueba(Evento nuevoEvento) throws Exception;
+
 }

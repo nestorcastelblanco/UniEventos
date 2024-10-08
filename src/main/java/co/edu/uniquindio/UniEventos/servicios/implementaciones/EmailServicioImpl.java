@@ -41,6 +41,11 @@ public class EmailServicioImpl implements EmailServicio {
         }
     }
 
+    @Override
+    public void enviarCorreoRecuperacion(String correo_destino) throws Exception {
+        
+    }
+
 
     public void enviarCorreoPago(EmailDTO emailDTO, File archivoAdjunto) throws Exception {
         // Limpiar el destinatario para evitar caracteres indeseados
@@ -66,6 +71,55 @@ public class EmailServicioImpl implements EmailServicio {
                 .buildMailer()) {
 
             // Enviar el correo
+            mailer.sendMail(email);
+        }
+    }
+
+    //METODOS DE PRUEBA DE JUNIT
+
+
+    @Override
+    @Async
+    public void enviarCorreoPrueba(EmailDTO emailDTO) throws Exception {
+
+        String destinatarioLimpio = emailDTO.destinatario().trim().replace("\"", "");
+
+        Email email = EmailBuilder.startingBlank()
+                .from("unieventos.uniquindio@gmail.com")
+                .to(destinatarioLimpio)
+                .withSubject(emailDTO.asunto())
+                .withPlainText(emailDTO.cuerpo())
+                .buildEmail();
+
+        try (Mailer mailer = MailerBuilder
+                .withSMTPServer("smtp.gmail.com", 587, "unieventos.uniquindio@gmail.com", "bngo ktya tpae mzec") // Correo como usuario SMTP
+                .withTransportStrategy(TransportStrategy.SMTP_TLS)
+                .withDebugLogging(true)
+                .buildMailer()) {
+
+            mailer.sendMail(email);
+        }
+    }
+
+    @Async
+    @Override
+    public void enviarCorreoRecuperacionPrueba(String correo_destino) throws Exception {
+
+        String destinatarioLimpio = correo_destino.trim().replace("\"", "");
+
+        Email email = EmailBuilder.startingBlank()
+                .from("unieventos.uniquindio@gmail.com")
+                .to(destinatarioLimpio)
+                .withSubject("Codigo de recuperacion de contraseña de Unieventos")
+                .withPlainText("000000")
+                .buildEmail();
+
+        try (Mailer mailer = MailerBuilder
+                .withSMTPServer("smtp.gmail.com", 587, "unieventos.uniquindio@gmail.com", "bngo ktya tpae mzec") // Correo como usuario SMTP
+                .withTransportStrategy(TransportStrategy.SMTP_TLS)
+                .withDebugLogging(true)
+                .buildMailer()) {
+
             mailer.sendMail(email);
         }
     }

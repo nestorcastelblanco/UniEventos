@@ -10,10 +10,10 @@
     },
     "codigoValidacionPassword": {
       "codigoValidacion": "pwd456",
-      "fechaCreacion": "2024-10-07T10:30:00"
+      "fechaCreacion": "2024-10-09T01:10:00"
     },
     "usuario": {
-      "idUsuario": "u1",
+
       "telefono": "1234567890",
       "cedula": "12345678",
       "nombre": "Juan Perez",
@@ -27,16 +27,16 @@
     "email": "usuario2@example.com",
     "password": "password456",
     "rol": "ADMINISTRADOR",
+    "rol": "ADMINISTRADOR",
     "codigoValidacionRegistro": {
       "codigoValidacion": "def456",
       "fechaCreacion": "2024-10-02T12:00:00"
     },
     "codigoValidacionPassword": {
       "codigoValidacion": "pwd789",
-      "fechaCreacion": "2024-10-02T12:00:00"
+      "fechaCreacion": "2024-10-09T01:10:00"
     },
     "usuario": {
-      "idUsuario": "u2",
       "telefono": "0987654321",
       "cedula": "87654321",
       "nombre": "Maria Gomez",
@@ -56,10 +56,10 @@
     },
     "codigoValidacionPassword": {
       "codigoValidacion": "pwd012",
-      "fechaCreacion": "2024-10-03T14:30:00"
+      "fechaCreacion": "2024-10-09T01:10:00"
     },
     "usuario": {
-      "idUsuario": "u3",
+
       "telefono": "1231231234",
       "cedula": "11111111",
       "nombre": "Carlos Ruiz",
@@ -79,10 +79,9 @@
     },
     "codigoValidacionPassword": {
       "codigoValidacion": "pwd345",
-      "fechaCreacion": "2024-10-04T08:45:00"
+      "fechaCreacion": "2024-10-09T01:10:00"
     },
     "usuario": {
-      "idUsuario": "u4",
       "telefono": "4564564567",
       "cedula": "22222222",
       "nombre": "Laura Torres",
@@ -102,10 +101,10 @@
     },
     "codigoValidacionPassword": {
       "codigoValidacion": "pwd678",
-      "fechaCreacion": "2024-10-05T11:00:00"
+      "fechaCreacion": "2024-10-09T01:10:00"
     },
     "usuario": {
-      "idUsuario": "u5",
+
       "telefono": "3213214321",
       "cedula": "33333333",
       "nombre": "Pedro Martinez",

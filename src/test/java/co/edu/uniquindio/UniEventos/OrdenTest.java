@@ -1,25 +1,17 @@
 package co.edu.uniquindio.UniEventos;
 
-import co.edu.uniquindio.UniEventos.dto.EventoDTOs.InformacionEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
-import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Orden;
-import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoOrden;
-import co.edu.uniquindio.UniEventos.modelo.vo.Pago;
 import co.edu.uniquindio.UniEventos.repositorios.OrdenRepo;
 import co.edu.uniquindio.UniEventos.servicios.implementaciones.OrdenServicioImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
 import com.mercadopago.resources.preference.PreferenceItem;
 import org.bson.types.ObjectId;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +27,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class OrdenTest {
@@ -142,7 +133,7 @@ public class OrdenTest {
         request.put("data", data);
 
         // Invocar el método que estás probando
-        ordenServicio.recibirNotificacionMercadoPagoJUNIT(request);
+        ordenServicio.recibirNotificacionMercadoPago(request);
 
         // Comprobar que el ID de pago se haya establecido correctamente
         Orden orden = ordenRepo.buscarOrdenPorId("60d21b4667d0d8992e610c90").orElseThrow();

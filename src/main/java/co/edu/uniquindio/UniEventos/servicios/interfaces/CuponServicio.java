@@ -20,4 +20,17 @@ public interface CuponServicio {
     InformacionCuponDTO obtenerInformacionCupon(String id) throws Exception;
 
     String redimirCupon(String codigo) throws Exception;
+
+    // METODOS DE PRUEBA JUNIT
+    String crearCuponPrueba(CrearCuponDTO cupon) throws Exception;
+
+    String editarCuponPrueba(EditarCuponDTO cupon) throws Exception;
+
+    String eliminarCuponPrueba(String id) throws Exception;
+
+    List<ItemCuponDTO> obtenerCuponesPrueba() throws Exception;
+
+    InformacionCuponDTO obtenerInformacionCuponPrueba(String id) throws Exception;
+
+    String redimirCuponPrueba(String codigo) throws Exception;
 }

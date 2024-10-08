@@ -296,4 +296,160 @@ public class CarritoServicioImpl implements CarritoServicio {
         carritoRepo.save(carrito);
         return "Carrito vaciado exitosamente";
     }
+
+
+
+
+
+    // METODOS DE JUNIT PARA PRUEBAS UNITARIAS
+
+
+
+
+
+
+    @Override
+    public String agregarItemCarritoPrueba(EventoCarritoDTO eventoCarritoDTO) throws Exception {
+        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorIdCliente(eventoCarritoDTO.idUsuario());
+        // Si el carrito no existe para el cliente, lanzamos una excepción
+        if (!carritoCliente.isPresent()) {
+            throw new Exception("El carrito no existe para el cliente con ID: " + eventoCarritoDTO.idUsuario());
+        }
+
+        // Si el carrito existe, procedemos a agregar el item
+        Carrito carrito = carritoCliente.get();
+        DetalleCarrito detalleCarrito = DetalleCarrito.builder()
+                .idDetalleCarrito(new ObjectId())
+                .cantidad(eventoCarritoDTO.numBoletas())
+                .nombreLocalidad(eventoCarritoDTO.nombreLocalidad())
+                .idEvento(eventoCarritoDTO.idEvento()).build();
+
+        // Agregar el detalle al carrito y guardar el cambio en la base de datos
+        carrito.getItems().add(detalleCarrito);
+        carritoRepo.save(carrito);
+
+        return "Item agregado al carrito correctamente " + "nombre localidad : " +eventoCarritoDTO.nombreLocalidad();
+    }
+
+
+    @Override
+    public String eliminarItemCarritoPrueba(EventoEliminarCarritoDTO eventoEliminarCarritoDTO) throws Exception {
+        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorId(eventoEliminarCarritoDTO.idCarrito());
+        if (carritoCliente.isEmpty()) {
+            throw new Exception("El carrito no existe");
+        }
+
+        Carrito carrito = carritoCliente.get();
+        List<DetalleCarrito> lista = carrito.getItems();
+        boolean removed = lista.removeIf(i -> i.getIdDetalleCarrito().equals(eventoEliminarCarritoDTO.idDetalle()));
+
+        if (!removed) {
+            throw new Exception("El elemento no se encontró en el carrito");
+        }
+
+        carritoRepo.save(carrito);
+        return "Elemento eliminado del carrito";
+    }
+
+    @Override
+    public void eliminarCarritoPrueba(EliminarCarritoDTO eliminarCarritoDTO) throws Exception {
+        Optional<Carrito> carrito = carritoRepo.buscarCarritoPorId(eliminarCarritoDTO.idCarrito());
+        if (carrito.isEmpty()) {
+            throw new Exception("El carrito no existe");
+        }
+
+        carritoRepo.delete(carrito.get());
+    }
+
+    @Override
+    public VistaCarritoDTO obtenerInformacionCarritoPrueba(ObjectId id_carrito) throws Exception {
+        Optional<Carrito> carritoOptional = carritoRepo.buscarCarritoPorId(id_carrito);
+        if (carritoOptional.isEmpty()) {
+            throw new Exception("El carrito no existe");
+        }
+
+        Carrito carrito = carritoOptional.get();
+        List<DetalleCarrito> detallesCarrito = carrito.getItems();
+        LocalDateTime fecha = carrito.getFecha();
+
+        return new VistaCarritoDTO(new ObjectId(carrito.getId()), detallesCarrito, fecha);
+    }
+
+    @Override
+    public List<CarritoListDTO> listarCarritosPrueba() {
+        List<Carrito> carritos = carritoRepo.findAll();  // Obtener todos los carritos
+        return carritos.stream().map(carrito -> {
+            // Mapear cada Carrito a CarritoListDTO
+            return new CarritoListDTO(new ObjectId(carrito.getId()), carrito.getFecha(), carrito.getItems());
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public String actualizarItemCarritoPrueba(ActualizarItemCarritoDTO actualizarItemCarritoDTO) throws Exception {
+        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorIdCliente(actualizarItemCarritoDTO.idCliente());
+        if (carritoCliente.isEmpty()) {
+            throw new Exception("El carrito no existe");
+        }
+
+        Carrito carrito = carritoCliente.get();
+        for (DetalleCarrito item : carrito.getItems()) {
+            if (item.getIdEvento().equals(actualizarItemCarritoDTO.idEvento())) {
+                item.setCantidad(actualizarItemCarritoDTO.nuevaCantidad());
+                carritoRepo.save(carrito);
+                return "Item actualizado exitosamente";
+            }
+        }
+
+        throw new Exception("El item no existe en el carrito");
+    }
+
+    @Override
+    public double calcularTotalCarritoPrueba(ObjectId idCliente) throws Exception {
+        Carrito carrito = obtenerCarritoClientePrueba(idCliente);
+        double total = 0;
+
+        for (DetalleCarrito item : carrito.getItems()) {
+            total += item.getCantidad() * obtenerPrecioEventoPrueba(item.getIdEvento(), item.getNombreLocalidad());
+        }
+
+        return total;
+    }
+
+    public double obtenerPrecioEventoPrueba(ObjectId idEvento, String nombreLocalidad) throws Exception {
+        Optional<Evento> evento = eventoRepo.buscarPorIdEvento(idEvento);
+        if (evento.isEmpty()) {
+            throw new Exception("El evento no existe");
+        }
+        System.out.println("NOMBRE DEL EVENTO + LOCALIDAD "+ evento.get().getNombre() + " " + evento.get().getLocalidades());
+        List<Localidad> localidades = evento.get().getLocalidades();
+        for (Localidad localidad : localidades) {
+            if (localidad.getNombreLocalidad().equals(nombreLocalidad)) {
+                return localidad.getPrecio();
+            }
+        }
+
+        throw new Exception("La localidad no existe para el evento especificado");
+    }
+
+    public Carrito obtenerCarritoClientePrueba(ObjectId idCliente) throws Exception {
+        Optional<Carrito> carritoOptional = carritoRepo.buscarCarritoPorIdCliente(idCliente);
+        if (carritoOptional.isEmpty()) {
+            throw new Exception("El carrito con el id: " + idCliente + " no existe");
+        }
+        return carritoOptional.get();
+    }
+
+    @Override
+    public String vaciarCarritoPrueba(ObjectId idCliente) throws Exception {
+        Optional<Carrito> carritoOptional = carritoRepo.buscarCarritoPorId(idCliente);
+        if (carritoOptional.isEmpty()) {
+            throw new Exception("El carrito con el id: " + idCliente + " no existe");
+        }
+
+        Carrito carrito = carritoOptional.get();
+        carrito.setItems(new ArrayList<>());
+
+        carritoRepo.save(carrito);
+        return "Carrito vaciado exitosamente";
+    }
 }
