@@ -14,7 +14,7 @@ public record InformacionOrdenCompraDTO (
         String codigoPasarela,
         List<DetalleOrden>items,
         Pago pago,
-        ObjectId id,
+        String ordenId,
         float total,
         String codigoCupon,
         EstadoOrden estado

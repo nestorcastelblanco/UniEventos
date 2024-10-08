@@ -5,6 +5,7 @@ import com.mercadopago.client.preference.*;
 import com.mercadopago.resources.preference.Preference;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import com.mercadopago.client.payment.*;
@@ -129,8 +130,13 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
     public Orden obtenerOrden(String idOrden) throws Exception {
-        return ordenRepo.findById(idOrden)
-                .orElseThrow(() -> new Exception("La orden con el id: " + idOrden + " no existe"));
+        Optional<Orden> ordenOptional = ordenRepo.buscarOrdenPorId(idOrden);
+
+        if (ordenOptional.isEmpty()) {
+            throw new Exception("La orden con el id: " + idOrden + " no existe");
+        }
+
+        return ordenOptional.get();
     }
 
     @Override
@@ -160,7 +166,7 @@ public class OrdenServicioImpl implements OrdenServicio {
                 orden.getCodigoPasarela(),
                 itemsOrden,
                 orden.getPago(),
-                new ObjectId(orden.getId()),
+                orden.getOrdenId(),
                 orden.getTotal(),
                 orden.getIdCupon(),
                 orden.getEstado()
@@ -241,26 +247,28 @@ public class OrdenServicioImpl implements OrdenServicio {
         return preference;
     }
 
+    @Override
     public void recibirNotificacionMercadoPago(Map<String, Object> request) {
-        try {
-            String tipo = (String) request.get("type");
-            if ("payment".equals(tipo)) {
-                String input = request.get("data").toString();
-                String idPago = input.replaceAll("\\D+", "");
+        String tipo = (String) request.get("type");
+        if ("payment".equals(tipo)) {
+            Map<String, Object> data = (Map<String, Object>) request.get("data");
+            String idPago = (String) data.get("id"); // Asegúrate de que este sea un String
+            String idOrden = (String) ((Map<String, Object>) data.get("metadata")).get("id_orden");
 
-                PaymentClient client = new PaymentClient();
-                Payment payment = client.get(Long.parseLong(idPago));
+            Orden orden = ordenRepo.buscarOrdenPorId(idOrden).orElseThrow(() -> new RuntimeException("Orden no encontrada"));
 
-                String idOrden = payment.getMetadata().get("id_orden").toString();
-                Orden orden = obtenerOrden(idOrden);
-                Pago pago = crearPago(payment);
-                orden.setPago(pago);
-                ordenRepo.save(orden);
+            // Aquí no debe haber conversión a número
+            if (idPago == null) {
+                throw new RuntimeException("ID de pago no recibido");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            // Asignar ID de pago al objeto Orden
+            orden.getPago().setIdPago(idPago); // No hay conversión a número aquí
+            orden.getPago().setEstado("CONFIRMADO");
+            ordenRepo.save(orden);
         }
     }
+
 
     private Pago crearPago(Payment payment) {
         Pago pago = new Pago();
@@ -276,6 +284,9 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     private List<DetalleOrden> convertirDetalleCarritoAOrden(List<DetalleCarrito> items) {
         List<DetalleOrden> detallesOrden = new ArrayList<>();
+        if(items == null) {
+            return null;
+        }
         for (DetalleCarrito item : items) {
             DetalleOrden detalleOrden = new DetalleOrden();
             detalleOrden.setIdDetalleOrden(item.getIdDetalleCarrito());

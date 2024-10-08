@@ -1,0 +1,66 @@
+[
+  {
+    "id": "60d21b4667d0d8992e610c91",
+    "items": [
+      {
+        "idDetalleCarrito": "60d21b4667d0d8992e610c92",
+        "cantidad": 2,
+        "nombreLocalidad": "VIP",
+        "idEvento": "651fb39e67d99177cd75e4a1"
+      }
+    ],
+    "fecha": "2024-10-06T10:00:00",
+    "idUsuario": "60d21b4667d0d8992e610c85"
+  },
+  {
+    "id": "60d21b4667d0d8992e610c93",
+    "items": [
+      {
+        "idDetalleCarrito": "60d21b4667d0d8992e610c94",
+        "cantidad": 1,
+        "nombreLocalidad": "General",
+        "idEvento": "651fb39e67d99177cd75e4a2"
+      },
+      {
+        "idDetalleCarrito": "60d21b4667d0d8992e610c95",
+        "cantidad": 3,
+        "nombreLocalidad": "Preferencial",
+        "idEvento": "651fb39e67d99177cd75e4a3"
+      }
+    ],
+    "fecha": "2024-10-06T10:00:00",
+    "idUsuario": "60d21b4667d0d8992e610c86"
+  },
+  {
+    "id": "60d21b4667d0d8992e610c96",
+    "items": [],
+    "fecha": "2024-10-06T10:00:00",
+    "idUsuario": "60d21b4667d0d8992e610c87"
+  },
+  {
+    "id": "60d21b4667d0d8992e610c97",
+    "items": [
+      {
+        "idDetalleCarrito": "60d21b4667d0d8992e610c98",
+        "cantidad": 4,
+        "nombreLocalidad": "VIP",
+        "idEvento": "651fb39e67d99177cd75e4a4"
+      }
+    ],
+    "fecha": "2024-10-06T10:00:00",
+    "idUsuario": "60d21b4667d0d8992e610c88"
+  },
+  {
+    "id": "60d21b4667d0d8992e610c99",
+    "items": [
+      {
+        "idDetalleCarrito": "60d21b4667d0d8992e610c9a",
+        "cantidad": 2,
+        "nombreLocalidad": "General",
+        "idEvento": "651fb39e67d99177cd75e4a5"
+      }
+    ],
+    "fecha": "2024-10-06T10:00:00",
+    "idUsuario": "60d21b4667d0d8992e610c89"
+  }
+]
