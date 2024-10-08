@@ -110,6 +110,12 @@ public class OrdenServicioImpl implements OrdenServicio {
     @Override
     public String cancelarOrden(String idOrden) throws Exception {
         Orden orden = obtenerOrden(idOrden);
+        if (orden.getEstado() == EstadoOrden.PAGADA ) {
+            throw new Exception("LA ORDEN NO PUEDE SER CANCELADA, YA FUE PAGADA");
+        }
+        if (orden.getEstado() == EstadoOrden.CANCELADA){
+            throw new Exception("LA ORDEN NO PUEDE SER CANCELADA, YA FUE CANCELADA");
+        }
         orden.setEstado(EstadoOrden.CANCELADA);
         ordenRepo.save(orden);
         return "Orden cancelada";
