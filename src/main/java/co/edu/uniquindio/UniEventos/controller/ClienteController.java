@@ -5,11 +5,13 @@ import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.CrearOrdenDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.OrdenesUsuarioDTO;
+import co.edu.uniquindio.UniEventos.dto.ReseñaDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Orden;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CarritoServicio;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuponServicio;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.OrdenServicio;
+import co.edu.uniquindio.UniEventos.servicios.interfaces.ReseñaServicio;
 import com.mercadopago.resources.preference.Preference;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -30,12 +32,20 @@ public class ClienteController {
     private final CuponServicio cuponServicio;
     private final CarritoServicio carritoServicio;
     private final OrdenServicio ordenServicio;
+    private final ReseñaServicio resenaServicio;
 
     // Crear una nueva orden
     @PostMapping("/orden/crear")
     public ResponseEntity<MensajeDTO<String>> crearOrden(@RequestBody CrearOrdenDTO crearOrdenDTO) throws Exception {
         String idOrden = ordenServicio.crearOrden(crearOrdenDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, idOrden));
+    }
+
+    // Crear una reseña para un evento
+    @PostMapping("/reseña/crear")
+    public ResponseEntity<MensajeDTO<String>> crearReseña(@RequestBody ReseñaDTO reseñaDTO) throws Exception {
+        String idResena = resenaServicio.crearReseña(reseñaDTO);
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, idResena));
     }
 
     // Cancelar una orden existente
@@ -120,4 +130,17 @@ public class ClienteController {
         String respuesta = carritoServicio.vaciarCarrito(new VaciarCarritoDTO(new ObjectId(id)).idCarrito());
         return ResponseEntity.ok(new MensajeDTO<>(false, respuesta));
     }
+
+    @GetMapping("/reseña/evento/{idEvento}")
+    public ResponseEntity<MensajeDTO<List<ReseñaDTO>>> obtenerReseñasPorEvento(@PathVariable String idEvento) throws Exception {
+        List<ReseñaDTO> reseñas = resenaServicio.obtenerReseñasPorEvento(idEvento);
+        return ResponseEntity.ok(new MensajeDTO<>(false, reseñas));
+    }
+
+    @GetMapping("/reseña/usuario/{idUsuario}")
+    public ResponseEntity<MensajeDTO<List<ReseñaDTO>>> obtenerReseñasPorUsuario(@PathVariable String idUsuario) throws Exception {
+        List<ReseñaDTO> reseñas = resenaServicio.obtenerReseñasPorUsuario(idUsuario);
+        return ResponseEntity.ok(new MensajeDTO<>(false, reseñas));
+    }
+
 }
