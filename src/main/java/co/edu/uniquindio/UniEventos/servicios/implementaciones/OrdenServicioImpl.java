@@ -332,6 +332,7 @@ public class OrdenServicioImpl implements OrdenServicio {
                 Cuenta cuentaPago = cuentaCliente.get();
 
                 Pago pago = crearPago(payment);
+                pago.setValorTransaccion(orden.getTotal());
                 orden.setEstado(EstadoOrden.PAGADA);
                 orden.setPago(pago);
                 enviarCorreoOrden(new ObjectId(idOrden), cuentaPago.getEmail());
