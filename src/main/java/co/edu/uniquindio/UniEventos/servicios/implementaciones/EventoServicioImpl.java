@@ -129,10 +129,12 @@ public class EventoServicioImpl implements EventoServicio {
 
     @Override
     public List<Evento> filtrarEventos(FiltroEventoDTO filtroEventoDTO) throws Exception {
-        // Filtrar eventos activos
-        return eventoRepo.filtrarEventos(filtroEventoDTO.nombre(), filtroEventoDTO.tipo(), filtroEventoDTO.ciudad())
-                .stream().filter(evento -> evento.getEstado() == EstadoEvento.ACTIVO)
-                .collect(Collectors.toList());
+        String nombre = filtroEventoDTO.nombre().isEmpty() ? null : filtroEventoDTO.nombre();
+        String tipo = filtroEventoDTO.tipo().isEmpty() ? null : filtroEventoDTO.tipo();
+        String ciudad = filtroEventoDTO.ciudad().isEmpty() ? null : filtroEventoDTO.ciudad();
+
+        // Se llama al repositorio para filtrar eventos por los campos especificados
+        return eventoRepo.filtrarEventosCar(nombre, tipo, ciudad, EstadoEvento.ACTIVO);
     }
 
     @Override

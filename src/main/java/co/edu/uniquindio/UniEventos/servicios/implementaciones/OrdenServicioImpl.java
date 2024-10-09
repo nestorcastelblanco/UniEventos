@@ -281,7 +281,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         // retorno
         PreferenceRequest preferenceRequest = PreferenceRequest.builder().backUrls(backUrls).items(itemsPasarela)
                 .metadata(Map.of("id_orden", ordenGuardada.getId()))
-                .notificationUrl("https://7139-152-202-207-38.ngrok-free.app/api/publico/orden/notificacion-pago").build();
+                .notificationUrl("https://af2e-152-202-207-38.ngrok-free.app/api/publico/orden/notificacion-pago").build();
 
         // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();

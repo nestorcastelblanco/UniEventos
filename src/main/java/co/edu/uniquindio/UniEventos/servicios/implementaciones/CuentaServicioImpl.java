@@ -64,12 +64,11 @@ public class CuentaServicioImpl implements CuentaServicio {
         nuevaCuenta.setRol(Rol.CLIENTE);
         nuevaCuenta.setFechaRegistro(LocalDateTime.now());
         nuevaCuenta.setEstadoCuenta(EstadoCuenta.INACTIVO);
-        nuevaCuenta.setUsuario(new Usuario(
-                cuenta.cedula(),
-                cuenta.nombre(),
-                cuenta.telefono(),
-                cuenta.direccion()
-        ));
+        nuevaCuenta.setUsuario( Usuario.builder()
+                .cedula(cuenta.cedula())
+                .direccion(cuenta.direccion())
+                .nombre(cuenta.nombre())
+                .telefono(cuenta.telefono()).build());
 
         String codigoActivacion = generarCodigoValidacion();
         nuevaCuenta.setCodigoValidacionRegistro(
