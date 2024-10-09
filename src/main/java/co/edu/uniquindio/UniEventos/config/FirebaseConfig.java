@@ -17,13 +17,13 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp intializeFirebase() throws IOException {
         FileInputStream serviceAccount = new FileInputStream(
-                "src/main/resources/unieventos-aca74-firebase-adminsdk-zp03a-46c565c691.json"
+                "src/main/resources/uniquindio-36aa1-firebase-adminsdk-5vup3-bbd2742635.json"
         );
 
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("unieventos-aca74.appspot.com")
+                .setStorageBucket("uniquindio-36aa1.appspot.com")
                 .build();
 
 
