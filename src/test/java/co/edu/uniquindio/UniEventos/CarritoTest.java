@@ -55,7 +55,7 @@ public class CarritoTest {
     void testAgregarItemCarrito() throws Exception {
         // Crear un DTO con datos válidos
         EventoCarritoDTO eventoCarritoDTO = new EventoCarritoDTO(
-                new ObjectId("651f13fc3e89d7601f4b9b91"), // ID del evento
+                new ObjectId("651fb39e67d99177cd75e4a1"), // ID del evento
                 new ObjectId("60d21b4667d0d8992e610c85"), // ID del usuario
                 "Concierto de Rock", // Nombre del evento
                 LocalDateTime.now().plusDays(5), // Fecha futura del evento
@@ -131,7 +131,7 @@ public class CarritoTest {
 
     @Test
     public void testActualizarItemCarrito() throws Exception {
-        ActualizarItemCarritoDTO dto = new ActualizarItemCarritoDTO(new ObjectId("60d21b4667d0d8992e610c86"), new ObjectId("651fb39e67d99177cd75e4a2"), 5);
+        ActualizarItemCarritoDTO dto = new ActualizarItemCarritoDTO(new ObjectId("60d21b4667d0d8992e610c86"), new ObjectId("651fb39e67d99177cd75e4a3"), 5);
         String resultado = carritoServicio.actualizarItemCarrito(dto);
         assertEquals("Item actualizado exitosamente", resultado);
     }

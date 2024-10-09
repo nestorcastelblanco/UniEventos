@@ -59,7 +59,7 @@ public class OrdenTest {
         String idOrden = "60d21b4667d0d8992e610c90";
 
         // Llamar al método de realizar pago
-        Preference preference = ordenServicio.realizarPago(idOrden);
+        Preference preference = ordenServicio.realizarPagoPrueba(idOrden);
 
         // Verificar que el código de pasarela se haya generado correctamente
         Orden ordenGuardada = ordenRepo.buscarOrdenPorId(idOrden).orElseThrow(() -> new Exception("Orden no encontrada"));
@@ -100,7 +100,7 @@ public class OrdenTest {
         // ID que existe en el archivo eventos.json
         String ordenId = "60d21b4667d0d8992e610c90"; // Cambia esto por un ID válido
 
-        InformacionOrdenCompraDTO infoOrden = ordenServicio.obtenerInformacionOrden("60d21b4667d0d8992e610c90");
+        InformacionOrdenCompraDTO infoOrden = ordenServicio.obtenerInformacionOrdenPrueba("60d21b4667d0d8992e610c90");
         assertNotNull(infoOrden, "La información del orden no debe ser nula");
         assertEquals(ordenId, infoOrden.ordenId(), "El ID de la orden debe coincidir");
     }

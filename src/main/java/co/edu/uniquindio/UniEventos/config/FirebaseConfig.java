@@ -11,7 +11,7 @@ import java.io.IOException;
 
 
 @Configuration
-public class FirebaseConfig {
+public class  FirebaseConfig {
 
 
     @Bean
