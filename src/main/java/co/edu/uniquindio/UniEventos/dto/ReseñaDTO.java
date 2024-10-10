@@ -9,8 +9,6 @@ import org.bson.types.ObjectId;
 import java.time.LocalDateTime;
 
 public record ReseñaDTO(
-        @NotNull(message = "El ID no puede estar vacío")
-        String id,
 
         @NotNull(message = "El ID del evento no puede estar vacío")
         String idEvento,

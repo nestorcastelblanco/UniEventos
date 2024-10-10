@@ -1,6 +1,5 @@
 [
   {
-    "id": "652ce223f0b8db4e709c4f61",
     "idEvento": "651fb39e67d99177cd75e4a1",
     "idUsuario": "60d21b4667d0d8992e610c85",
     "calificacion": 5,
@@ -8,7 +7,6 @@
     "fechaCreacion": "2024-10-01T15:30:00"
   },
   {
-    "id": "652ce223f0b8db4e709c4f62",
     "idEvento": "652ce223f0b8db4e709c4f5d",
     "idUsuario": "652ce223f0b8db4e709c4f6f",
     "calificacion": 4,
@@ -16,7 +14,6 @@
     "fechaCreacion": "2024-10-02T18:45:00"
   },
   {
-    "id": "652ce223f0b8db4e709c4f63",
     "idEvento": "652ce223f0b8db4e709c4f5e",
     "idUsuario": "652ce223f0b8db4e709c4f70",
     "calificacion": 3,
@@ -24,7 +21,6 @@
     "fechaCreacion": "2024-10-03T10:15:00"
   },
   {
-    "id": "652ce223f0b8db4e709c4f64",
     "idEvento": "652ce223f0b8db4e709c4f5e",
     "idUsuario": "652ce223f0b8db4e709c4f71",
     "calificacion": 2,
@@ -32,7 +28,6 @@
     "fechaCreacion": "2024-10-04T20:00:00"
   },
   {
-    "id": "652ce223f0b8db4e709c4f65",
     "idEvento": "652ce223f0b8db4e709c4f5f",
     "idUsuario": "652ce223f0b8db4e709c4f72",
     "calificacion": 1,

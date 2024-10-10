@@ -51,7 +51,6 @@ public class ReseñaServicioImpl implements ReseñaServicio {
 
         // Convertir las entidades Reseña a DTO
         return reseñas.stream().map(reseña -> new ReseñaDTO(
-                reseña.getId().toHexString(),
                 reseña.getIdEvento(),
                 reseña.getIdUsuario(),
                 reseña.getCalificacion(),
@@ -67,7 +66,6 @@ public class ReseñaServicioImpl implements ReseñaServicio {
 
         // Convertir las entidades Reseña a DTO
         return reseñas.stream().map(reseña -> new ReseñaDTO(
-                reseña.getId().toHexString(),
                 reseña.getIdEvento(),
                 reseña.getIdUsuario(),
                 reseña.getCalificacion(),

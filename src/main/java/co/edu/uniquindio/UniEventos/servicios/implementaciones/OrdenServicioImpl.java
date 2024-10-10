@@ -281,7 +281,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         // retorno
         PreferenceRequest preferenceRequest = PreferenceRequest.builder().backUrls(backUrls).items(itemsPasarela)
                 .metadata(Map.of("id_orden", ordenGuardada.getId()))
-                .notificationUrl("https://af2e-152-202-207-38.ngrok-free.app/api/publico/orden/notificacion-pago").build();
+                .notificationUrl("https://d389-152-202-204-179.ngrok-free.app/api/publico/orden/notificacion-pago").build();
 
         // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();
@@ -291,27 +291,6 @@ public class OrdenServicioImpl implements OrdenServicio {
         ordenRepo.save(ordenGuardada);
 
         return preference;
-    }
-
-    public void recibirNotificacionMercadoPagoJUNIT(Map<String, Object> request) {
-        String tipo = (String) request.get("type");
-        if ("payment".equals(tipo)) {
-            Map<String, Object> data = (Map<String, Object>) request.get("data");
-            String idPago = (String) data.get("id"); // Asegúrate de que este sea un String
-            String idOrden = (String) ((Map<String, Object>) data.get("metadata")).get("id_orden");
-
-            Orden orden = ordenRepo.buscarOrdenPorId(idOrden).orElseThrow(() -> new RuntimeException("Orden no encontrada"));
-
-            // Aquí no debe haber conversión a número
-            if (idPago == null) {
-                throw new RuntimeException("ID de pago no recibido");
-            }
-
-            // Asignar ID de pago al objeto Orden
-            orden.getPago().setIdPago(idPago); // No hay conversión a número aquí
-            orden.getPago().setEstado("CONFIRMADO");
-            ordenRepo.save(orden);
-        }
     }
 
     @Override
