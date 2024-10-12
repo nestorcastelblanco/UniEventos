@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reseña {
+public class Resena {
 
     @Id
     private ObjectId id;

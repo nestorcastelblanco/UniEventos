@@ -4,11 +4,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 
-public record ReseñaDTO(
+public record ResenaDTO(
 
         @NotNull(message = "El ID del evento no puede estar vacío")
         String idEvento,
