@@ -1,9 +1,6 @@
 package co.edu.uniquindio.UniEventos.controller;
 
-import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.CambiarPasswordDTO;
-import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.CrearCuentaDTO;
-import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.LoginDTO;
-import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.ValidarCuentaDTO;
+import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.FiltroEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.InformacionEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.ItemEventoDTO;
@@ -78,13 +75,16 @@ public class PublicoController {
     }
 
     @PostMapping("/enviar-codigo-recuperacion")
-    public String enviarCodigoRecuperacionPassword(@RequestParam String correo) throws Exception {
-        return cuentaServicio.enviarCodigoRecuperacionPassword(correo);
+    public ResponseEntity<MensajeDTO<String>> enviarCodigoRecuperacionPassword(@Valid @RequestBody EnviarCodigoDTO enviarCodigoDTO) throws Exception {
+        cuentaServicio.enviarCodigoRecuperacionPassword(enviarCodigoDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Se ha enviado un código de Verificación a su correo, con una duración de 15 minutos"));
     }
 
+
     @PostMapping("/cambiar-password")
-    public String cambiarPassword(@RequestBody CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
-        return cuentaServicio.cambiarPassword(cambiarPasswordDTO);
+    public ResponseEntity<MensajeDTO<String>> cambiarPassword(@Valid @RequestBody CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
+        cuentaServicio.cambiarPassword(cambiarPasswordDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "La contraseña se ha cambiado correctamente"));
     }
 
     @PostMapping("/crear-cuenta")

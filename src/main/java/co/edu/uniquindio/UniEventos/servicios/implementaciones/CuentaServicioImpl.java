@@ -78,7 +78,7 @@ public class CuentaServicioImpl implements CuentaServicio {
                 )
         );
         cuentaRepo.save(nuevaCuenta);
-        emailServicio.enviarCorreo(new EmailDTO("Codigo de activación de cuenta de Unieventos", "El codigo de activacion asignado para recuperar la cuenta es el siguiente " + codigoActivacion, nuevaCuenta.getEmail()));
+        emailServicio.enviarCorreo(new EmailDTO("Codigo de activación de cuenta de Unieventos", "El codigo de activacion asignado para activar la cuenta es el siguiente " + codigoActivacion, nuevaCuenta.getEmail()));
 
     }
 
@@ -154,7 +154,10 @@ public class CuentaServicioImpl implements CuentaServicio {
     }
 
     @Override
-    public String enviarCodigoRecuperacionPassword(String correo) throws Exception {
+    public String enviarCodigoRecuperacionPassword(EnviarCodigoDTO enviarCodigoDTO) throws Exception {
+        // Extrae el correo del DTO
+        String correo = enviarCodigoDTO.correo();
+
         Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCorreo(correo);
 
         if (cuentaOptional.isEmpty()) {
@@ -176,16 +179,25 @@ public class CuentaServicioImpl implements CuentaServicio {
                 )
         );
 
-        emailServicio.enviarCorreo(new EmailDTO("Codigo de recuperacion de contraseña de Unieventos", "El codigo de verificacion asignado para recuperar la cuenta es el siguiente " + codigoValidacion, cuentaUsuario.getEmail()));
+        try {
+            emailServicio.enviarCorreo(new EmailDTO(
+                    "Código de recuperación de contraseña de Unieventos",
+                    "El código de recuperación asignado para reestablecer la contraseña es el siguiente: " + codigoValidacion,
+                    cuentaUsuario.getEmail()
+            ));
+        } catch (Exception e) {
+            throw new Exception("Error al enviar el correo: " + e.getMessage());
+        }
 
         cuentaRepo.save(cuentaUsuario);
 
         return "Se ha enviado un código a su correo, con una duración de 15 minutos";
     }
 
+
     @Override
     public String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
-        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCorreo(cambiarPasswordDTO.email());
+        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCorreo(cambiarPasswordDTO.correo());
 
         if (cuentaOptional.isEmpty()) {
             throw new Exception("El correo no está registrado");
@@ -457,7 +469,7 @@ public class CuentaServicioImpl implements CuentaServicio {
 
     @Override
     public String cambiarPasswordPrueba(CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
-        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCorreo(cambiarPasswordDTO.email());
+        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarCuentaPorCorreo(cambiarPasswordDTO.correo());
 
         if (cuentaOptional.isEmpty()) {
             throw new Exception("El correo no está registrado");

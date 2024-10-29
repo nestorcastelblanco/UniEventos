@@ -1,6 +1,7 @@
 package co.edu.uniquindio.UniEventos;
 
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.CambiarPasswordDTO;
+import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.EnviarCodigoDTO;
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.LoginDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.TokenDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
@@ -160,9 +161,10 @@ public class CuentaTest {
     void testEnviarCodigoRecuperacionPassword() throws Exception {
         // Datos de prueba
         String email = "usuario1@example.com";
+        EnviarCodigoDTO enviarCodigoDTO = new EnviarCodigoDTO(email);
 
-        // Llamada al metodo para enviar el código de recuperación
-        String respuesta = cuentaServicio.enviarCodigoRecuperacionPassword(email);
+        // Llamada al método para enviar el código de recuperación
+        String respuesta = cuentaServicio.enviarCodigoRecuperacionPassword(enviarCodigoDTO);
 
         // Verifica que la respuesta sea la esperada
         assertEquals("Se ha enviado un código a su correo, con una duración de 15 minutos", respuesta);
@@ -179,6 +181,7 @@ public class CuentaTest {
         // Verifica que la fecha de creación del código sea reciente (dentro de los últimos minutos)
         assertTrue(cuentaActualizada.getCodigoValidacionPassword().getFechaCreacion().isAfter(LocalDateTime.now().minusMinutes(1)));
     }
+
 
     @Test
     public void testIniciarSesion_Correcto() throws Exception {
