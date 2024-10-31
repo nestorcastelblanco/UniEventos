@@ -70,8 +70,8 @@ public class CarritoServicioImpl implements CarritoServicio {
 
 
     @Override
-    public String eliminarItemCarrito(EventoEliminarCarritoDTO eventoEliminarCarritoDTO) throws Exception {
-        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorId(eventoEliminarCarritoDTO.idCarrito());
+    public String eliminarItemCarrito(String idDetalle, String idCarrito) throws Exception {
+        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorId(idCarrito);
         if (carritoCliente.isEmpty()) {
             throw new Exception("El carrito no existe");
         }
@@ -113,7 +113,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         }
 
 
-        boolean removed = lista.removeIf(i -> i.getIdDetalleCarrito().equals(eventoEliminarCarritoDTO.idDetalle()));
+        boolean removed = lista.removeIf(i -> i.getIdDetalleCarrito().equals(idDetalle));
 
         if (!removed) {
             throw new Exception("El elemento no se encontró en el carrito");

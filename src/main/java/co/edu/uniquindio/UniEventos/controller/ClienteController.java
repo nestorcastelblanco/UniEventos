@@ -89,9 +89,12 @@ public class ClienteController {
         return ResponseEntity.ok(new MensajeDTO<>(false, respuesta));
     }
 
-    @DeleteMapping("/carrito/eliminar-item")
-    public ResponseEntity<MensajeDTO<String>> eliminarItemCarrito(@Valid @RequestBody EventoEliminarCarritoDTO eventoCarritoDTO) throws Exception {
-        String respuesta = carritoServicio.eliminarItemCarrito(eventoCarritoDTO);
+    @DeleteMapping("/carrito/eliminar-item/{idDetalle}/{idCarrito}")
+    public ResponseEntity<MensajeDTO<String>> eliminarItemCarrito(
+            @PathVariable String idDetalle,
+            @PathVariable String idCarrito) throws Exception {
+
+        String respuesta = carritoServicio.eliminarItemCarrito(idDetalle, idCarrito);
         return ResponseEntity.ok(new MensajeDTO<>(false, respuesta));
     }
 

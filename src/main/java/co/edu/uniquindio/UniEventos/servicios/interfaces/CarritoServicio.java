@@ -10,7 +10,7 @@ public interface CarritoServicio {
 
     String agregarItemCarrito(EventoCarritoDTO eventoCarritoDTO) throws Exception;
 
-    String eliminarItemCarrito(EventoEliminarCarritoDTO eventoCarritoDTO) throws Exception;
+    String eliminarItemCarrito(String idDetalle, String idCarrito) throws Exception;
 
     void eliminarCarrito(EliminarCarritoDTO eliminarCarritoDTO) throws Exception;
 

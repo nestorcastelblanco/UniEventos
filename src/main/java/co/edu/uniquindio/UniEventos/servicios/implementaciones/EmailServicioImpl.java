@@ -27,6 +27,7 @@ public class EmailServicioImpl implements EmailServicio {
         Email email = EmailBuilder.startingBlank()
                 .from("unieventos.uniquindio@gmail.com")
                 .to(destinatarioLimpio)
+                //.cc("assdsds", "sdsdsdsd", "aasasas")
                 .withSubject(emailDTO.asunto())
                 .withPlainText(emailDTO.cuerpo())
                 .buildEmail();

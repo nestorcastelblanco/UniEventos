@@ -80,7 +80,7 @@ public class CarritoTest {
         );
 
         // Ejecutar el método de servicio para eliminar el item
-        String result = carritoServicio.eliminarItemCarrito(eventoEliminarCarritoDTO);
+        String result = carritoServicio.eliminarItemCarrito(eventoEliminarCarritoDTO.idDetalle().toString(), eventoEliminarCarritoDTO.idCarrito().toString());
 
         // Validar que la operación fue exitosa
         assertEquals("Elemento eliminado del carrito", result);

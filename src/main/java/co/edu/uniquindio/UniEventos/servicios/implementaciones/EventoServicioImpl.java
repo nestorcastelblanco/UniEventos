@@ -115,17 +115,26 @@ public class EventoServicioImpl implements EventoServicio {
     }
 
     @Override
-    public List<ItemEventoDTO> listarEventos() throws Exception {
+    public List<EventoDTO> listarEventos() throws Exception {
         List<Evento> eventos = eventoRepo.findAll();
         return eventos.stream()
                 .filter(evento -> evento.getEstado() == EstadoEvento.ACTIVO) // Solo listar eventos activos
-                .map(evento -> new ItemEventoDTO(
+                .map(evento -> new EventoDTO(
                         evento.getId(),
                         evento.getNombre(),
+                        evento.getDireccion(),
+                        evento.getCiudad(),
+                        evento.getDescripcion(),
+                        evento.getTipo(),
+                        evento.getEstado(),
+                        evento.getImagenPortada(), // Asegúrate de que este método retorne la imagen correcta
                         evento.getFecha(),
-                        evento.getTipo()))
+                        evento.getLocalidades(),  // Lista de localidades
+                        evento.getImagenLocalidades() // Imagen de localidades
+                ))
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public List<Evento> filtrarEventos(FiltroEventoDTO filtroEventoDTO) throws Exception {

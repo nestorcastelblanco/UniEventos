@@ -1,9 +1,6 @@
 package co.edu.uniquindio.UniEventos;
 
-import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EditarEventoDTO;
-import co.edu.uniquindio.UniEventos.dto.EventoDTOs.FiltroEventoDTO;
-import co.edu.uniquindio.UniEventos.dto.EventoDTOs.InformacionEventoDTO;
-import co.edu.uniquindio.UniEventos.dto.EventoDTOs.ItemEventoDTO;
+import co.edu.uniquindio.UniEventos.dto.EventoDTOs.*;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Evento;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoEvento;
 import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
@@ -47,7 +44,7 @@ public class EventoTest {
 
     @Test
     public void testListarEventos() throws Exception {
-        List<ItemEventoDTO> eventos = eventoServicio.listarEventos();
+        List<EventoDTO> eventos = eventoServicio.listarEventos();
         Assertions.assertFalse(eventos.isEmpty());
     }
 

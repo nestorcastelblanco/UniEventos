@@ -1,6 +1,7 @@
 package co.edu.uniquindio.UniEventos.controller;
 
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
+import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.FiltroEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.InformacionEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.ItemEventoDTO;
@@ -38,10 +39,12 @@ public class PublicoController {
     }
 
     @GetMapping("/evento/listar")
-    public ResponseEntity<List<ItemEventoDTO>> listarEventos() {
+    public ResponseEntity<MensajeDTO<List<EventoDTO>>> listarEventos() {
         try {
-            List<ItemEventoDTO> eventos = eventoServicio.listarEventos();
-            return ResponseEntity.ok(eventos);
+            List<EventoDTO> eventos = eventoServicio.listarEventos();
+            System.out.println(eventos);
+            System.out.println("LLego eventos");
+            return ResponseEntity.ok(new MensajeDTO<>(false, eventos));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(null);
         }

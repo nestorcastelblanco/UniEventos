@@ -48,6 +48,8 @@ public class CuentaServicioImpl implements CuentaServicio {
     @Override
     public void crearCuenta(CrearCuentaDTO cuenta) throws Exception {
 
+        System.out.println( cuenta.nombre() +"  "+ cuenta.correo());
+
         if (existeCedula(cuenta.cedula())) {
             throw new Exception("Ya existe una cuenta con esta cedula");
         }
@@ -230,11 +232,14 @@ public class CuentaServicioImpl implements CuentaServicio {
 
         Cuenta cuenta = obtenerPorEmail(loginDTO.correo());
 
+        System.out.println("credenciales:" + cuenta.getEmail() + " PS:" + cuenta.getPassword()+"--");
+        System.out.println("credenciales ingresadas:" + loginDTO.correo() + " PS:" + loginDTO.password()+"--");
+
         if (cuenta.getEstadoCuenta() != EstadoCuenta.ACTIVO) {
             throw new Exception("La cuenta no está activa");
         }
 
-        if (!passwordEncoder.matches(loginDTO.password().trim(), cuenta.getPassword().trim())) {
+        if (!passwordEncoder.matches(loginDTO.password(), cuenta.getPassword())) {
             throw new Exception("La contraseña es incorrecta");
         }
 
@@ -253,7 +258,7 @@ public class CuentaServicioImpl implements CuentaServicio {
         if (cuentaOptional.isEmpty()) {
             throw new Exception("La cuenta con el correo: " + correo + " no existe");
         }
-
+        System.out.println("Hay cuenta");
         return cuentaOptional.get();
     }
 
