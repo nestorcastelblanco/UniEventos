@@ -38,6 +38,12 @@ public class PublicoController {
         return ResponseEntity.ok(new MensajeDTO<>(false, token));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<MensajeDTO<TokenDTO>> refresh(@RequestBody TokenDTO tokenDTO) throws Exception {
+        TokenDTO nuevoToken = cuentaServicio.refreshToken(tokenDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(false, nuevoToken));
+    }
+
     @GetMapping("/evento/listar")
     public ResponseEntity<MensajeDTO<List<EventoDTO>>> listarEventos() {
         try {

@@ -46,6 +46,37 @@ public class CuentaServicioImpl implements CuentaServicio {
     }
 
     @Override
+    public TokenDTO refreshToken(TokenDTO tokenDTO) throws Exception {
+        String tokenActual = tokenDTO.token();
+
+        // Verifica si el token ha expirado
+        if (jwtUtils.esTokenExpirado(tokenActual)) {
+            // Extrae el correo electrónico (u otro identificador) del token
+            String correoUsuario = jwtUtils.obtenerCorreoDesdeToken(tokenActual);
+
+            // Obtiene la cuenta usando el correo extraído
+            Cuenta cuenta = obtenerPorEmail(correoUsuario);
+
+            // Verifica que la cuenta esté activa
+            if (cuenta.getEstadoCuenta() != EstadoCuenta.ACTIVO) {
+                throw new Exception("La cuenta no está activa.");
+            }
+
+            // Construye los claims para el nuevo token
+            Map<String, Object> claims = construirClaims(cuenta);
+
+            // Genera un nuevo token con los mismos claims y correo electrónico
+            String nuevoToken = jwtUtils.generarToken(cuenta.getEmail(), claims);
+
+            // Retorna el nuevo token en un TokenDTO
+            return new TokenDTO(nuevoToken);
+        } else {
+            throw new Exception("El token aún es válido, no es necesario refrescarlo.");
+        }
+    }
+
+
+    @Override
     public void crearCuenta(CrearCuentaDTO cuenta) throws Exception {
 
         System.out.println( cuenta.nombre() +"  "+ cuenta.correo());
@@ -269,6 +300,7 @@ public class CuentaServicioImpl implements CuentaServicio {
                 "id", cuenta.getId()
         );
     }
+
 
     @Override
     public String activarCuenta(ValidarCuentaDTO validarCuentaDTO) throws Exception {

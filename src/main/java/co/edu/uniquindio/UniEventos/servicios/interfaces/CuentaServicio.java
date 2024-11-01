@@ -17,6 +17,8 @@ public interface CuentaServicio {
 
     InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception;
 
+    TokenDTO refreshToken(TokenDTO tokenDTO) throws Exception;
+
     String enviarCodigoRecuperacionPassword(EnviarCodigoDTO enviarCodigoDTO) throws Exception;
 
     String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception;
