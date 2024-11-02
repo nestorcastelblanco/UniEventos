@@ -35,4 +35,24 @@ public class JWTUtils {
         byte[] secretKeyBytes = claveSecreta.getBytes();
         return Keys.hmacShaKeyFor(secretKeyBytes);
     }
+
+    // Función para verificar si el token ha expirado
+    public boolean esTokenExpirado(String token) {
+        try {
+            Claims claims = parseJwt(token).getBody();
+            Date fechaExpiracion = claims.getExpiration();
+            return fechaExpiracion.before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true; // Si el token ya ha expirado, retornamos true
+        } catch (Exception e) {
+            // En caso de otros errores, podemos retornar false o manejar la excepción de otra manera
+            throw new RuntimeException("Error al verificar si el token ha expirado");
+        }
+    }
+
+    // Función para obtener el correo (o subject) desde el token
+    public String obtenerCorreoDesdeToken(String token) {
+        Claims claims = parseJwt(token).getBody();
+        return claims.getSubject(); // Asume que el correo está en el 'subject' del token
+    }
 }
