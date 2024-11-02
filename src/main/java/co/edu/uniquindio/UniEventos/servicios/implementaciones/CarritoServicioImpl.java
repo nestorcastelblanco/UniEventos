@@ -34,12 +34,12 @@ public class CarritoServicioImpl implements CarritoServicio {
 
     @Override
     public String agregarItemCarrito(EventoCarritoDTO eventoCarritoDTO) throws Exception {
-        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorIdCliente(eventoCarritoDTO.idUsuario());
+        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorIdCliente(new ObjectId(eventoCarritoDTO.idUsuario()));
         // Si el carrito no existe para el cliente, lanzamos una excepción
         if (!carritoCliente.isPresent()) {
             throw new Exception("El carrito no existe para el cliente con ID: " + eventoCarritoDTO.idUsuario());
         }
-        Optional<Evento> evento = eventoRepo.buscarPorIdEvento(eventoCarritoDTO.idEvento());
+        Optional<Evento> evento = eventoRepo.buscarPorIdEvento(eventoCarritoDTO.id());
         Evento eventoSeleccionado = evento.get();
         // Si el carrito existe, procedemos a agregar el item
         Carrito carrito = carritoCliente.get();
@@ -59,7 +59,7 @@ public class CarritoServicioImpl implements CarritoServicio {
                 .idDetalleCarrito(new ObjectId())
                 .cantidad(eventoCarritoDTO.numBoletas())
                 .nombreLocalidad(eventoCarritoDTO.nombreLocalidad())
-                .idEvento(eventoCarritoDTO.idEvento()).build();
+                .idEvento(eventoCarritoDTO.id()).build();
 
         // Agregar el detalle al carrito y guardar el cambio en la base de datos
         carrito.getItems().add(detalleCarrito);
@@ -259,7 +259,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         return total;
     }
 
-    private double obtenerPrecioEvento(ObjectId idEvento, String nombreLocalidad) throws Exception {
+    private double obtenerPrecioEvento(String idEvento, String nombreLocalidad) throws Exception {
         Optional<Evento> evento = eventoRepo.buscarPorIdEvento(idEvento);
         if (evento.isEmpty()) {
             throw new Exception("El evento no existe");
@@ -322,7 +322,7 @@ public class CarritoServicioImpl implements CarritoServicio {
                 .idDetalleCarrito(new ObjectId())
                 .cantidad(eventoCarritoDTO.numBoletas())
                 .nombreLocalidad(eventoCarritoDTO.nombreLocalidad())
-                .idEvento(eventoCarritoDTO.idEvento()).build();
+                .idEvento(eventoCarritoDTO.id()).build();
 
         // Agregar el detalle al carrito y guardar el cambio en la base de datos
         carrito.getItems().add(detalleCarrito);
@@ -415,7 +415,12 @@ public class CarritoServicioImpl implements CarritoServicio {
         return total;
     }
 
+    @Override
     public double obtenerPrecioEventoPrueba(ObjectId idEvento, String nombreLocalidad) throws Exception {
+        return 0;
+    }
+
+    public double obtenerPrecioEventoPrueba(String idEvento, String nombreLocalidad) throws Exception {
         Optional<Evento> evento = eventoRepo.buscarPorIdEvento(idEvento);
         if (evento.isEmpty()) {
             throw new Exception("El evento no existe");

@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -51,20 +52,11 @@ public class PublicoController {
     }
 
     @GetMapping("/evento/informacion/{id}")
-    public ResponseEntity<?> obtenerInformacionEvento(@PathVariable String id) {
-        try {
-            InformacionEventoDTO eventoDTO = eventoServicio.obtenerInformacionEvento(id);
-            return ResponseEntity.ok(eventoDTO);
-        } catch (Exception e) {
-
-            if (e.getMessage().contains("no existe")) {
-                return ResponseEntity.status(404).body(new MensajeDTO<>(true, "Evento no encontrado: " + e.getMessage()));
-            } else {
-
-                return ResponseEntity.status(500).body(new MensajeDTO<>(true, "Error al buscar el evento: " + e.getMessage()));
-            }
-        }
+    public ResponseEntity<InformacionEventoDTO> obtenerInformacionEvento(@PathVariable String id) throws Exception {
+        InformacionEventoDTO eventos = eventoServicio.obtenerInformacionEvento(id);
+        return new ResponseEntity<>(eventos, HttpStatus.OK);
     }
+
     @GetMapping("/evento/filtrar")
     public ResponseEntity<List<Evento>> filtrarEventos(FiltroEventoDTO filtroEventoDTO) throws Exception {
         List<Evento> eventos = eventoServicio.filtrarEventos(filtroEventoDTO);

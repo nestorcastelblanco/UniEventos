@@ -19,7 +19,7 @@ public interface EventoServicio {
 
     List<Evento> filtrarEventos (FiltroEventoDTO filtroEventoDTO) throws Exception;
 
-    InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception;
+    InformacionEventoDTO        obtenerInformacionEvento(String id) throws Exception;
 
     Evento obtenerEvento(ObjectId id) throws Exception;
 

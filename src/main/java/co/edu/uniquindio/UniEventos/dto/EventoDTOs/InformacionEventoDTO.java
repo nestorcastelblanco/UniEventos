@@ -2,6 +2,7 @@ package co.edu.uniquindio.UniEventos.dto.EventoDTOs;
 
 import co.edu.uniquindio.UniEventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.UniEventos.modelo.vo.Localidad;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -28,6 +29,7 @@ public record InformacionEventoDTO(
         String ciudad,
 
         @NotNull(message = "La fecha del evento es obligatoria")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDateTime fecha,
 
         @NotNull(message = "El tipo de evento es obligatorio")

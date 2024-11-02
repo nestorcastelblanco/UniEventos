@@ -24,7 +24,7 @@ public class Cuenta{
     private String email;
     private CodigoValidacion codigoValidacionRegistro;
     private Usuario usuario;
-    private ObjectId id;
+    private String id;
     private LocalDateTime fechaRegistro;
     private String password;
     private EstadoCuenta estadoCuenta;

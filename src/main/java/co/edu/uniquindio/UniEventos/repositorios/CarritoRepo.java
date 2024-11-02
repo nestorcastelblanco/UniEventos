@@ -22,6 +22,6 @@ public interface CarritoRepo extends MongoRepository<Carrito, String> {
     Optional<Carrito> buscarCarritoPorIdCliente(ObjectId idUsuario);
 
     @Query("{ 'idUsuario' : ?0 }")
-    Optional<Carrito> buscarCarritoPorIdCliente(String idUsuario);
+    Optional<Carrito>   buscarCarritoPorIdCliente(String idUsuario);
 
 }

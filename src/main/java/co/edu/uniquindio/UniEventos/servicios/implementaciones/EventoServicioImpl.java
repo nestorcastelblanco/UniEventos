@@ -14,6 +14,7 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -149,6 +150,7 @@ public class EventoServicioImpl implements EventoServicio {
     @Override
     public InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception {
         Evento eventoExistente = obtenerEvento(new ObjectId(id));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
         // Verificar que el evento esté activo antes de obtener la información
         if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
@@ -305,7 +307,6 @@ public class EventoServicioImpl implements EventoServicio {
     @Override
     public InformacionEventoDTO obtenerInformacionEventoPrueba(String id) throws Exception {
         Evento eventoExistente = obtenerEvento(new ObjectId(id));
-
         // Verificar que el evento esté activo antes de obtener la información
         if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
             throw new Exception("El evento no está activo.");

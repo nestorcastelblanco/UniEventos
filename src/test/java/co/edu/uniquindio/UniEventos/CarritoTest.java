@@ -55,8 +55,8 @@ public class CarritoTest {
     void testAgregarItemCarrito() throws Exception {
         // Crear un DTO con datos válidos
         EventoCarritoDTO eventoCarritoDTO = new EventoCarritoDTO(
-                new ObjectId("651fb39e67d99177cd75e4a1"), // ID del evento
-                new ObjectId("60d21b4667d0d8992e610c85"), // ID del usuario
+               "651fb39e67d99177cd75e4a1", // ID del evento
+                "60d21b4667d0d8992e610c85", // ID del usuario
                 "Concierto de Rock", // Nombre del evento
                 LocalDateTime.now().plusDays(5), // Fecha futura del evento
                 2, // Número de boletas
