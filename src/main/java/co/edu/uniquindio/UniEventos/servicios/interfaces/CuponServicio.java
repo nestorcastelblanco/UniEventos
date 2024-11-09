@@ -21,6 +21,10 @@ public interface CuponServicio {
 
     String redimirCupon(String codigo) throws Exception;
 
+    List<String> listarTiposCupon() throws Exception;
+
+    List<String> listarEstadosCupon() throws Exception;
+
     // METODOS DE PRUEBA JUNIT
     String crearCuponPrueba(CrearCuponDTO cupon) throws Exception;
 

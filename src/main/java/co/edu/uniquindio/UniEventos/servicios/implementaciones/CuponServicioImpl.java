@@ -6,12 +6,14 @@ import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.ItemCuponDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoCupon;
+import co.edu.uniquindio.UniEventos.modelo.enums.TipoCupon;
 import co.edu.uniquindio.UniEventos.repositorios.CuponRepo;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuponServicio;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,6 +55,22 @@ public class CuponServicioImpl implements CuponServicio {
     //Metodo auxiliar para verificar si un cupón con el mismo código ya existe
     private boolean existeCodigo(String codigo) {
         return cuponRepo.buscarCuponPorCodigo(codigo).isPresent();
+    }
+
+    @Override
+    public List<String> listarTiposCupon() {
+        // Convertir los valores del enum a una lista de strings
+        return Arrays.stream(TipoCupon.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> listarEstadosCupon() {
+        // Convertir los valores del enum a una lista de strings
+        return Arrays.stream(EstadoCupon.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
     }
 
 
@@ -107,6 +125,7 @@ public class CuponServicioImpl implements CuponServicio {
                 cupon.getCodigo(),
                 cupon.getDescuento(),
                 cupon.getFechaVencimiento(),
+                cupon.getTipo(),
                 cupon.getEstado()
         )).collect(Collectors.toList());
     }
@@ -232,6 +251,7 @@ public class CuponServicioImpl implements CuponServicio {
                 cupon.getCodigo(),
                 cupon.getDescuento(),
                 cupon.getFechaVencimiento(),
+                cupon.getTipo(),
                 cupon.getEstado()
         )).collect(Collectors.toList());
     }

@@ -6,6 +6,7 @@ import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.ItemCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.CrearEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EditarEventoDTO;
+import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EventoDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuponServicio;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.EventoServicio;
@@ -72,6 +73,24 @@ public class AdministradorController {
         }
     }
 
+    @GetMapping("/evento/listar")
+    public ResponseEntity<MensajeDTO<List<EventoDTO>>> listarEventos() {
+        try {
+            List<EventoDTO> eventos = eventoServicio.listarEventos();
+            System.out.println(eventos);
+            System.out.println("LLego eventos");
+            return ResponseEntity.ok(new MensajeDTO<>(false, eventos));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+    @GetMapping("/evento/tipos")
+    public ResponseEntity<MensajeDTO<List<String>>> obtenerTiposEvento() throws Exception {
+        List<String> tiposEvento = eventoServicio.listarTiposEvento();
+        return ResponseEntity.ok(new MensajeDTO<>(false, tiposEvento));
+    }
+
     @PostMapping("/cupon/crear")
     public ResponseEntity<MensajeDTO<String>> crearCupon(@Valid @RequestBody CrearCuponDTO cuponDTO) throws Exception {
         String idCupon = cuponServicio.crearCupon(cuponDTO);
@@ -100,6 +119,17 @@ public class AdministradorController {
     public ResponseEntity<MensajeDTO<List<ItemCuponDTO>>> obtenerCupones() throws Exception {
         List<ItemCuponDTO> cupones = cuponServicio.obtenerCupones();
         return ResponseEntity.ok(new MensajeDTO<>(false, cupones));
+    }
+    @GetMapping("/cupon/tipos")
+    public ResponseEntity<MensajeDTO<List<String>>> obtenerTiposCupon() throws Exception {
+        List<String> tiposCupon = cuponServicio.listarTiposCupon();
+        return ResponseEntity.ok(new MensajeDTO<>(false, tiposCupon));
+    }
+
+    @GetMapping("/cupon/estados")
+    public ResponseEntity<MensajeDTO<List<String>>> obtenerEstadosCupon() throws Exception {
+        List<String> estadosCupon = cuponServicio.listarEstadosCupon();
+        return ResponseEntity.ok(new MensajeDTO<>(false, estadosCupon));
     }
 
 }

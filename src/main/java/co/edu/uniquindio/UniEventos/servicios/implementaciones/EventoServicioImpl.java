@@ -5,6 +5,8 @@ import co.edu.uniquindio.UniEventos.dto.EventoDTOs.*;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Evento;
 import co.edu.uniquindio.UniEventos.modelo.enums.EstadoEvento;
+import co.edu.uniquindio.UniEventos.modelo.enums.TipoCupon;
+import co.edu.uniquindio.UniEventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.UniEventos.modelo.vo.Localidad;
 import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
 import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -145,6 +148,14 @@ public class EventoServicioImpl implements EventoServicio {
 
         // Se llama al repositorio para filtrar eventos por los campos especificados
         return eventoRepo.filtrarEventosCar(nombre, tipo, ciudad, EstadoEvento.ACTIVO);
+    }
+
+    @Override
+    public List<String> listarTiposEvento() {
+        // Convertir los valores del enum a una lista de strings
+        return Arrays.stream(TipoEvento.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
     }
 
     @Override

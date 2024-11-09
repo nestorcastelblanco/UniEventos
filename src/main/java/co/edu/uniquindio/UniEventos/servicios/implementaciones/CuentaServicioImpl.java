@@ -66,7 +66,7 @@ public class CuentaServicioImpl implements CuentaServicio {
             Map<String, Object> claims = construirClaims(cuenta);
 
             // Genera un nuevo token con los mismos claims y correo electrónico
-            String nuevoToken = jwtUtils.generarToken(cuenta.getEmail(), claims);
+            String nuevoToken = jwtUtils.generarToken(cuenta.getEmail(),  claims);
 
             // Retorna el nuevo token en un TokenDTO
             return new TokenDTO(nuevoToken);
@@ -148,8 +148,6 @@ public class CuentaServicioImpl implements CuentaServicio {
         cuentaUsuario.getUsuario().setDireccion(cuenta.direccion());
         cuentaUsuario.getUsuario().setTelefono(cuenta.telefono());
         cuentaUsuario.getUsuario().setCedula(cuentaUsuario.getUsuario().getCedula());
-        // Cifrar la nueva contraseña antes de almacenarla
-        cuentaUsuario.setPassword(passwordEncoder.encode(cuenta.password()));
 
         cuentaRepo.save(cuentaUsuario);
 
@@ -297,7 +295,11 @@ public class CuentaServicioImpl implements CuentaServicio {
         return Map.of(
                 "rol", cuenta.getRol(),
                 "nombre", cuenta.getUsuario().getNombre(),
-                "id", cuenta.getId()
+                "id", cuenta.getId(),
+                "telefono", cuenta.getUsuario().getTelefono(),
+                "direccion", cuenta.getUsuario().getDireccion()
+
+
         );
     }
 

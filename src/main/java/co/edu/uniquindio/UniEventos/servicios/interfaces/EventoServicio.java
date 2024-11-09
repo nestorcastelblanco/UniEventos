@@ -23,6 +23,8 @@ public interface EventoServicio {
 
     Evento obtenerEvento(ObjectId id) throws Exception;
 
+    List<String> listarTiposEvento() throws Exception;
+
     // METODOS DE PRUEBA DE JUNIT
     String crearEventoPrueba(CrearEventoDTO crearEventoDTO) throws Exception;
 
