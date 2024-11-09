@@ -93,7 +93,6 @@ public class ClienteController {
     public ResponseEntity<MensajeDTO<String>> eliminarItemCarrito(
             @PathVariable String idDetalle,
             @PathVariable String idCarrito) throws Exception {
-
         String respuesta = carritoServicio.eliminarItemCarrito(idDetalle, idCarrito);
         return ResponseEntity.ok(new MensajeDTO<>(false, respuesta));
     }
