@@ -112,9 +112,12 @@ public class AdministradorController {
 
     @GetMapping("/cupon/obtener-informacion/{id}")
     public ResponseEntity<MensajeDTO<InformacionCuponDTO>> obtenerInformacionCupon(@PathVariable String id) throws Exception {
+
         InformacionCuponDTO cuponInfo = cuponServicio.obtenerInformacionCupon(id);
         return ResponseEntity.ok(new MensajeDTO<>(false, cuponInfo));
+
     }
+
 
     @GetMapping("/cupon/listar")
     public ResponseEntity<MensajeDTO<List<ItemCuponDTO>>> obtenerCupones() throws Exception {

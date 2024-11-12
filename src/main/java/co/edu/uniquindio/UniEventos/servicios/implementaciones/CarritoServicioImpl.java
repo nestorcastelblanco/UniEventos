@@ -56,7 +56,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         }
 
         DetalleCarrito detalleCarrito = DetalleCarrito.builder()
-                .idDetalleCarrito(new ObjectId())
+                .idDetalleCarrito(String.valueOf(new ObjectId()))
                 .cantidad(eventoCarritoDTO.numBoletas())
                 .nombreLocalidad(eventoCarritoDTO.nombreLocalidad())
                 .idEvento(eventoCarritoDTO.id()).build();
@@ -68,10 +68,9 @@ public class CarritoServicioImpl implements CarritoServicio {
         return "Item agregado al carrito correctamente " + "nombre localidad : " +eventoCarritoDTO.nombreLocalidad();
     }
 
-
     @Override
     public String eliminarItemCarrito(String idDetalle, String idCarrito) throws Exception {
-        Optional<Carrito> carritoCliente = carritoRepo.buscarCarritoPorId(idCarrito);
+        Optional<Carrito> carritoCliente = carritoRepo.findById(idCarrito);
         if (carritoCliente.isEmpty()) {
             throw new Exception("El carrito no existe");
         }
@@ -79,52 +78,58 @@ public class CarritoServicioImpl implements CarritoServicio {
         Carrito carrito = carritoCliente.get();
         List<DetalleCarrito> lista = carrito.getItems();
 
-
         List<Evento> eventosSistema = eventoRepo.findAll();
         List<Evento> eventosCarrito = new ArrayList<>();
 
-
+        // Obtener los eventos que están en el carrito
         for (DetalleCarrito detalleCarrito : lista) {
-            eventosCarrito.add(eventoRepo.buscarPorIdEvento(detalleCarrito.getIdEvento()).get());
+            Optional<Evento> eventoOpt = eventoRepo.buscarPorIdEvento(detalleCarrito.getIdEvento());
+            if (eventoOpt.isPresent()) {
+                eventosCarrito.add(eventoOpt.get());
+            } else {
+                // En caso de que no se encuentre el evento
+                throw new Exception("Evento no encontrado en el carrito");
+            }
         }
 
-        for (Evento eventoSistema : eventosSistema){
-
-            for (Localidad eventoSistemaLocalidad : eventoSistema.getLocalidades()){
-
-                for (Evento eventoCarrito : eventosCarrito){
-
-                    for (Localidad localidad : eventoCarrito.getLocalidades()){
-
-                        if (eventoSistemaLocalidad.getNombreLocalidad().equals(localidad.getNombreLocalidad())){
-
-                            for (DetalleCarrito detalleCarrito : carrito.getItems()){
-
-                                if (detalleCarrito.getNombreLocalidad().equals(eventoSistemaLocalidad.getNombreLocalidad())){
-
-                                    eventoSistemaLocalidad.setEntradasVendidas(eventoSistemaLocalidad.getEntradasVendidas() - detalleCarrito.getCantidad());
+        // Iterar sobre los eventos del sistema y los eventos del carrito para actualizar las localidades
+        for (Evento eventoSistema : eventosSistema) {
+            for (Localidad eventoSistemaLocalidad : eventoSistema.getLocalidades()) {
+                // Verificar si el nombre de la localidad es no nulo antes de compararlo
+                if (eventoSistemaLocalidad.getNombreLocalidad() != null) {
+                    for (Evento eventoCarrito : eventosCarrito) {
+                        for (Localidad localidad : eventoCarrito.getLocalidades()) {
+                            // Verificar si la localidad del evento del carrito tiene nombre
+                            if (localidad.getNombreLocalidad() != null && eventoSistemaLocalidad.getNombreLocalidad().equals(localidad.getNombreLocalidad())) {
+                                // Actualizar entradas vendidas para esta localidad
+                                for (DetalleCarrito detalleCarrito : carrito.getItems()) {
+                                    if (detalleCarrito.getNombreLocalidad().equals(eventoSistemaLocalidad.getNombreLocalidad())) {
+                                        eventoSistemaLocalidad.setEntradasVendidas(eventoSistemaLocalidad.getEntradasVendidas() - detalleCarrito.getCantidad());
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-
         }
 
-
+        // Eliminar el ítem del carrito
         boolean removed = lista.removeIf(i -> i.getIdDetalleCarrito().equals(idDetalle));
 
         if (!removed) {
             throw new Exception("El elemento no se encontró en el carrito");
         }
 
-        for ( Evento evento : eventosSistema){
+        // Guardar los cambios en los eventos y el carrito
+        for (Evento evento : eventosSistema) {
             eventoRepo.save(evento);
         }
         carritoRepo.save(carrito);
+
         return "Elemento eliminado del carrito";
     }
+
 
     @Override
     public void eliminarCarrito(EliminarCarritoDTO eliminarCarritoDTO) throws Exception {
@@ -171,7 +176,7 @@ public class CarritoServicioImpl implements CarritoServicio {
 
     @Override
     public VistaCarritoDTO obtenerInformacionCarrito(ObjectId id_carrito) throws Exception {
-        Optional<Carrito> carritoOptional = carritoRepo.buscarCarritoPorId(id_carrito);
+        Optional<Carrito> carritoOptional = carritoRepo.buscarCarritoPorIdCliente(id_carrito);
         if (carritoOptional.isEmpty()) {
             throw new Exception("El carrito no existe");
         }
@@ -180,7 +185,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         List<DetalleCarrito> detallesCarrito = carrito.getItems();
         LocalDateTime fecha = carrito.getFecha();
 
-        return new VistaCarritoDTO(new ObjectId(carrito.getId()), detallesCarrito, fecha);
+        return new VistaCarritoDTO(carrito.getId(), detallesCarrito, fecha);
     }
 
     @Override
@@ -319,7 +324,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         // Si el carrito existe, procedemos a agregar el item
         Carrito carrito = carritoCliente.get();
         DetalleCarrito detalleCarrito = DetalleCarrito.builder()
-                .idDetalleCarrito(new ObjectId())
+                .idDetalleCarrito(String.valueOf(new ObjectId()))
                 .cantidad(eventoCarritoDTO.numBoletas())
                 .nombreLocalidad(eventoCarritoDTO.nombreLocalidad())
                 .idEvento(eventoCarritoDTO.id()).build();
@@ -372,7 +377,7 @@ public class CarritoServicioImpl implements CarritoServicio {
         List<DetalleCarrito> detallesCarrito = carrito.getItems();
         LocalDateTime fecha = carrito.getFecha();
 
-        return new VistaCarritoDTO(new ObjectId(carrito.getId()), detallesCarrito, fecha);
+        return new VistaCarritoDTO(carrito.getId(), detallesCarrito, fecha);
     }
 
     @Override

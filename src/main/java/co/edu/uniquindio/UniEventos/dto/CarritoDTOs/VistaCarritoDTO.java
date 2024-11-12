@@ -7,7 +7,7 @@ import java.util.List;
 
 public record VistaCarritoDTO(
 
-        ObjectId id_carrito,
+        String id_carrito,
         List<DetalleCarrito> detallesCarrito,
         LocalDateTime fecha
 ) {

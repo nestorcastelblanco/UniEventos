@@ -16,16 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 public class DetalleOrden {
 
-    private ObjectId idDetalleOrden;
-    private ObjectId idEvento;
+    private String idDetalleOrden;
+    private String idEvento;
     private float precio;
     private String nombreLocalidad;
     private int cantidad;
 
     public static DetalleOrden fromDTO(CrearOrdenDTO.ItemDTO itemDTO) {
         return DetalleOrden.builder()
-                .idDetalleOrden(ObjectId.get())
-                .idEvento(new ObjectId(itemDTO.idEvento()))
+                .idDetalleOrden(String.valueOf(ObjectId.get()))
+                .idEvento(String.valueOf(new ObjectId(itemDTO.idEvento())))
                 .precio(itemDTO.precio())
                 .nombreLocalidad(itemDTO.nombreLocalidad())
                 .cantidad(itemDTO.cantidad())

@@ -80,7 +80,7 @@ public class EventoServicioImpl implements EventoServicio {
     @Override
     public String editarEvento(EditarEventoDTO evento) throws Exception {
 
-        Evento eventoExistente = obtenerEvento(new ObjectId(evento.id()));
+        Evento eventoExistente = obtenerEvento(String.valueOf(new ObjectId(evento.id())));
 
         // Verificar que el evento esté ACTIVO antes de permitir la edición
         if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
@@ -105,7 +105,7 @@ public class EventoServicioImpl implements EventoServicio {
     @Override
     public String eliminarEvento(String id) throws Exception {
 
-        Evento eventoExistente = obtenerEvento(new ObjectId(id));
+        Evento eventoExistente = obtenerEvento(String.valueOf(new ObjectId(id)));
 
         // Cambiar el estado del evento a INACTIVO en lugar de eliminarlo
         if (eventoExistente.getEstado() == EstadoEvento.INACTIVO) {
@@ -160,7 +160,7 @@ public class EventoServicioImpl implements EventoServicio {
 
     @Override
     public InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception {
-        Evento eventoExistente = obtenerEvento(new ObjectId(id));
+        Evento eventoExistente = obtenerEvento(String.valueOf(new ObjectId(id)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
         // Verificar que el evento esté activo antes de obtener la información
@@ -183,7 +183,7 @@ public class EventoServicioImpl implements EventoServicio {
     }
 
     @Override
-    public Evento obtenerEvento(ObjectId id) throws Exception {
+    public Evento obtenerEvento(String id) throws Exception {
         Optional<Evento> eventoOptional = eventoRepo.buscarPorIdEvento(id);
 
         if (eventoOptional.isEmpty()) {
@@ -219,27 +219,6 @@ public class EventoServicioImpl implements EventoServicio {
         if (existeNombreEventoPrueba(crearEventoDTO.nombre())) {
             throw new Exception("Ya existe un evento con este nombre");
         }
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenLocalidades());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
-        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
         // Crear una nueva instancia de Evento
         Evento nuevoEvento = new Evento();
         nuevoEvento.setNombre(crearEventoDTO.nombre());
@@ -276,7 +255,7 @@ public class EventoServicioImpl implements EventoServicio {
     @Override
     public String editarEventoPrueba(EditarEventoDTO evento) throws Exception {
 
-        Evento eventoExistente = obtenerEvento(new ObjectId(evento.id()));
+        Evento eventoExistente = obtenerEvento(String.valueOf(new ObjectId(evento.id())));
 
         // Verificar que el evento esté ACTIVO antes de permitir la edición
         if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
@@ -301,7 +280,7 @@ public class EventoServicioImpl implements EventoServicio {
     @Override
     public String eliminarEventoPrueba(String id) throws Exception {
 
-        Evento eventoExistente = obtenerEvento(new ObjectId(id));
+        Evento eventoExistente = obtenerEvento(String.valueOf(new ObjectId(id)));
 
         // Cambiar el estado del evento a INACTIVO en lugar de eliminarlo
         if (eventoExistente.getEstado() == EstadoEvento.INACTIVO) {
@@ -337,7 +316,7 @@ public class EventoServicioImpl implements EventoServicio {
 
     @Override
     public InformacionEventoDTO obtenerInformacionEventoPrueba(String id) throws Exception {
-        Evento eventoExistente = obtenerEvento(new ObjectId(id));
+        Evento eventoExistente = obtenerEvento(String.valueOf(new ObjectId(id)));
         // Verificar que el evento esté activo antes de obtener la información
         if (eventoExistente.getEstado() != EstadoEvento.ACTIVO) {
             throw new Exception("El evento no está activo.");

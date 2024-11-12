@@ -355,7 +355,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         List<DetalleCarrito> detallesCarrito = new ArrayList<>();
         for (CrearOrdenDTO.ItemDTO item : items) {
             DetalleCarrito detalleCarrito = new DetalleCarrito();
-            detalleCarrito.setIdDetalleCarrito(new ObjectId(item.idDetalleCarrito()));
+            detalleCarrito.setIdDetalleCarrito(String.valueOf(new ObjectId(item.idDetalleCarrito())));
             detalleCarrito.setCantidad(item.cantidad());
             detalleCarrito.setNombreLocalidad(item.nombreLocalidad());
             detallesCarrito.add(detalleCarrito);
@@ -616,7 +616,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         List<DetalleCarrito> detallesCarrito = new ArrayList<>();
         for (CrearOrdenDTO.ItemDTO item : items) {
             DetalleCarrito detalleCarrito = new DetalleCarrito();
-            detalleCarrito.setIdDetalleCarrito(new ObjectId(item.idDetalleCarrito()));
+            detalleCarrito.setIdDetalleCarrito(String.valueOf(new ObjectId(item.idDetalleCarrito())));
             detalleCarrito.setCantidad(item.cantidad());
             detalleCarrito.setNombreLocalidad(item.nombreLocalidad());
             detallesCarrito.add(detalleCarrito);

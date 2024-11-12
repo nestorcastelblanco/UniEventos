@@ -13,7 +13,7 @@ import org.bson.types.ObjectId;
 public class DetalleCarrito {
 
     @EqualsAndHashCode.Include
-    private ObjectId idDetalleCarrito;
+    private String idDetalleCarrito;
 
     private int cantidad;
     private String nombreLocalidad;

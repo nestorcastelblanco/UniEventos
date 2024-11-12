@@ -1,6 +1,7 @@
 package co.edu.uniquindio.UniEventos.controller;
 
 import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.*;
+import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.CrearOrdenDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.InformacionOrdenCompraDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
@@ -133,16 +134,10 @@ public class ClienteController {
         return ResponseEntity.ok(new MensajeDTO<>(false, respuesta));
     }
 
-//    @GetMapping("/reseña/evento/{idEvento}")
-//    public ResponseEntity<MensajeDTO<List<ResenaDTO>>> obtenerReseñasPorEvento(@PathVariable String idEvento) throws Exception {
-//        List<ResenaDTO> reseñas = resenaServicio.obtenerReseñasPorEvento(idEvento);
-//        return ResponseEntity.ok(new MensajeDTO<>(false, reseñas));
-//    }
-//
-//    @GetMapping("/reseña/usuario/{idUsuario}")
-//    public ResponseEntity<MensajeDTO<List<ResenaDTO>>> obtenerReseñasPorUsuario(@PathVariable String idUsuario) throws Exception {
-//        List<ResenaDTO> reseñas = resenaServicio.obtenerReseñasPorUsuario(idUsuario);
-//        return ResponseEntity.ok(new MensajeDTO<>(false, reseñas));
-//    }
+    @GetMapping("/cupon/obtener/{codigo}")
+    public ResponseEntity<MensajeDTO<InformacionCuponDTO>> obtenerCupon(@PathVariable String codigo) throws Exception {
+        InformacionCuponDTO cupon = cuponServicio.obtenerInformacionCupon(codigo);
+        return ResponseEntity.ok(new MensajeDTO<>(false, cupon));
+    }
 
 }

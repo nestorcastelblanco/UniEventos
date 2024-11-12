@@ -21,7 +21,7 @@ public interface EventoServicio {
 
     InformacionEventoDTO        obtenerInformacionEvento(String id) throws Exception;
 
-    Evento obtenerEvento(ObjectId id) throws Exception;
+    Evento obtenerEvento(String id) throws Exception;
 
     List<String> listarTiposEvento() throws Exception;
 
