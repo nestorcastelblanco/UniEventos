@@ -4,6 +4,7 @@ import co.edu.uniquindio.UniEventos.dto.CuponDTOs.CrearCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.EditarCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.ItemCuponDTO;
+import co.edu.uniquindio.UniEventos.modelo.enums.TipoCupon;
 
 import java.util.List;
 

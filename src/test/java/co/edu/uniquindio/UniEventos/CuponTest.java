@@ -94,7 +94,7 @@ public class CuponTest {
     @Test
     public void listarCuponesTest() throws Exception {
         List<ItemCuponDTO> cupones = cuponServicio.obtenerCupones();
-
+        System.out.println(cupones);
         Assertions.assertFalse(cupones.isEmpty());
     }
 
