@@ -219,7 +219,27 @@ public class EventoServicioImpl implements EventoServicio {
         if (existeNombreEventoPrueba(crearEventoDTO.nombre())) {
             throw new Exception("Ya existe un evento con este nombre");
         }
-
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenLocalidades());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
+        System.out.println("url de la imagen de poster: " + crearEventoDTO.imagenPoster());
         // Crear una nueva instancia de Evento
         Evento nuevoEvento = new Evento();
         nuevoEvento.setNombre(crearEventoDTO.nombre());
@@ -361,4 +381,5 @@ public class EventoServicioImpl implements EventoServicio {
                     +" \n " + nuevoEvento.getDescripcion() +" \n " + nuevoEvento.getFecha(), cliente.getEmail()));
         }
     }
+
 }

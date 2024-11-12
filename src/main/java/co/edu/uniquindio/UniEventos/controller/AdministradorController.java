@@ -5,6 +5,7 @@ import co.edu.uniquindio.UniEventos.dto.CuponDTOs.EditarCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.ItemCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.CrearEventoDTO;
+import co.edu.uniquindio.UniEventos.dto.EventoDTOs.CrearLocalidadDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EditarEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EventoDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
