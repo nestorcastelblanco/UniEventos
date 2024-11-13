@@ -271,7 +271,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         }
 
         // Configurar las credenciales de MercadoPago
-        MercadoPagoConfig.setAccessToken("APP_USR-8320315241588080-100615-13f8572024d95a653994a5ba03bc7c16-2019618896");
+        MercadoPagoConfig.setAccessToken("APP_USR-4368524607273593-100523-5ecdf138298f2f251854edb28b1d6957-518706539");
 
         // Configurar las urls de retorno de la pasarela (Frontend)
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder().success("URL PAGO EXITOSO")
@@ -281,7 +281,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         // retorno
         PreferenceRequest preferenceRequest = PreferenceRequest.builder().backUrls(backUrls).items(itemsPasarela)
                 .metadata(Map.of("id_orden", ordenGuardada.getId()))
-                .notificationUrl("https://6956-190-130-109-180.ngrok-free.app/api/publico/orden/notificacion-pago").build();
+                .notificationUrl("https://343f-152-202-4-97.ngrok-free.app/api/publico/orden/notificacion-pago").build();
 
         // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();

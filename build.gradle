@@ -9,10 +9,10 @@ version = '0.0.1-SNAPSHOT'
 description = 'Breve descripción del proyecto'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
 }
+
 
 configurations {
     compileOnly {
@@ -57,8 +57,4 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-}
-
-test {
-    useJUnitPlatform()
 }
