@@ -28,7 +28,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.google.zxing:javase:3.4.1'
 
-    implementation 'com.mercadopago:sdk-java:2.1.27'
+    implementation 'com.mercadopago:sdk-java:2.1.29'
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     implementation 'org.simplejavamail:simple-java-mail:8.11.2'
     implementation 'org.simplejavamail:batch-module:8.10.1'
