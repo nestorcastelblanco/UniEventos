@@ -277,7 +277,7 @@ public class OrdenServicioImpl implements OrdenServicio {
 
         // Configurar las urls de retorno de la pasarela (Frontend)
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("https://app-frontend-unieventos.web.app/vista-carrito")
+                .success("https://app-frontend-unieventos.web.app/inicio")
                 .failure("https://app-frontend-unieventos.web.app/inicio")
                 .pending("https://app-frontend-unieventos.web.app/inicio").build();
 
