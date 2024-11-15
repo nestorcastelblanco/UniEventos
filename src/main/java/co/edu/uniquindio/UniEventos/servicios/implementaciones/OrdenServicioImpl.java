@@ -276,8 +276,10 @@ public class OrdenServicioImpl implements OrdenServicio {
         MercadoPagoConfig.setAccessToken("APP_USR-8178646482281064-100513-248819fc76ea7f7577f902e927eaefb7-2014458486");
 
         // Configurar las urls de retorno de la pasarela (Frontend)
-        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder().success("URL PAGO EXITOSO")
-                .failure("URL PAGO FALLIDO").pending("URL PAGO PENDIENTE").build();
+        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
+                .success("https://app-frontend-unieventos.web.app/inicio")
+                .failure("https://app-frontend-unieventos.web.app/inicio")
+                .pending("https://app-frontend-unieventos.web.app/inicio").build();
 
         // Construir la preferencia de la pasarela con los ítems, metadatos y urls de
         // retorno
