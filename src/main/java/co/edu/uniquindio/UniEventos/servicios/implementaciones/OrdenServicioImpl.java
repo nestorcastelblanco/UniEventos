@@ -233,6 +233,7 @@ public class OrdenServicioImpl implements OrdenServicio {
 
         // Obtener la orden guardada en la base de datos y los ítems de la orden
         Orden ordenGuardada = obtenerOrden(idOrden);
+        System.out.println("ORDEN OBTENIDA: " + ordenGuardada);
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
         if ( ordenGuardada.getEstado() == EstadoOrden.CANCELADA) {
