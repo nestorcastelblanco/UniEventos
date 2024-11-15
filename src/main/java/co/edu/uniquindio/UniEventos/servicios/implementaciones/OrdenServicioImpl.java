@@ -229,80 +229,68 @@ public class OrdenServicioImpl implements OrdenServicio {
 
     @Override
     public Preference realizarPago(String idOrden) throws Exception {
-        try {
-            // Obtener la orden guardada en la base de datos y los ítems de la orden
-            Orden ordenGuardada = obtenerOrden(idOrden);
-            List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
-            if (ordenGuardada.getEstado() == EstadoOrden.CANCELADA) {
-                throw new Exception("LA ORDEN SELECCIONADA FUE CANCELADA");
-            }
+        // Obtener la orden guardada en la base de datos y los ítems de la orden
+        Orden ordenGuardada = obtenerOrden(idOrden);
+        List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
-            if (ordenGuardada.getEstado() == EstadoOrden.PAGADA) {
-                throw new Exception("LA ORDEN SELECCIONADA YA FUE PAGADA");
-            }
+        if ( ordenGuardada.getEstado() == EstadoOrden.CANCELADA) {
+            throw new Exception("LA ORDEN SELECCIONADA FUE CANCELADA");
+        }
 
-            // Recorrer los ítems de la orden y crear los ítems de la pasarela
-            for (DetalleOrden item : ordenGuardada.getDetallesOrden()) {
-                Evento evento = eventoServicio.obtenerEvento(item.getIdEvento());
-                List<Localidad> localidadesEventos = evento.getLocalidades();
+        if ( ordenGuardada.getEstado() == EstadoOrden.PAGADA) {
+            throw new Exception("LA ORDEN SELECCIONADA YA FUE PAGADA ");
+        }
 
-                for (Localidad localidades : localidadesEventos) {
-                    if (item.getNombreLocalidad().equals(localidades.getNombreLocalidad())) {
-                        if (item.getCantidad() + localidades.getEntradasVendidas() > localidades.getCapacidadMaxima()) {
-                            throw new Exception("Las entradas ingresadas no pueden ser compradas, ya que se cuenta con el aforo máximo");
-                        } else {
-                            localidades.setEntradasVendidas(item.getCantidad() + localidades.getEntradasVendidas());
-                            eventoRepo.save(evento);
-                        }
+        // Recorrer los items de la orden y crea los ítems de la pasarela
+        for (DetalleOrden item : ordenGuardada.getDetallesOrden()) {
+
+            Evento evento = eventoServicio.obtenerEvento(item.getIdEvento());
+            List<Localidad> localidadesEventos = evento.getLocalidades();
+
+            for (Localidad localidades : localidadesEventos){
+
+                if ( item.getNombreLocalidad().equals( localidades.getNombreLocalidad()) ) {
+                    if (item.getCantidad() + localidades.getEntradasVendidas() > localidades.getCapacidadMaxima()){
+                        throw new Exception("Las entradas ingresadas no pueden ser compradas, ya que se cuenta con el aforo maximo");
+                    }else{
+                        localidades.setEntradasVendidas(item.getCantidad() + localidades.getEntradasVendidas());
+                        eventoRepo.save(evento);
                     }
                 }
-
-                // Crear el ítem de la pasarela
-                PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
-                        .id(evento.getId())
-                        .title(evento.getNombre())
-                        .categoryId(String.valueOf(evento.getTipo()))
-                        .quantity(1)
-                        .currencyId("COP")
-                        .unitPrice(BigDecimal.valueOf(ordenGuardada.getTotal()))
-                        .build();
-
-                itemsPasarela.add(itemRequest);
             }
 
-            // Configurar las credenciales de MercadoPago
-            MercadoPagoConfig.setAccessToken("APP_USR-4368524607273593-100523-5ecdf138298f2f251854edb28b1d6957-518706539");
+            // Crear el item de la pasarela
+            PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
+                    .id(evento.getId()).title(evento.getNombre())
+                    .pictureUrl(null).categoryId(String.valueOf(evento.getTipo()))
+                    .quantity(1)
+                    .currencyId("COP").unitPrice(BigDecimal.valueOf(ordenGuardada.getTotal())).build();
 
-            // Configurar las URLs de retorno de la pasarela (Frontend)
-            PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                    .success("https://unieventos.onrender.com/success")
-                    .failure("https://unieventos.onrender.com/failure")
-                    .pending("https://unieventos.onrender.com/pending")
-                    .build();
-
-            // Construir la preferencia de la pasarela con los ítems, metadatos y URLs de retorno
-            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                    .backUrls(backUrls)
-                    .items(itemsPasarela)
-                    .metadata(Map.of("id_orden", ordenGuardada.getId()))
-                    .notificationUrl("https://unieventos.onrender.com/api/publico/orden/notificacion-pago")
-                    .build();
-
-            // Crear la preferencia en la pasarela de MercadoPago
-            PreferenceClient client = new PreferenceClient();
-            Preference preference = client.create(preferenceRequest);
-
-            // Guardar el código de la pasarela en la orden
-            ordenGuardada.setCodigoPasarela(preference.getId());
-            ordenRepo.save(ordenGuardada);
-
-            return preference;
-        } catch (Exception e) {
-            // Manejar y registrar la excepción
-            System.err.println("Error al realizar el pago: " + e.getMessage());
-            throw new Exception("Error al procesar el pago. Por favor, inténtelo de nuevo más tarde.");
+            itemsPasarela.add(itemRequest);
         }
+
+        // Configurar las credenciales de MercadoPago
+        MercadoPagoConfig.setAccessToken("APP_USR-8320315241588080-100615-13f8572024d95a653994a5ba03bc7c16-2019618896");
+
+        // Configurar las urls de retorno de la pasarela (Frontend)
+        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder().success("URL PAGO EXITOSO")
+                .failure("URL PAGO FALLIDO").pending("URL PAGO PENDIENTE").build();
+
+        // Construir la preferencia de la pasarela con los ítems, metadatos y urls de
+        // retorno
+        PreferenceRequest preferenceRequest = PreferenceRequest.builder().backUrls(backUrls).items(itemsPasarela)
+                .metadata(Map.of("id_orden", ordenGuardada.getId()))
+                .notificationUrl("https://unieventos.onrender.com/api/publico/orden/notificacion-pago").build();
+
+        // Crear la preferencia en la pasarela de MercadoPago
+        PreferenceClient client = new PreferenceClient();
+        Preference preference = client.create(preferenceRequest);
+        // Guardar el código de la pasarela en la orden
+        ordenGuardada.setCodigoPasarela(preference.getId());
+        ordenRepo.save(ordenGuardada);
+
+        return preference;
     }
 
 
