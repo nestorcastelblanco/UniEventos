@@ -1,4 +1,5 @@
 package co.edu.uniquindio.UniEventos.servicios.implementaciones;
+import co.edu.uniquindio.UniEventos.dto.MercadoPagoDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Cupon;
 import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
@@ -228,7 +229,7 @@ public class OrdenServicioImpl implements OrdenServicio {
     }
 
     @Override
-    public Preference realizarPago(String idOrden) throws Exception {
+    public MercadoPagoDTO realizarPago(String idOrden) throws Exception {
 
         // Obtener la orden guardada en la base de datos y los ítems de la orden
         Orden ordenGuardada = obtenerOrden(idOrden);
@@ -289,8 +290,8 @@ public class OrdenServicioImpl implements OrdenServicio {
         // Guardar el código de la pasarela en la orden
         ordenGuardada.setCodigoPasarela(preference.getId());
         ordenRepo.save(ordenGuardada);
-
-        return preference;
+        MercadoPagoDTO link = new MercadoPagoDTO(preference.getInitPoint());
+        return link;
     }
 
 

@@ -2,6 +2,7 @@ package co.edu.uniquindio.UniEventos.controller;
 
 import co.edu.uniquindio.UniEventos.dto.CarritoDTOs.*;
 import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
+import co.edu.uniquindio.UniEventos.dto.MercadoPagoDTO;
 import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.*;
 import co.edu.uniquindio.UniEventos.dto.ResenaDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
@@ -76,9 +77,9 @@ public class ClienteController {
 
     // Realizar el pago de una orden
     @PostMapping("/orden/realizar-pago")
-    public ResponseEntity<MensajeDTO<Preference>> realizarPago(@Valid @RequestBody OrdenPagoDTO ordenPagoDTO) throws Exception {
-        Preference preference = ordenServicio.realizarPago(ordenPagoDTO.idOrden());
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, preference));
+    public ResponseEntity<MensajeDTO<MercadoPagoDTO>> realizarPago(@Valid @RequestBody OrdenPagoDTO ordenPagoDTO) throws Exception {
+        MercadoPagoDTO mercadoPagoDTO = ordenServicio.realizarPago(ordenPagoDTO.idOrden());
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, mercadoPagoDTO));
     }
 
     @PostMapping("/carrito/agregar-item")
