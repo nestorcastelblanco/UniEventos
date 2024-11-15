@@ -6,7 +6,6 @@ import co.edu.uniquindio.UniEventos.repositorios.CuentaRepo;
 import co.edu.uniquindio.UniEventos.repositorios.CuponRepo;
 import co.edu.uniquindio.UniEventos.repositorios.EventoRepo;
 import com.mercadopago.client.preference.*;
-import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.resources.preference.Preference;
 
 import java.io.File;
@@ -38,7 +37,6 @@ import com.mercadopago.resources.payment.Payment;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,14 +44,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Service
 @Transactional
 public class OrdenServicioImpl implements OrdenServicio {
-
-    private final Logger log = (Logger) LoggerFactory.getLogger(OrdenServicioImpl.class);
 
     private final OrdenRepo ordenRepo;
     private final EventoServicio eventoServicio;
@@ -61,14 +55,13 @@ public class OrdenServicioImpl implements OrdenServicio {
     private final CuentaRepo cuentaRepo;
     private final EventoRepo eventoRepo;
 
-    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo, CuentaRepo cuentaRepo, EventoRepo eventoRepo) {
+    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo, CuentaRepo cuentaRepo, EventoRepo eventoRepo, EventoRepo eventoRepo1) {
         this.ordenRepo = ordenRepo;
         this.eventoServicio = eventoServicio;
         this.cuponRepo = cuponRepo;
         this.cuentaRepo = cuentaRepo;
         this.eventoRepo = eventoRepo;
     }
-
 
     @Override
     public String crearOrden(CrearOrdenDTO orden) throws Exception {
@@ -269,28 +262,22 @@ public class OrdenServicioImpl implements OrdenServicio {
                 }
             }
 
+            // Crear el item de la pasarela
             PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
-                    .id(evento.getId())
-                    .title(evento.getNombre())
-                    .pictureUrl(null)
-                    .categoryId(String.valueOf(evento.getTipo()))
-                    .quantity(item.getCantidad()) // Cantidad específica del ítem
-                    .currencyId("COP")
-                    .unitPrice(BigDecimal.valueOf(ordenGuardada.getTotal())) // Precio unitario del ítem
-                    .build();
-
+                    .id(evento.getId()).title(evento.getNombre())
+                    .pictureUrl(null).categoryId(String.valueOf(evento.getTipo()))
+                    .quantity(1)
+                    .currencyId("COP").unitPrice(BigDecimal.valueOf(ordenGuardada.getTotal())).build();
 
             itemsPasarela.add(itemRequest);
         }
 
         // Configurar las credenciales de MercadoPago
-        MercadoPagoConfig.setAccessToken("APP_USR-8320315241588080-100615-13f8572024d95a653994a5ba03bc7c16-2019618896");
+        MercadoPagoConfig.setAccessToken("APP_USR-8178646482281064-100513-248819fc76ea7f7577f902e927eaefb7-2014458486");
 
-        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("https://unieventos.onrender.com/api/publico/pago-exitoso")
-                .failure("https://unieventos.onrender.com/api/publico/pago-fallido")
-                .pending("https://unieventos.onrender.com/api/publico/pago-pendiente")
-                .build();
+        // Configurar las urls de retorno de la pasarela (Frontend)
+        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder().success("URL PAGO EXITOSO")
+                .failure("URL PAGO FALLIDO").pending("URL PAGO PENDIENTE").build();
 
         // Construir la preferencia de la pasarela con los ítems, metadatos y urls de
         // retorno
@@ -300,16 +287,12 @@ public class OrdenServicioImpl implements OrdenServicio {
 
         // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();
-        try {
-            Preference preference = client.create(preferenceRequest);
-            ordenGuardada.setCodigoPasarela(preference.getId());
-            ordenRepo.save(ordenGuardada);
-            return new MercadoPagoDTO(preference.getInitPoint());
-        } catch (MPApiException e) {
-            log.log(Level.parse("Error al crear preferencia en MercadoPago: {}"), e.getMessage());
-            log.log(Level.parse("Detalles del error: {}"), String.valueOf(e.getApiResponse()));
-            throw new Exception("Error al procesar el pago: " + e.getMessage());
-        }
+        Preference preference = client.create(preferenceRequest);
+        // Guardar el código de la pasarela en la orden
+        ordenGuardada.setCodigoPasarela(preference.getId());
+        ordenRepo.save(ordenGuardada);
+        MercadoPagoDTO link = new MercadoPagoDTO(preference.getInitPoint());
+        return link;
     }
 
 
