@@ -40,7 +40,6 @@ public class AdministradorController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, respuesta));
     }
 
-
     @DeleteMapping("/imagen/eliminar")
     public ResponseEntity<MensajeDTO<String>> eliminar(@RequestParam("idImagen") String idImagen)  throws Exception{
         imagenesServicio.eliminarImagen( idImagen );

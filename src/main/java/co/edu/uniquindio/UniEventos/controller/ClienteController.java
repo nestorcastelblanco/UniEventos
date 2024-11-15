@@ -132,10 +132,10 @@ public class ClienteController {
         return ResponseEntity.ok(new MensajeDTO<>(false, respuesta));
     }
 
-    @GetMapping("/cupon/obtener/{codigo}")
-    public ResponseEntity<MensajeDTO<InformacionCuponDTO>> obtenerCupon(@PathVariable String codigo) throws Exception {
-        InformacionCuponDTO cupon = cuponServicio.obtenerInformacionCupon(codigo);
-        return ResponseEntity.ok(new MensajeDTO<>(false, cupon));
+    @GetMapping("/cupon/obtener-informacion/{id}")
+    public ResponseEntity<MensajeDTO<InformacionCuponDTO>> obtenerInformacionCupon(@PathVariable String id) throws Exception {
+        InformacionCuponDTO cuponInfo = cuponServicio.obtenerInformacionCupon(id);
+        return ResponseEntity.ok(new MensajeDTO<>(false, cuponInfo));
     }
 
 }
