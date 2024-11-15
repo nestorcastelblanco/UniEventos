@@ -8,10 +8,12 @@ import co.edu.uniquindio.UniEventos.dto.EventoDTOs.CrearEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.CrearLocalidadDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EditarEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EventoDTO;
+import co.edu.uniquindio.UniEventos.dto.OrdenDTOs.ItemOrdenDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.CuponServicio;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.EventoServicio;
 import co.edu.uniquindio.UniEventos.servicios.interfaces.ImagenesServicio;
+import co.edu.uniquindio.UniEventos.servicios.interfaces.OrdenServicio;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class AdministradorController {
 
     private final CuponServicio cuponServicio;
     private final EventoServicio eventoServicio;
+    private final OrdenServicio ordenServicio;
     private final ImagenesServicio imagenesServicio;
 
     @PostMapping("/imagen/subir")
@@ -118,7 +121,6 @@ public class AdministradorController {
 
     }
 
-
     @GetMapping("/cupon/listar")
     public ResponseEntity<MensajeDTO<List<ItemCuponDTO>>> obtenerCupones() throws Exception {
         List<ItemCuponDTO> cupones = cuponServicio.obtenerCupones();
@@ -134,6 +136,13 @@ public class AdministradorController {
     public ResponseEntity<MensajeDTO<List<String>>> obtenerEstadosCupon() throws Exception {
         List<String> estadosCupon = cuponServicio.listarEstadosCupon();
         return ResponseEntity.ok(new MensajeDTO<>(false, estadosCupon));
+    }
+
+    // Obtener historial de órdenes de una cuenta
+    @GetMapping("/orden/historial")
+    public ResponseEntity<MensajeDTO<List<ItemOrdenDTO>>> obtenerHistorialOrdenes() throws Exception {
+        List<ItemOrdenDTO> historial = ordenServicio.obtenerHistorialOrdenes();
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, historial));
     }
 
 }
