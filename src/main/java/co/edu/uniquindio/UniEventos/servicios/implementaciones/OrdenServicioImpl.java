@@ -272,7 +272,7 @@ public class OrdenServicioImpl implements OrdenServicio {
         }
 
         // Configurar las credenciales de MercadoPago
-        MercadoPagoConfig.setAccessToken("APP_USR-8320315241588080-100615-13f8572024d95a653994a5ba03bc7c16-2019618896");
+        MercadoPagoConfig.setAccessToken("APP_USR-3168225250331071-100317-9b9258820ca1df2ce8c9141f44127850-2014457544");
 
         // Configurar las urls de retorno de la pasarela (Frontend)
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder().success("URL PAGO EXITOSO")
