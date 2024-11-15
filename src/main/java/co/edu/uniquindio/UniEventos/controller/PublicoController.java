@@ -1,6 +1,7 @@
 package co.edu.uniquindio.UniEventos.controller;
 
 import co.edu.uniquindio.UniEventos.dto.CuentaDTOs.*;
+import co.edu.uniquindio.UniEventos.dto.CuponDTOs.InformacionCuponDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.EventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.FiltroEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.EventoDTOs.InformacionEventoDTO;
@@ -8,10 +9,7 @@ import co.edu.uniquindio.UniEventos.dto.EventoDTOs.ItemEventoDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.MensajeDTO;
 import co.edu.uniquindio.UniEventos.dto.TokenDTOs.TokenDTO;
 import co.edu.uniquindio.UniEventos.modelo.documentos.Evento;
-import co.edu.uniquindio.UniEventos.servicios.interfaces.CuentaServicio;
-import co.edu.uniquindio.UniEventos.servicios.interfaces.EmailServicio;
-import co.edu.uniquindio.UniEventos.servicios.interfaces.EventoServicio;
-import co.edu.uniquindio.UniEventos.servicios.interfaces.OrdenServicio;
+import co.edu.uniquindio.UniEventos.servicios.interfaces.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,7 @@ public class PublicoController {
     private final EmailServicio emailServicio;
     private final EventoServicio eventoServicio;
     private final OrdenServicio ordenServicio;
+    private final CuponServicio cuponServicio;
 
     @PostMapping("/iniciar-sesion")
     public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception{
@@ -100,4 +99,11 @@ public class PublicoController {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta activada exitosamente"));
     }
 
+    @GetMapping("/cupon/obtener-informacion/{id}")
+    public ResponseEntity<MensajeDTO<InformacionCuponDTO>> obtenerInformacionCupon(@PathVariable String id) throws Exception {
+
+        InformacionCuponDTO cuponInfo = cuponServicio.obtenerInformacionCupon(id);
+        return ResponseEntity.ok(new MensajeDTO<>(false, cuponInfo));
+
+    }
 }
