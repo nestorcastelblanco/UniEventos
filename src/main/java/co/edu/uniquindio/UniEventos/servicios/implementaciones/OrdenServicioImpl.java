@@ -52,7 +52,8 @@ import java.util.logging.Logger;
 @Service
 @Transactional
 public class OrdenServicioImpl implements OrdenServicio {
-    private static final Logger log = (Logger) LoggerFactory.getLogger(OrdenServicioImpl.class);
+
+    private final Logger log = (Logger) LoggerFactory.getLogger(OrdenServicioImpl.class);
 
     private final OrdenRepo ordenRepo;
     private final EventoServicio eventoServicio;
@@ -60,13 +61,14 @@ public class OrdenServicioImpl implements OrdenServicio {
     private final CuentaRepo cuentaRepo;
     private final EventoRepo eventoRepo;
 
-    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo, CuentaRepo cuentaRepo, EventoRepo eventoRepo, EventoRepo eventoRepo1) {
+    public OrdenServicioImpl(OrdenRepo ordenRepo, EventoServicio eventoServicio, CuponRepo cuponRepo, CuentaRepo cuentaRepo, EventoRepo eventoRepo) {
         this.ordenRepo = ordenRepo;
         this.eventoServicio = eventoServicio;
         this.cuponRepo = cuponRepo;
         this.cuentaRepo = cuentaRepo;
         this.eventoRepo = eventoRepo;
     }
+
 
     @Override
     public String crearOrden(CrearOrdenDTO orden) throws Exception {
