@@ -138,4 +138,10 @@ public class ClienteController {
         return ResponseEntity.ok(new MensajeDTO<>(false, cuponInfo));
     }
 
+    @GetMapping("/cupon/obtener-carrito/{id}")
+    public ResponseEntity<MensajeDTO<InformacionCuponDTO>> obtenerInformacionCuponCarrito(@PathVariable String id) throws Exception {
+        InformacionCuponDTO cuponInfo = cuponServicio.obtenerInformacionCuponCarrito(id);
+        return ResponseEntity.ok(new MensajeDTO<>(false, cuponInfo));
+    }
+
 }

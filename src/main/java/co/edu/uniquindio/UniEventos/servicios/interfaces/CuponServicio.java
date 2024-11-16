@@ -38,4 +38,6 @@ public interface CuponServicio {
     InformacionCuponDTO obtenerInformacionCuponPrueba(String id) throws Exception;
 
     String redimirCuponPrueba(String codigo) throws Exception;
+
+    InformacionCuponDTO obtenerInformacionCuponCarrito(String id) throws Exception;
 }
