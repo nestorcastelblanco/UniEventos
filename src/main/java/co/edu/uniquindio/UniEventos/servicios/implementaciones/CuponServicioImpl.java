@@ -294,7 +294,7 @@ public class CuponServicioImpl implements CuponServicio {
 
     @Override
     public InformacionCuponDTO obtenerInformacionCuponCarrito(String id) throws Exception{
-        Cupon cupon = obtenerCuponNombre(id);
+        Cupon cupon = obtenerCuponCodigo(id);
         return new InformacionCuponDTO(
                 cupon.getId(),
                 cupon.getNombre(),
@@ -306,11 +306,11 @@ public class CuponServicioImpl implements CuponServicio {
         );
     }
 
-    private Cupon obtenerCuponNombre(String id) throws Exception {
+    private Cupon obtenerCuponCodigo(String id) throws Exception {
         Optional<Cupon> cuponOptional = cuponRepo.buscarCuponPorCodigo(id);
 
         if (cuponOptional.isEmpty()) {
-            throw new Exception("El cupón con el id: " + id + " no existe");
+            throw new Exception("El cupón con el codigo: " + id + " no existe");
         }
 
         return cuponOptional.get();
