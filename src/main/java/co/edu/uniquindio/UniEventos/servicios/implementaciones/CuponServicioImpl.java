@@ -93,7 +93,7 @@ public class CuponServicioImpl implements CuponServicio {
     }
 
     private Cupon obtenerCupon(String id) throws Exception {
-        Optional<Cupon> cuponOptional = cuponRepo.buscarCuponPorCodigo(id);
+        Optional<Cupon> cuponOptional = cuponRepo.findById(id);
 
         if (cuponOptional.isEmpty()) {
             throw new Exception("El cupón con el id: " + id + " no existe");
