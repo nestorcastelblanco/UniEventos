@@ -20,7 +20,7 @@ public class  FirebaseConfig {
     @Bean
     public FirebaseApp intializeFirebase() throws IOException {
 
-        InputStream serviceAccount = new ClassPathResource("unieventos-aca74-firebase-adminsdk-zp03a-d4f2d64f50.json").getInputStream();
+        InputStream serviceAccount = new ClassPathResource("uniquindio-36aa1-firebase-adminsdk-5vup3-10cf048ecc.json").getInputStream();
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
